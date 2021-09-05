@@ -1,6 +1,9 @@
 package CovidLoveit.Domain.Models;
 
+import org.hibernate.mapping.Set;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,25 +18,14 @@ public class User {
 
     private String email;
 
-    private String companyName;
+    private String compName;
 
-    private String companyDescription;
+    private String compDesc;
 
-    @OneToOne(mappedBy="user")
-    private Industry industry;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<RegisteredBusiness> registeredBusinesses = new ArrayList<RegisteredBusiness>();
 
-
-    // TODO: Finalise the database design
-//    @OneToMany(mappedBy="user")
-//    private List<IndustrySubtype> industrySubtype;
-
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
+    public UUID getUserId() { return userId; }
 
     public String getEmail() {
         return email;
@@ -44,18 +36,18 @@ public class User {
     }
 
     public String getCompanyName() {
-        return companyName;
+        return compName;
     }
 
     public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+        this.compName = companyName;
     }
 
     public String getCompanyDescription() {
-        return companyDescription;
+        return compDesc;
     }
 
     public void setCompanyDescription(String companyDescription) {
-        this.companyDescription = companyDescription;
+        this.compDesc = companyDescription;
     }
 }
