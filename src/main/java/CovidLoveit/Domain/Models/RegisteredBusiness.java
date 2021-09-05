@@ -15,8 +15,9 @@ public class RegisteredBusiness {
 
     private String businessDesc;
 
-//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "industry")
-//    private Industry industry;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "industryId")
+    private Industry industry;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="customerId")

@@ -1,13 +1,14 @@
 package CovidLoveit.Domain.Models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.hibernate.annotations.Cascade;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name="INDUSTRY")
 public class Industry {
 
     @Id
@@ -20,9 +21,37 @@ public class Industry {
 
     private String description;
 
-    // TODO: Create the mappings for industry and guidelines
-    // In this case this will be a one-to-many relationship
-//    private List<Guideline> guidelines = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "industry")
+    private List<Guideline> guidelines = new ArrayList<>();
 
-    // TODO: Generate the getters and setters
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "industry")
+    private List<RegisteredBusiness> registeredBusinesses = new ArrayList<>();
+
+    public UUID getIndustryId() {
+        return industryId;
+    }
+
+    public String getIndustryName() {
+        return industryName;
+    }
+
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
+    }
+
+    public String getIndustrySubtype() {
+        return industrySubtype;
+    }
+
+    public void setIndustrySubtype(String industrySubtype) {
+        this.industrySubtype = industrySubtype;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
