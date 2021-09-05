@@ -1,7 +1,5 @@
 package CovidLoveit.Domain.Models;
 
-import org.hibernate.mapping.Set;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +11,7 @@ public class User {
 
     // TODO: Remove the generated value when frontend application is up
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID userId;
 
     private String email;
@@ -22,8 +20,8 @@ public class User {
 
     private String compDesc;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<RegisteredBusiness> registeredBusinesses = new ArrayList<RegisteredBusiness>();
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+//    private List<RegisteredBusiness> registeredBusinesses = new ArrayList<RegisteredBusiness>();
 
     public UUID getUserId() { return userId; }
 
@@ -50,4 +48,8 @@ public class User {
     public void setCompanyDescription(String companyDescription) {
         this.compDesc = companyDescription;
     }
+
+//    public List<RegisteredBusiness> getRegisteredBusinesses() { return registeredBusinesses; }
+//
+//    public void setRegisteredBusinesses(List<RegisteredBusiness> registeredBusinesses) { this.registeredBusinesses = registeredBusinesses; }
 }
