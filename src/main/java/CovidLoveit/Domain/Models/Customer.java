@@ -25,6 +25,13 @@ public class Customer {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private List<RegisteredBusiness> registeredBusinesses = new ArrayList<RegisteredBusiness>();
 
+    public Customer(String email, String compName, String compDesc, boolean isAdmin) {
+        this.email = email;
+        this.compName = compName;
+        this.compDesc = compDesc;
+        this.isAdmin = isAdmin;
+    }
+
     public UUID getUserId() {
         return customerId;
     }
