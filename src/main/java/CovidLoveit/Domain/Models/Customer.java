@@ -28,7 +28,7 @@ public class Customer {
     public Customer (){
 
     }
-    
+
     public Customer(String email, String compName, String compDesc, boolean isAdmin) {
         this.email = email;
         this.compName = compName;
