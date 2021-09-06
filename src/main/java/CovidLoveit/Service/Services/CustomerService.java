@@ -21,6 +21,7 @@ public class CustomerService implements ICustomerService {
     private Logger logger = LoggerFactory.getLogger(CustomerService.class);
     private CustomerRepository customerRepository;
 
+    // Injecting the required dependencies here
     @Autowired
     public CustomerService(CustomerRepository customerRepository){
         this.customerRepository = customerRepository;
