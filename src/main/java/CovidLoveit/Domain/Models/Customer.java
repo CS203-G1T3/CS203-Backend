@@ -25,7 +25,7 @@ public class Customer {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private List<RegisteredBusiness> registeredBusinesses = new ArrayList<RegisteredBusiness>();
 
-    public Customer (){
+    public Customer () {
 
     }
 
