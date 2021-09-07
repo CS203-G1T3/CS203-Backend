@@ -2,8 +2,8 @@ package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Exception.ResourceNotFoundException;
-import CovidLoveit.Repositories.CustomerRepository;
-import CovidLoveit.Service.Services.Interfaces.ICustomerService;
+import CovidLoveit.Repositories.ClientRepository;
+import CovidLoveit.Service.Services.Interfaces.IClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,57 +15,57 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class CustomerService implements ICustomerService {
+public class ClientService implements IClientService {
 
     // Use this logger object to log information of user's actions
-    private Logger logger = LoggerFactory.getLogger(CustomerService.class);
-    private CustomerRepository customerRepository;
+    private Logger logger = LoggerFactory.getLogger(ClientService.class);
+    private ClientRepository clientRepository;
 
     // Injecting the required dependencies here
     @Autowired
-    public CustomerService(CustomerRepository customerRepository){
-        this.customerRepository = customerRepository;
+    public ClientService(ClientRepository clientRepository){
+        this.clientRepository = clientRepository;
     }
 
     @Override
-    public Client addCustomer(String email, String companyName, String companyDesc, boolean isAdmin) {
-        var customer = new Client(email, companyName, companyDesc, isAdmin);
-        var savedCustomer = customerRepository.save(customer);
+    public Client addClient(String email, String companyName, String companyDesc, boolean isAdmin) {
+        var client = new Client(email, companyName, companyDesc, isAdmin);
+        var savedClient = clientRepository.save(client);
 
-        logger.info(String.format("Successfully added user %s", savedCustomer.getUserId()));
+        logger.info(String.format("Successfully added user %s", savedClient.getClientId()));
 
-        return savedCustomer;
+        return savedClient;
     }
 
     @Override
-    public Client updateCustomer(Client client) {
-        Optional<Client> customerRecord = customerRepository.findById(client.getUserId());
+    public Client updateClient(Client client) {
+        Optional<Client> clientRecord = clientRepository.findById(client.getClientId());
 
-        if (customerRecord.isPresent()) {
-            Client clientUpdate = customerRecord.get();
+        if (clientRecord.isPresent()) {
+            Client clientUpdate = clientRecord.get();
             clientUpdate.setEmail(client.getEmail());
             clientUpdate.setCompanyName(client.getCompanyName());
             clientUpdate.setCompanyDescription(client.getCompanyDescription());
             clientUpdate.setAdmin(client.isAdmin());
 
-            customerRepository.save(clientUpdate);
+            clientRepository.save(clientUpdate);
             return clientUpdate;
 
         } else {
-            logger.error(String.format("Customer with ID %s does not exist in database.", client.getUserId()));
-            throw new ResourceNotFoundException(String.format("Customer with ID %s not found.", client.getUserId()));
+            logger.error(String.format("Customer with ID %s does not exist in database.", client.getClientId()));
+            throw new ResourceNotFoundException(String.format("Customer with ID %s not found.", client.getClientId()));
         }
     }
 
     @Override
-    public void deleteCustomer(UUID customerId) {
-        Optional<Client> customerOptional = customerRepository.findById(customerId);
+    public void deleteClient(UUID clientId) {
+        Optional<Client> clientOptional = clientRepository.findById(clientId);
 
-        if (customerOptional.isPresent()) {
-            customerRepository.delete(customerOptional.get());
+        if (clientOptional.isPresent()) {
+            clientRepository.delete(clientOptional.get());
         } else {
-            logger.error(String.format("Customer with ID %s does not exist in database.", customerId));
-            throw new ResourceNotFoundException(String.format("Customer with ID %s not found.", customerId));
+            logger.error(String.format("Customer with ID %s does not exist in database.", clientId));
+            throw new ResourceNotFoundException(String.format("Customer with ID %s not found.", clientId));
         }
     }
 }
