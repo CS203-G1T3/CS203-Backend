@@ -22,11 +22,10 @@ public class Client {
 
     private boolean isAdmin;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "client")
-    private List<RegisteredBusiness> registeredBusinesses = new ArrayList<RegisteredBusiness>();
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
+    private RegisteredBusiness registeredBusiness;
 
     public Client() {
-
     }
 
     public Client(String email, String compName, String compDesc, boolean isAdmin) {
@@ -64,12 +63,12 @@ public class Client {
         this.compDesc = companyDescription;
     }
 
-    public List<RegisteredBusiness> getRegisteredBusinesses() {
-        return registeredBusinesses;
+    public RegisteredBusiness getRegisteredBusiness() {
+        return registeredBusiness;
     }
 
-    public void setRegisteredBusinesses(List<RegisteredBusiness> registeredBusinesses) {
-        this.registeredBusinesses = registeredBusinesses;
+    public void setRegisteredBusiness(RegisteredBusiness registeredBusiness) {
+        this.registeredBusiness = registeredBusiness;
     }
 
     public boolean isAdmin() {
