@@ -22,7 +22,7 @@ public class Customer {
 
     private boolean isAdmin;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "customer")
     private List<RegisteredBusiness> registeredBusinesses = new ArrayList<RegisteredBusiness>();
 
     public Customer () {
