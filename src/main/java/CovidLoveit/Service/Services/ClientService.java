@@ -32,7 +32,7 @@ public class ClientService implements IClientService {
         var client = new Client(email, companyName, companyDesc, isAdmin);
         var savedClient = clientRepository.save(client);
 
-        logger.info(String.format("Successfully added user %s", savedClient.getClientId()));
+        logger.info(String.format("Successfully added client {%s}", savedClient.getClientId()));
 
         return savedClient;
     }
@@ -49,11 +49,12 @@ public class ClientService implements IClientService {
             clientUpdate.setAdmin(client.isAdmin());
 
             clientRepository.save(clientUpdate);
+            logger.info(String.format("Successfully updated client with ID {%s}", client.getClientId().toString()));
             return clientUpdate;
 
         } else {
-            logger.error(String.format("Customer with ID %s does not exist in database.", client.getClientId()));
-            throw new ResourceNotFoundException(String.format("Customer with ID %s not found.", client.getClientId()));
+            logger.error(String.format("Client with ID {%s} does not exist in database.", client.getClientId()));
+            throw new ResourceNotFoundException(String.format("Client with ID {%s} not found.", client.getClientId()));
         }
     }
 
@@ -64,8 +65,8 @@ public class ClientService implements IClientService {
         if (clientOptional.isPresent()) {
             clientRepository.delete(clientOptional.get());
         } else {
-            logger.error(String.format("Customer with ID %s does not exist in database.", clientId));
-            throw new ResourceNotFoundException(String.format("Customer with ID %s not found.", clientId));
+            logger.error(String.format("Client with ID {%s} does not exist in database.", clientId));
+            throw new ResourceNotFoundException(String.format("Client with ID {%s} not found.", clientId));
         }
     }
 }
