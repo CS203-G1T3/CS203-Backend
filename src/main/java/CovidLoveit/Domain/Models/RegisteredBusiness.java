@@ -15,12 +15,12 @@ public class RegisteredBusiness {
 
     private String businessDesc;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "industryId")
     private Industry industry;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="customerId")
+    @ManyToOne
+    @JoinColumn(name = "customerId")
     private Customer customer;
 
     public UUID getBusinessId() { return businessId; }
