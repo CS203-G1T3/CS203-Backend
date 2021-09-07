@@ -1,5 +1,7 @@
 package CovidLoveit.Domain.Models;
 
+import org.apache.tomcat.jni.Local;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 @Entity
@@ -14,9 +16,11 @@ public class Guideline {
 
     private boolean canOperateOnSite;
 
-    private boolean canOperateOnSiteDetails;
+    private String canOperateOnSiteDetails;
 
     private int groupSize;
+
+    private String groupSizeDetails;
 
     private int covidTestingVaccinated;
 
@@ -40,6 +44,30 @@ public class Guideline {
     @JoinColumn(name = "industryId")
     private Industry industry;
 
+    public Guideline() {
+    }
+
+    public Guideline(LocalDateTime createdAt, boolean canOperateOnSite, String canOperateOnSiteDetails,
+                     int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated,
+                     String covidTestingDetails, String contactTracing, String contactTracingDetails,
+                     int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
+                     String referenceLink) {
+        this.createdAt = createdAt;
+        this.canOperateOnSite = canOperateOnSite;
+        this.canOperateOnSiteDetails = canOperateOnSiteDetails;
+        this.groupSize = groupSize;
+        this.groupSizeDetails = groupSizeDetails;
+        this.covidTestingVaccinated = covidTestingVaccinated;
+        this.covidTestingUnvaccinated = covidTestingUnvaccinated;
+        this.covidTestingDetails = covidTestingDetails;
+        this.contactTracing = contactTracing;
+        this.contactTracingDetails = contactTracingDetails;
+        this.operatingCapacity = operatingCapacity;
+        this.operatingCapacityDetails = operatingCapacityDetails;
+        this.operationGuidelines = operationGuidelines;
+        this.referenceLink = referenceLink;
+    }
+
     public int getGuidelineId() {
         return guidelineId;
     }
@@ -48,8 +76,8 @@ public class Guideline {
         return createdAt;
     }
 
-    public void setCreatedAt() {
-        this.createdAt = LocalDateTime.now();
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public boolean isCanOperateOnSite() {
@@ -60,11 +88,11 @@ public class Guideline {
         this.canOperateOnSite = canOperateOnSite;
     }
 
-    public boolean isCanOperateOnSiteDetails() {
+    public String isCanOperateOnSiteDetails() {
         return canOperateOnSiteDetails;
     }
 
-    public void setCanOperateOnSiteDetails(boolean canOperateOnSiteDetails) {
+    public void setCanOperateOnSiteDetails(String canOperateOnSiteDetails) {
         this.canOperateOnSiteDetails = canOperateOnSiteDetails;
     }
 
@@ -74,6 +102,14 @@ public class Guideline {
 
     public void setGroupSize(int groupSize) {
         this.groupSize = groupSize;
+    }
+
+    public String getGroupSizeDetails() {
+        return groupSizeDetails;
+    }
+
+    public void setGroupSizeDetails(String groupSizeDetails) {
+        this.groupSizeDetails = groupSizeDetails;
     }
 
     public int getCovidTestingVaccinated() {
