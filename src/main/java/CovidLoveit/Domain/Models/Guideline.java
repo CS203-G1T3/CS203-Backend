@@ -1,5 +1,7 @@
 package CovidLoveit.Domain.Models;
 
+import org.apache.tomcat.jni.Local;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 @Entity
@@ -42,7 +44,25 @@ public class Guideline {
     @JoinColumn(name = "industryId")
     private Industry industry;
 
-    public Guideline(LocalDateTime createdAt, boolean canOperateOnSite, String canOperateOnSiteDetails, String groupSizeDetails, String groupSizeDetails1, int covidTestingVaccinated, int covidTestingUnvaccinated, String covidTestingDetails, String contactTracing, String contactTracingDetails, int operatingCapacity, String operatingCapacityDetails, String operationGuidelines, String referenceLink) {
+    public Guideline(LocalDateTime createdAt, boolean canOperateOnSite, String canOperateOnSiteDetails, 
+                     int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated, 
+                     String covidTestingDetails, String contactTracing, String contactTracingDetails, 
+                     int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
+                     String referenceLink) {
+        this.createdAt = createdAt;
+        this.canOperateOnSite = canOperateOnSite;
+        this.canOperateOnSiteDetails = canOperateOnSiteDetails;
+        this.groupSize = groupSize;
+        this.groupSizeDetails = groupSizeDetails;
+        this.covidTestingVaccinated = covidTestingVaccinated;
+        this.covidTestingUnvaccinated = covidTestingUnvaccinated;
+        this.covidTestingDetails = covidTestingDetails;
+        this.contactTracing = contactTracing;
+        this.contactTracingDetails = contactTracingDetails;
+        this.operatingCapacity = operatingCapacity;
+        this.operatingCapacityDetails = operatingCapacityDetails;
+        this.operationGuidelines = operationGuidelines;
+        this.referenceLink = referenceLink;
     }
 
     public int getGuidelineId() {
@@ -53,8 +73,8 @@ public class Guideline {
         return createdAt;
     }
 
-    public void setCreatedAt() {
-        this.createdAt = LocalDateTime.now();
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public boolean isCanOperateOnSite() {

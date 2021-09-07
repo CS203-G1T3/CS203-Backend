@@ -31,10 +31,14 @@ public class GuidelineService implements IGuidelineService {
                                   String contactTracing, String contactTracingDetails,
                                   int operatingCapacity, String operatingCapacityDetails,
                                   String operationGuidelines, String referenceLink) {
-        var guideline = new Guideline(createdAt, canOperateOnSite, canOperateOnSiteDetails, groupSizeDetails, groupSizeDetails, covidTestingVaccinated, covidTestingUnvaccinated, covidTestingDetails, contactTracing, contactTracingDetails, operatingCapacity, operatingCapacityDetails, operationGuidelines, referenceLink);
+        var guideline = new Guideline(LocalDateTime.now(), canOperateOnSite,
+                canOperateOnSiteDetails, groupSize, groupSizeDetails,
+                covidTestingVaccinated, covidTestingUnvaccinated, covidTestingDetails,
+                contactTracing, contactTracingDetails, operatingCapacity, operatingCapacityDetails,
+                operationGuidelines, referenceLink);
         var savedGuideline = guidelineRepository.save(guideline);
 
-        logger.info(String.format("Successfully added guideline %s", savedGuideline.getGuidelineId()));
+        logger.info(String.format("Successfully added guideline %d", savedGuideline.getGuidelineId()));
 
         return savedGuideline;
     }
@@ -63,8 +67,8 @@ public class GuidelineService implements IGuidelineService {
             return guidelineUpdate;
 
         } else {
-            logger.error(String.format("Guideline with ID %s does not exist in database.", guideline.getGuidelineId()));
-            throw new ResourceNotFoundException(String.format("Guideline ID is not found.", guideline.getGuidelineId()));
+            logger.error(String.format("Guideline with ID %d does not exist in database.", guideline.getGuidelineId()));
+            throw new ResourceNotFoundException(String.format("Guideline ID %d is not found.", guideline.getGuidelineId()));
         }
     }
 
@@ -75,8 +79,8 @@ public class GuidelineService implements IGuidelineService {
         if (guidelineOptional.isPresent()) {
             guidelineRepository.delete(guidelineOptional.get());
         } else {
-            logger.error(String.format("Guideline with ID %s does not exist in database.", guidelineId));
-            throw new ResourceNotFoundException(String.format("Guideline with ID %s not found.", guidelineId));
+            logger.error(String.format("Guideline with ID %d does not exist in database.", guidelineId));
+            throw new ResourceNotFoundException(String.format("Guideline with ID %d not found.", guidelineId));
         }
     }
 }
