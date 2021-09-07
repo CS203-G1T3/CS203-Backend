@@ -19,7 +19,7 @@ public class RegisteredBusiness {
     @JoinColumn(name = "industryId")
     private Industry industry;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "clientId")
     private Client client;
 
