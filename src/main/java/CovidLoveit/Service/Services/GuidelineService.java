@@ -24,7 +24,7 @@ public class GuidelineService implements IGuidelineService {
     public GuidelineService(GuidelineRepository guidelineRepository) {this.guidelineRepository = guidelineRepository; }
 
     @Override
-    public Guideline addGuideline(LocalDateTime createdAt, boolean canOperateOnSite,
+    public Guideline addGuideline(boolean canOperateOnSite,
                                   String canOperateOnSiteDetails, int groupSize,
                                   String groupSizeDetails, int covidTestingVaccinated,
                                   int covidTestingUnvaccinated, String covidTestingDetails,

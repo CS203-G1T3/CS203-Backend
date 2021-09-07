@@ -44,9 +44,12 @@ public class Guideline {
     @JoinColumn(name = "industryId")
     private Industry industry;
 
-    public Guideline(LocalDateTime createdAt, boolean canOperateOnSite, String canOperateOnSiteDetails, 
-                     int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated, 
-                     String covidTestingDetails, String contactTracing, String contactTracingDetails, 
+    public Guideline() {
+    }
+
+    public Guideline(LocalDateTime createdAt, boolean canOperateOnSite, String canOperateOnSiteDetails,
+                     int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated,
+                     String covidTestingDetails, String contactTracing, String contactTracingDetails,
                      int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
                      String referenceLink) {
         this.createdAt = createdAt;
