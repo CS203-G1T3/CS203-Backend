@@ -2,8 +2,6 @@ package CovidLoveit.Domain.Models;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Entity
 @Table(name = "GUIDELINES")
 public class Guideline {
