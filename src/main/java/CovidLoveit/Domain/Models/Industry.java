@@ -21,10 +21,10 @@ public class Industry {
 
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "industry")
+    @OneToMany(mappedBy = "industry")
     private List<Guideline> guidelines = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "industry")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "industry")
     private List<RegisteredBusiness> registeredBusinesses = new ArrayList<>();
 
     public UUID getIndustryId() {
