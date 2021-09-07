@@ -4,11 +4,11 @@ import CovidLoveit.Domain.Models.Client;
 
 import java.util.UUID;
 
-public interface ICustomerService {
+public interface IClientService {
 
-    Client addCustomer (String email, String companyName, String companyDesc, boolean isAdmin);
+    Client addClient (String email, String companyName, String companyDesc, boolean isAdmin);
 
-    Client updateCustomer (Client client);
+    Client updateClient (Client client);
 
-    void deleteCustomer (UUID customerId);
+    void deleteClient (UUID clientId);
 }
