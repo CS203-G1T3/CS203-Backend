@@ -38,7 +38,7 @@ public class Guideline {
 
     private String referenceLink;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "industryId")
     private Industry industry;
 
