@@ -20,8 +20,8 @@ public class RegisteredBusiness {
     private Industry industry;
 
     @ManyToOne
-    @JoinColumn(name = "customerId")
-    private Customer customer;
+    @JoinColumn(name = "clientId")
+    private Client client;
 
     public UUID getBusinessId() { return businessId; }
 
@@ -35,7 +35,7 @@ public class RegisteredBusiness {
 
     public void setBusinessDesc(String businessDesc) { this.businessDesc = businessDesc; }
 
-    public Customer getUser() { return customer; }
+    public Client getClient() { return client; }
 
-    public void setUser(Customer customer) { this.customer = customer; }
+    public void setClient(Client client) { this.client = client; }
 }
