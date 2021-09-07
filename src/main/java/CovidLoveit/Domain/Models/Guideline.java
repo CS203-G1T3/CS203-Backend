@@ -14,9 +14,11 @@ public class Guideline {
 
     private boolean canOperateOnSite;
 
-    private boolean canOperateOnSiteDetails;
+    private String canOperateOnSiteDetails;
 
     private int groupSize;
+
+    private String groupSizeDetails;
 
     private int covidTestingVaccinated;
 
@@ -40,6 +42,9 @@ public class Guideline {
     @JoinColumn(name = "industryId")
     private Industry industry;
 
+    public Guideline(LocalDateTime createdAt, boolean canOperateOnSite, String canOperateOnSiteDetails, String groupSizeDetails, String groupSizeDetails1, int covidTestingVaccinated, int covidTestingUnvaccinated, String covidTestingDetails, String contactTracing, String contactTracingDetails, int operatingCapacity, String operatingCapacityDetails, String operationGuidelines, String referenceLink) {
+    }
+
     public int getGuidelineId() {
         return guidelineId;
     }
@@ -60,11 +65,11 @@ public class Guideline {
         this.canOperateOnSite = canOperateOnSite;
     }
 
-    public boolean isCanOperateOnSiteDetails() {
+    public String isCanOperateOnSiteDetails() {
         return canOperateOnSiteDetails;
     }
 
-    public void setCanOperateOnSiteDetails(boolean canOperateOnSiteDetails) {
+    public void setCanOperateOnSiteDetails(String canOperateOnSiteDetails) {
         this.canOperateOnSiteDetails = canOperateOnSiteDetails;
     }
 
@@ -74,6 +79,14 @@ public class Guideline {
 
     public void setGroupSize(int groupSize) {
         this.groupSize = groupSize;
+    }
+
+    public String getGroupSizeDetails() {
+        return groupSizeDetails;
+    }
+
+    public void setGroupSizeDetails(String groupSizeDetails) {
+        this.groupSizeDetails = groupSizeDetails;
     }
 
     public int getCovidTestingVaccinated() {
