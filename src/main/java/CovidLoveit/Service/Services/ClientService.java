@@ -1,6 +1,6 @@
 package CovidLoveit.Service.Services;
 
-import CovidLoveit.Domain.Models.Customer;
+import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Exception.ResourceNotFoundException;
 import CovidLoveit.Repositories.CustomerRepository;
 import CovidLoveit.Service.Services.Interfaces.ICustomerService;
@@ -28,8 +28,8 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public Customer addCustomer(String email, String companyName, String companyDesc, boolean isAdmin) {
-        var customer = new Customer(email, companyName, companyDesc, isAdmin);
+    public Client addCustomer(String email, String companyName, String companyDesc, boolean isAdmin) {
+        var customer = new Client(email, companyName, companyDesc, isAdmin);
         var savedCustomer = customerRepository.save(customer);
 
         logger.info(String.format("Successfully added user %s", savedCustomer.getUserId()));
@@ -38,28 +38,28 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public Customer updateCustomer(Customer customer) {
-        Optional<Customer> customerRecord = customerRepository.findById(customer.getUserId());
+    public Client updateCustomer(Client client) {
+        Optional<Client> customerRecord = customerRepository.findById(client.getUserId());
 
         if (customerRecord.isPresent()) {
-            Customer customerUpdate = customerRecord.get();
-            customerUpdate.setEmail(customer.getEmail());
-            customerUpdate.setCompanyName(customer.getCompanyName());
-            customerUpdate.setCompanyDescription(customer.getCompanyDescription());
-            customerUpdate.setAdmin(customer.isAdmin());
+            Client clientUpdate = customerRecord.get();
+            clientUpdate.setEmail(client.getEmail());
+            clientUpdate.setCompanyName(client.getCompanyName());
+            clientUpdate.setCompanyDescription(client.getCompanyDescription());
+            clientUpdate.setAdmin(client.isAdmin());
 
-            customerRepository.save(customerUpdate);
-            return customerUpdate;
+            customerRepository.save(clientUpdate);
+            return clientUpdate;
 
         } else {
-            logger.error(String.format("Customer with ID %s does not exist in database.", customer.getUserId()));
-            throw new ResourceNotFoundException(String.format("Customer with ID %s not found.", customer.getUserId()));
+            logger.error(String.format("Customer with ID %s does not exist in database.", client.getUserId()));
+            throw new ResourceNotFoundException(String.format("Customer with ID %s not found.", client.getUserId()));
         }
     }
 
     @Override
     public void deleteCustomer(UUID customerId) {
-        Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        Optional<Client> customerOptional = customerRepository.findById(customerId);
 
         if (customerOptional.isPresent()) {
             customerRepository.delete(customerOptional.get());
