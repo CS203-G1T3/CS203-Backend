@@ -2,7 +2,7 @@ package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Exception.ResourceNotFoundException;
-import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
+import CovidLoveit.Repositories.Interfaces.IGuidelineRepository;
 import CovidLoveit.Service.Services.Interfaces.IGuidelineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +18,10 @@ import java.util.Optional;
 public class GuidelineService implements IGuidelineService {
 
     private Logger logger = LoggerFactory.getLogger(GuidelineService.class);
-    private GuidelineRepository guidelineRepository;
+    private IGuidelineRepository _GuidelineRepository;
 
     @Autowired
-    public GuidelineService(GuidelineRepository guidelineRepository) {this.guidelineRepository = guidelineRepository; }
+    public GuidelineService(IGuidelineRepository guidelineRepository) {this._GuidelineRepository = guidelineRepository; }
 
     @Override
     public Guideline addGuideline(boolean canOperateOnSite,
@@ -36,7 +36,7 @@ public class GuidelineService implements IGuidelineService {
                 covidTestingVaccinated, covidTestingUnvaccinated, covidTestingDetails,
                 contactTracing, contactTracingDetails, operatingCapacity, operatingCapacityDetails,
                 operationGuidelines, referenceLink);
-        var savedGuideline = guidelineRepository.save(guideline);
+        var savedGuideline = _GuidelineRepository.save(guideline);
 
         logger.info(String.format("Successfully added guideline %d", savedGuideline.getGuidelineId()));
 
@@ -45,7 +45,7 @@ public class GuidelineService implements IGuidelineService {
 
     @Override
     public Guideline updateGuideline(Guideline guideline) {
-        Optional<Guideline> guidelineRecord = guidelineRepository.findById(guideline.getGuidelineId());
+        Optional<Guideline> guidelineRecord = _GuidelineRepository.findById(guideline.getGuidelineId());
 
         if (guidelineRecord.isPresent()) {
             Guideline guidelineUpdate = guidelineRecord.get();
@@ -63,7 +63,7 @@ public class GuidelineService implements IGuidelineService {
             guidelineUpdate.setOperationGuidelines(guideline.getOperationGuidelines());
             guidelineUpdate.setReferenceLink(guideline.getReferenceLink());
 
-            guidelineRepository.save(guidelineUpdate);
+            _GuidelineRepository.save(guidelineUpdate);
             return guidelineUpdate;
 
         } else {
@@ -74,10 +74,10 @@ public class GuidelineService implements IGuidelineService {
 
     @Override
     public void deleteGuideline(Integer guidelineId) {
-        Optional<Guideline> guidelineOptional = guidelineRepository.findById(guidelineId);
+        Optional<Guideline> guidelineOptional = _GuidelineRepository.findById(guidelineId);
 
         if (guidelineOptional.isPresent()) {
-            guidelineRepository.delete(guidelineOptional.get());
+            _GuidelineRepository.delete(guidelineOptional.get());
         } else {
             logger.error(String.format("Guideline with ID %d does not exist in database.", guidelineId));
             throw new ResourceNotFoundException(String.format("Guideline with ID %d not found.", guidelineId));
