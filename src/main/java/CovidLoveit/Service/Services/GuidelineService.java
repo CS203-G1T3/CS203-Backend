@@ -38,7 +38,7 @@ public class GuidelineService implements IGuidelineService {
                 operationGuidelines, referenceLink);
         var savedGuideline = _GuidelineRepository.save(guideline);
 
-        logger.info(String.format("Successfully added guideline %d", savedGuideline.getGuidelineId()));
+        logger.info(String.format("Successfully added guideline {%d}", savedGuideline.getGuidelineId()));
 
         return savedGuideline;
     }
@@ -67,8 +67,8 @@ public class GuidelineService implements IGuidelineService {
             return guidelineUpdate;
 
         } else {
-            logger.error(String.format("Guideline with ID %d does not exist in database.", guideline.getGuidelineId()));
-            throw new ResourceNotFoundException(String.format("Guideline ID %d is not found.", guideline.getGuidelineId()));
+            logger.error(String.format("Guideline with ID {%d} does not exist in database.", guideline.getGuidelineId()));
+            throw new ResourceNotFoundException(String.format("Guideline ID {%d} is not found.", guideline.getGuidelineId()));
         }
     }
 
@@ -79,8 +79,8 @@ public class GuidelineService implements IGuidelineService {
         if (guidelineOptional.isPresent()) {
             _GuidelineRepository.delete(guidelineOptional.get());
         } else {
-            logger.error(String.format("Guideline with ID %d does not exist in database.", guidelineId));
-            throw new ResourceNotFoundException(String.format("Guideline with ID %d not found.", guidelineId));
+            logger.error(String.format("Guideline with ID {%d} does not exist in database.", guidelineId));
+            throw new ResourceNotFoundException(String.format("Guideline with ID {%d} not found.", guidelineId));
         }
     }
 }
