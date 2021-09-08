@@ -1,4 +1,4 @@
-package CovidLoveit.Repositories;
+package CovidLoveit.Repositories.Interfaces;
 
 import CovidLoveit.Domain.Models.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
