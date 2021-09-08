@@ -2,7 +2,7 @@ package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Exception.ResourceNotFoundException;
-import CovidLoveit.Repositories.GuidelineRepository;
+import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
 import CovidLoveit.Service.Services.Interfaces.IGuidelineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
