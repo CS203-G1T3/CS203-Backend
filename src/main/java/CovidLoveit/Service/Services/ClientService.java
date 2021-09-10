@@ -19,18 +19,18 @@ public class ClientService implements IClientService {
 
     // Use this logger object to log information of user's actions
     private Logger logger = LoggerFactory.getLogger(ClientService.class);
-    private IClientRepository _ClientRepository;
+    private IClientRepository clientRepository;
 
     // Injecting the required dependencies here
     @Autowired
     public ClientService(IClientRepository clientRepository){
-        this._ClientRepository = clientRepository;
+        this.clientRepository = clientRepository;
     }
 
     @Override
     public Client addClient(String email, String companyName, String companyDesc, boolean isAdmin) {
         var client = new Client(email, companyName, companyDesc, isAdmin);
-        var savedClient = _ClientRepository.save(client);
+        var savedClient = clientRepository.save(client);
 
         logger.info(String.format("Successfully added client {%s}", savedClient.getClientId()));
 
@@ -39,7 +39,7 @@ public class ClientService implements IClientService {
 
     @Override
     public Client updateClient(Client client) {
-        Optional<Client> clientRecord = _ClientRepository.findById(client.getClientId());
+        Optional<Client> clientRecord = clientRepository.findById(client.getClientId());
 
         if (clientRecord.isPresent()) {
             Client clientUpdate = clientRecord.get();
@@ -48,7 +48,7 @@ public class ClientService implements IClientService {
             clientUpdate.setCompanyDescription(client.getCompanyDescription());
             clientUpdate.setAdmin(client.isAdmin());
 
-            _ClientRepository.save(clientUpdate);
+            clientRepository.save(clientUpdate);
             logger.info(String.format("Successfully updated client with ID {%s}", client.getClientId().toString()));
             return clientUpdate;
 
@@ -60,10 +60,10 @@ public class ClientService implements IClientService {
 
     @Override
     public void deleteClient(UUID clientId) {
-        Optional<Client> clientOptional = _ClientRepository.findById(clientId);
+        Optional<Client> clientOptional = clientRepository.findById(clientId);
 
         if (clientOptional.isPresent()) {
-            _ClientRepository.delete(clientOptional.get());
+            clientRepository.delete(clientOptional.get());
         } else {
             logger.error(String.format("Client with ID {%s} does not exist in database.", clientId));
             throw new ResourceNotFoundException(String.format("Client with ID {%s} not found.", clientId));

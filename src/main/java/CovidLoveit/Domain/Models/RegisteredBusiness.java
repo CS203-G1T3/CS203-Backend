@@ -23,6 +23,16 @@ public class RegisteredBusiness {
     @JoinColumn(name = "clientId")
     private Client client;
 
+    public RegisteredBusiness(){
+
+    }
+
+    public RegisteredBusiness(String name, String desc){
+        this.businessName = name;
+        this.businessDesc = desc;
+    }
+
+
     public UUID getBusinessId() { return businessId; }
 
     public void setBusinessId(UUID businessId) { this.businessId = businessId; }
