@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class RegisteredBusinessService implements IRegisteredBusinessService {
 
     private Logger logger = LoggerFactory.getLogger(RegisteredBusinessService.class);
