@@ -1,0 +1,71 @@
+package CovidLoveit.Service.Services;
+
+import CovidLoveit.Domain.Models.Industry;
+import CovidLoveit.Exception.ResourceNotFoundException;
+import CovidLoveit.Repositories.Interfaces.IIndustryRepository;
+import CovidLoveit.Service.Services.Interfaces.IIndustryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@Transactional
+public class IndustryService implements IIndustryService {
+
+    // Use this logger object to log information of user's actions
+    private Logger logger = LoggerFactory.getLogger(IndustryService.class);
+    private IIndustryRepository _IndustryRepository;
+
+    // Injecting the required dependencies here
+    @Autowired
+    public IndustryService(IIndustryRepository industryRepository){
+        this._IndustryRepository = industryRepository;
+    }
+
+    @Override
+    public Industry addIndustry(String industryName, String industrySubtype, String description) {
+        var industry = new Industry(industryName, industrySubtype, description);
+        var savedIndustry = _IndustryRepository.save(industry);
+
+        logger.info(String.format("Successfully added industry {%s}", savedIndustry.getIndustryId()));
+
+        return savedIndustry;
+    }
+
+    @Override
+    public Industry updateIndustry(Industry industry) {
+        Optional<Industry> industryRecord = _IndustryRepository.findById(industry.getIndustryId());
+
+        if (industryRecord.isPresent()) {
+            Industry industryUpdate = industryRecord.get();
+            industryUpdate.setIndustryName(industry.getIndustryName());
+            industryUpdate.setIndustrySubtype(industry.getIndustrySubtype());
+            industryUpdate.setDescription(industry.getDescription());
+
+            _IndustryRepository.save(industryUpdate);
+            logger.info(String.format("Successfully updated industry with ID {%s}", industry.getIndustryId().toString()));
+            return industryUpdate;
+
+        } else {
+            logger.error(String.format("Industry with ID {%s} does not exist in database.", industry.getIndustryId()));
+            throw new ResourceNotFoundException(String.format("Industry with ID {%s} not found.", industry.getIndustryId()));
+        }
+    }
+
+    @Override
+    public void deleteIndustry(UUID industryId) {
+        Optional<Industry> industryOptional = _IndustryRepository.findById(industryId);
+
+        if (industryOptional.isPresent()) {
+            _IndustryRepository.delete(industryOptional.get());
+        } else {
+            logger.error(String.format("Industry with ID {%s} does not exist in database.", industryId));
+            throw new ResourceNotFoundException(String.format("Industry with ID {%s} not found.", industryId));
+        }
+    }
+}
