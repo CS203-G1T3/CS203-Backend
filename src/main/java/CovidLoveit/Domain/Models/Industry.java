@@ -27,6 +27,15 @@ public class Industry {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "industry")
     private List<RegisteredBusiness> registeredBusinesses = new ArrayList<>();
 
+    public Industry() {
+    }
+
+    public Industry(String industryName, String industrySubtype, String description) {
+        this.industryName = industryName;
+        this.industrySubtype = industrySubtype;
+        this.description = description;
+    }
+
     public UUID getIndustryId() {
         return industryId;
     }
