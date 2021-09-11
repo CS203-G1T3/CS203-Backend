@@ -19,18 +19,18 @@ public class IndustryService implements IIndustryService {
 
     // Use this logger object to log information of user's actions
     private Logger logger = LoggerFactory.getLogger(IndustryService.class);
-    private IIndustryRepository _IndustryRepository;
+    private IIndustryRepository industryRepository;
 
     // Injecting the required dependencies here
     @Autowired
     public IndustryService(IIndustryRepository industryRepository){
-        this._IndustryRepository = industryRepository;
+        this.industryRepository = industryRepository;
     }
 
     @Override
     public Industry addIndustry(String industryName, String industrySubtype, String description) {
         var industry = new Industry(industryName, industrySubtype, description);
-        var savedIndustry = _IndustryRepository.save(industry);
+        var savedIndustry = industryRepository.save(industry);
 
         logger.info(String.format("Successfully added industry {%s}", savedIndustry.getIndustryId()));
 
@@ -39,7 +39,7 @@ public class IndustryService implements IIndustryService {
 
     @Override
     public Industry updateIndustry(Industry industry) {
-        Optional<Industry> industryRecord = _IndustryRepository.findById(industry.getIndustryId());
+        Optional<Industry> industryRecord = industryRepository.findById(industry.getIndustryId());
 
         if (industryRecord.isPresent()) {
             Industry industryUpdate = industryRecord.get();
@@ -47,8 +47,8 @@ public class IndustryService implements IIndustryService {
             industryUpdate.setIndustrySubtype(industry.getIndustrySubtype());
             industryUpdate.setDescription(industry.getDescription());
 
-            _IndustryRepository.save(industryUpdate);
-            logger.info(String.format("Successfully updated industry with ID {%s}", industry.getIndustryId().toString()));
+            industryRepository.save(industryUpdate);
+            logger.info(String.format("Successfully updated industry with ID {%s}", industry.getIndustryId()));
             return industryUpdate;
 
         } else {
@@ -59,10 +59,10 @@ public class IndustryService implements IIndustryService {
 
     @Override
     public void deleteIndustry(UUID industryId) {
-        Optional<Industry> industryOptional = _IndustryRepository.findById(industryId);
+        Optional<Industry> industryOptional = industryRepository.findById(industryId);
 
         if (industryOptional.isPresent()) {
-            _IndustryRepository.delete(industryOptional.get());
+            industryRepository.delete(industryOptional.get());
         } else {
             logger.error(String.format("Industry with ID {%s} does not exist in database.", industryId));
             throw new ResourceNotFoundException(String.format("Industry with ID {%s} not found.", industryId));
