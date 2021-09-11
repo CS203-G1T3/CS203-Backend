@@ -49,7 +49,7 @@ public class ClientService implements IClientService {
             clientUpdate.setAdmin(client.isAdmin());
 
             clientRepository.save(clientUpdate);
-            logger.info(String.format("Successfully updated client with ID {%s}", client.getClientId().toString()));
+            logger.info(String.format("Successfully updated client with ID {%s}", client.getClientId()));
             return clientUpdate;
 
         } else {
