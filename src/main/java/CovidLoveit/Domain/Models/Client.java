@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "CUSTOMER")
-public class Customer {
+@Table(name = "CLIENT")
+public class Client {
 
     // TODO: Remove the generated value when frontend application is up
     @Id
     @GeneratedValue
-    private UUID customerId;
+    private UUID clientId;
 
     private String email;
 
@@ -22,11 +22,21 @@ public class Customer {
 
     private boolean isAdmin;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
-    private List<RegisteredBusiness> registeredBusinesses = new ArrayList<RegisteredBusiness>();
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
+    private RegisteredBusiness registeredBusiness;
 
-    public UUID getUserId() {
-        return customerId;
+    public Client() {
+    }
+
+    public Client(String email, String compName, String compDesc, boolean isAdmin) {
+        this.email = email;
+        this.compName = compName;
+        this.compDesc = compDesc;
+        this.isAdmin = isAdmin;
+    }
+
+    public UUID getClientId() {
+        return clientId;
     }
 
     public String getEmail() {
@@ -53,12 +63,12 @@ public class Customer {
         this.compDesc = companyDescription;
     }
 
-    public List<RegisteredBusiness> getRegisteredBusinesses() {
-        return registeredBusinesses;
+    public RegisteredBusiness getRegisteredBusiness() {
+        return registeredBusiness;
     }
 
-    public void setRegisteredBusinesses(List<RegisteredBusiness> registeredBusinesses) {
-        this.registeredBusinesses = registeredBusinesses;
+    public void setRegisteredBusiness(RegisteredBusiness registeredBusiness) {
+        this.registeredBusiness = registeredBusiness;
     }
 
     public boolean isAdmin() {

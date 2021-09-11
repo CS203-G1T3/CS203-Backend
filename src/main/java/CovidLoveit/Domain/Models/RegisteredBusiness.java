@@ -15,13 +15,23 @@ public class RegisteredBusiness {
 
     private String businessDesc;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "industryId")
     private Industry industry;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="customerId")
-    private Customer customer;
+    @OneToOne
+    @JoinColumn(name = "clientId")
+    private Client client;
+
+    public RegisteredBusiness(){
+
+    }
+
+    public RegisteredBusiness(String name, String desc){
+        this.businessName = name;
+        this.businessDesc = desc;
+    }
+
 
     public UUID getBusinessId() { return businessId; }
 
@@ -35,7 +45,7 @@ public class RegisteredBusiness {
 
     public void setBusinessDesc(String businessDesc) { this.businessDesc = businessDesc; }
 
-    public Customer getUser() { return customer; }
+    public Client getClient() { return client; }
 
-    public void setUser(Customer customer) { this.customer = customer; }
+    public void setClient(Client client) { this.client = client; }
 }
