@@ -28,8 +28,8 @@ public class ClientService implements IClientService {
     }
 
     @Override
-    public Client addClient(String email, String companyName, String companyDesc, boolean isAdmin) {
-        var client = new Client(email, companyName, companyDesc, isAdmin);
+    public Client addClient(String email, boolean isAdmin) {
+        var client = new Client(email, isAdmin);
         var savedClient = clientRepository.save(client);
 
         logger.info(String.format("Successfully added client {%s}", savedClient.getClientId()));
@@ -44,8 +44,7 @@ public class ClientService implements IClientService {
         if (clientRecord.isPresent()) {
             Client clientUpdate = clientRecord.get();
             clientUpdate.setEmail(client.getEmail());
-            clientUpdate.setCompanyName(client.getCompanyName());
-            clientUpdate.setCompanyDescription(client.getCompanyDescription());
+            clientUpdate.setRegisteredBusiness(client.getRegisteredBusiness());
             clientUpdate.setAdmin(client.isAdmin());
 
             clientRepository.save(clientUpdate);
