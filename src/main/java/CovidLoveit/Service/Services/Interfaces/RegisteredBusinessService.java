@@ -7,7 +7,7 @@ import java.util.UUID;
 public interface RegisteredBusinessService {
     RegisteredBusiness addBusiness(String name, String desc);
 
-    RegisteredBusiness updateBusiness(RegisteredBusiness registeredBusiness);
+    RegisteredBusiness updateBusiness(UUID businessId, RegisteredBusiness registeredBusiness);
 
     void deleteBusiness(UUID businessId);
 }
