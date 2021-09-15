@@ -41,7 +41,10 @@ public class ClientServiceImpl implements ClientService {
     public Client updateClient(UUID clientId, Client client) {
         Optional<Client> clientOptional = clientRepository.findById(clientId);
 
-        clientOptional.orElseThrow(() -> new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId)));
+        clientOptional.orElseThrow(() -> {
+            logger.warn(String.format("Client with ID {%s} does not exist in DB.", clientId));
+            return new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId));
+        });
 
         logger.info(String.format("Successfully updated client with ID {%s}", clientId));
         return clientRepository.save(client);
@@ -51,7 +54,10 @@ public class ClientServiceImpl implements ClientService {
     public void deleteClient(UUID clientId) {
         Optional<Client> clientOptional = clientRepository.findById(clientId);
 
-        clientOptional.orElseThrow(() -> new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId)));
+        clientOptional.orElseThrow(() -> {
+            logger.warn(String.format("Client with ID {%s} does not exist in DB.", clientId));
+            return new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId));
+        });
 
         clientRepository.delete(clientOptional.get());
         logger.info(String.format("Successfully removed client with ID {%s}", clientId));

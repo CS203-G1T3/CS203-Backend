@@ -45,7 +45,10 @@ public class GuidelineServiceImpl implements GuidelineService {
     public Guideline updateGuideline(int guidelineId, Guideline guideline) {
         Optional<Guideline> guidelineOptional = guidelineRepository.findById(guidelineId);
 
-        guidelineOptional.orElseThrow(() -> new GuidelineNotFoundException(String.format("Guideline ID {%d} is not found.", guideline.getGuidelineId())));
+        guidelineOptional.orElseThrow(() -> {
+            logger.warn(String.format("Guideline with Id {%d} does not exist in DB.", guidelineId));
+            return new GuidelineNotFoundException(String.format("Guideline ID {%d} is not found.", guidelineId));
+        });
 
         Guideline guidelineRecord = guidelineRepository.save(guideline);
         logger.info(String.format("Successfully updated Guideline {%d}", guidelineId));
@@ -56,7 +59,10 @@ public class GuidelineServiceImpl implements GuidelineService {
     public void deleteGuideline(int guidelineId) {
         Optional<Guideline> guidelineOptional = guidelineRepository.findById(guidelineId);
 
-        guidelineOptional.orElseThrow(() -> new GuidelineNotFoundException(String.format("Guideline with ID {%d} not found.", guidelineId)));
+        guidelineOptional.orElseThrow(() -> {
+            logger.warn(String.format("Guideline with Id {%d} does not exist in DB.", guidelineId));
+            return new GuidelineNotFoundException(String.format("Guideline ID {%d} is not found.", guidelineId));
+        });
 
         guidelineRepository.delete(guidelineOptional.get());
         logger.info(String.format("Sucessfully removed Guideline {%d}", guidelineId));

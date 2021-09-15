@@ -37,7 +37,10 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
         Optional<RegisteredBusiness> businessOptional = registeredBusinessRepository.findById(registeredBusiness.getBusinessId());
 
         //statement will only be true of Optional object businessRecord was created with a non-null value
-        businessOptional.orElseThrow(() -> new RegisteredBusinessNotFoundException(String.format("Business with ID {%s} not found.", registeredBusiness.getBusinessName())));
+        businessOptional.orElseThrow(() -> {
+            logger.warn(String.format("Registered Business {%s} does not exist in DB.", businessId));
+            return new RegisteredBusinessNotFoundException(String.format("Business with ID {%s} not found.", businessId));
+        });
 
         RegisteredBusiness businessRecord = registeredBusinessRepository.save(registeredBusiness);
         logger.info(String.format("Successfully updated business with ID {%s}", businessId));
@@ -49,8 +52,11 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
     public void deleteBusiness(UUID businessId){
         Optional<RegisteredBusiness> businessOptional = registeredBusinessRepository.findById(businessId);
 
-        businessOptional.orElseThrow(() -> new RegisteredBusinessNotFoundException(String.format("Business with ID {%s} does not exist in database.", businessId)));
-
+        businessOptional.orElseThrow(() -> {
+            logger.warn(String.format("Registered Business {%s} does not exist in DB.", businessId));
+            return new RegisteredBusinessNotFoundException(String.format("Business with ID {%s} not found.", businessId));
+        });
+        
         registeredBusinessRepository.delete(businessOptional.get());
         logger.info(String.format("Successfully deleted business with ID {%s}", businessId));
     }

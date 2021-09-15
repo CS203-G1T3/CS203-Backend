@@ -41,7 +41,10 @@ public class IndustryServiceImpl implements IndustryService {
     public Industry updateIndustry(UUID industryId, Industry industry) {
         Optional<Industry> industryOptional = industryRepository.findById(industryId);
 
-        industryOptional.orElseThrow(() -> new IndustryNotFoundException(String.format("Industry with ID {%s} not found.",industryId)));
+        industryOptional.orElseThrow(() -> {
+            logger.warn(String.format("Industry with ID {%s} does not exist in DB.", industryId));
+            return new IndustryNotFoundException(String.format("Industry with ID {%s} not found.",industryId));
+        });
 
         Industry industryRecord = industryRepository.save(industry);
         logger.info(String.format("Successfully updated industry with ID {%s}", industry.getIndustryId()));
@@ -53,7 +56,10 @@ public class IndustryServiceImpl implements IndustryService {
     public void deleteIndustry(UUID industryId) {
         Optional<Industry> industryOptional = industryRepository.findById(industryId);
 
-        industryOptional.orElseThrow(() -> new IndustryNotFoundException(String.format("Industry with ID {%s} not found.",industryId)));
+        industryOptional.orElseThrow(() -> {
+            logger.warn(String.format("Industry with ID {%s} does not exist in DB.", industryId));
+            return new IndustryNotFoundException(String.format("Industry with ID {%s} not found.",industryId));
+        });
 
         industryRepository.delete(industryOptional.get());
         logger.info(String.format("Successfully removed Industry with ID {%s}", industryId));
