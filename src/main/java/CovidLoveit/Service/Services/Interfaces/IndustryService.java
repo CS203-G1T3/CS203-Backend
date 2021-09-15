@@ -8,7 +8,7 @@ public interface IndustryService {
 
     Industry addIndustry(String industryName, String industrySubtype, String description);
 
-    Industry updateIndustry(Industry industry);
+    Industry updateIndustry(UUID industryId, Industry industry);
 
     void deleteIndustry(UUID industryId);
 }
