@@ -14,15 +14,15 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class ClientService implements CovidLoveit.Service.Services.Interfaces.ClientService {
+public class ClientServiceImpl implements CovidLoveit.Service.Services.Interfaces.ClientService {
 
     // Use this logger object to log information of user's actions
-    private Logger logger = LoggerFactory.getLogger(ClientService.class);
+    private Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
     private IClientRepository clientRepository;
 
     // Injecting the required dependencies here
     @Autowired
-    public ClientService(IClientRepository clientRepository){
+    public ClientServiceImpl(IClientRepository clientRepository){
         this.clientRepository = clientRepository;
     }
 
