@@ -30,7 +30,7 @@ public class GuidelineServiceImpl implements CovidLoveit.Service.Services.Interf
                                   String contactTracing, String contactTracingDetails,
                                   int operatingCapacity, String operatingCapacityDetails,
                                   String operationGuidelines, String referenceLink) {
-        var guideline = new Guideline(LocalDateTime.now(), canOperateOnSite,
+        var guideline = new Guideline(canOperateOnSite,
                 canOperateOnSiteDetails, groupSize, groupSizeDetails,
                 covidTestingVaccinated, covidTestingUnvaccinated, covidTestingDetails,
                 contactTracing, contactTracingDetails, operatingCapacity, operatingCapacityDetails,
@@ -48,8 +48,8 @@ public class GuidelineServiceImpl implements CovidLoveit.Service.Services.Interf
 
         if (guidelineRecord.isPresent()) {
             Guideline guidelineUpdate = guidelineRecord.get();
-            guidelineUpdate.setCanOperateOnSite(guideline.isCanOperateOnSite());
-            guidelineUpdate.setCanOperateOnSiteDetails(guideline.isCanOperateOnSiteDetails());
+            guidelineUpdate.setCanOpOnSite(guideline.isCanOpOnSite());
+            guidelineUpdate.setCanOpOnSiteDetails(guideline.getCanOpOnSiteDetails());
             guidelineUpdate.setGroupSize(guideline.getGroupSize());
             guidelineUpdate.setGroupSizeDetails(guideline.getGroupSizeDetails());
             guidelineUpdate.setCovidTestingVaccinated(guideline.getCovidTestingVaccinated());
@@ -58,8 +58,8 @@ public class GuidelineServiceImpl implements CovidLoveit.Service.Services.Interf
             guidelineUpdate.setContactTracing(guideline.getContactTracing());
             guidelineUpdate.setContactTracingDetails(guideline.getContactTracingDetails());
             guidelineUpdate.setOperatingCapacity(guideline.getOperatingCapacity());
-            guidelineUpdate.setOperatingCapacityDetails(guideline.getOperatingCapacityDetails());
-            guidelineUpdate.setOperationGuidelines(guideline.getOperationGuidelines());
+            guidelineUpdate.setOpCapacityDetails(guideline.getOpCapacityDetails());
+            guidelineUpdate.setOpGuidelines(guideline.getOpGuidelines());
             guidelineUpdate.setReferenceLink(guideline.getReferenceLink());
 
             guidelineRepository.save(guidelineUpdate);
