@@ -18,33 +18,46 @@ public class Guideline {
     @Column(name = "createdAt", nullable = false)
     private Date createdAt;
 
+    @Column(name = "canOpOnSite")
     private boolean canOpOnSite;
 
+    @Column(name = "canOpOnSiteDetails")
     private String canOpOnSiteDetails;
 
+    @Column(name = "groupSize")
     private int groupSize;
 
+    @Column(name = "groupSizeDetails")
     private String groupSizeDetails;
 
+    @Column(name = "covidTestingVaccinated")
     private int covidTestingVaccinated;
 
+    @Column(name = "covidTestingUnvaccinated")
     private int covidTestingUnvaccinated;
 
+    @Column(name = "covidTestingDetails")
     private String covidTestingDetails;
 
+    @Column(name = "contactTracing")
     private String contactTracing;
 
+    @Column(name = "contactTracingDetails")
     private String contactTracingDetails;
 
+    @Column(name = "operatingCapacity")
     private int operatingCapacity;
 
+    @Column(name = "opCapacityDetails")
     private String opCapacityDetails;
 
+    @Column(name = "opGuidelines")
     private String opGuidelines;
 
+    @Column(name = "referenceLink")
     private String referenceLink;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "industryId")
     private Industry industry;
 
