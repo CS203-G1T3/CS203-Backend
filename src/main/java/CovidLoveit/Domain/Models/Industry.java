@@ -13,16 +13,20 @@ public class Industry {
 
     @Id
     @GeneratedValue
+    @Column(name = "industryId", unique = true, nullable = false)
     private UUID industryId;
 
+    @Column(name = "industryName", nullable = false)
     private String industryName;
 
+    @Column(name = "industrySubtype", nullable = false)
     private String industrySubtype;
 
-    private String description;
+    @Column(name = "industryDesc")
+    private String industryDesc;
 
     @OneToMany(mappedBy = "industry")
-    private List<Guideline> guidelines = new ArrayList<>();
+    private List<Guideline> guidelines;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "industry")
     private List<RegisteredBusiness> registeredBusinesses = new ArrayList<>();
@@ -30,10 +34,10 @@ public class Industry {
     public Industry() {
     }
 
-    public Industry(String industryName, String industrySubtype, String description) {
+    public Industry(String industryName, String industrySubtype, String industryDesc) {
         this.industryName = industryName;
         this.industrySubtype = industrySubtype;
-        this.description = description;
+        this.industryDesc = industryDesc;
     }
 
     public UUID getIndustryId() {
@@ -57,10 +61,26 @@ public class Industry {
     }
 
     public String getDescription() {
-        return description;
+        return industryDesc;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.industryDesc = industryDesc;
+    }
+
+    public List<Guideline> getGuidelines() {
+        return guidelines;
+    }
+
+    public void setGuidelines(List<Guideline> guidelines) {
+        this.guidelines = guidelines;
+    }
+
+    public List<RegisteredBusiness> getRegisteredBusinesses() {
+        return registeredBusinesses;
+    }
+
+    public void setRegisteredBusinesses(List<RegisteredBusiness> registeredBusinesses) {
+        this.registeredBusinesses = registeredBusinesses;
     }
 }
