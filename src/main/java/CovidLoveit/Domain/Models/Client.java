@@ -3,15 +3,13 @@ package CovidLoveit.Domain.Models;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "CLIENT")
 public class Client {
-    
+
     public Client() {
     }
 
