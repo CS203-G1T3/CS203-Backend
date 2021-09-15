@@ -4,7 +4,7 @@ import CovidLoveit.Domain.Models.RegisteredBusiness;
 
 import java.util.UUID;
 
-public interface IRegisteredBusinessService {
+public interface RegisteredBusinessService {
     RegisteredBusiness addBusiness(String name, String desc);
 
     RegisteredBusiness updateBusiness(RegisteredBusiness registeredBusiness);
