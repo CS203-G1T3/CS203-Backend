@@ -1,7 +1,11 @@
 package CovidLoveit.Domain.Models;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 @Entity
 @Table(name = "GUIDELINES")
 public class Guideline {
@@ -10,11 +14,13 @@ public class Guideline {
     @GeneratedValue
     private int guidelineId;
 
-    private LocalDateTime createdAt;
+    @CreationTimestamp
+    @Column(name = "createdAt", nullable = false)
+    private Date createdAt;
 
-    private boolean canOperateOnSite;
+    private boolean canOpOnSite;
 
-    private String canOperateOnSiteDetails;
+    private String canOpOnSiteDetails;
 
     private int groupSize;
 
@@ -32,9 +38,9 @@ public class Guideline {
 
     private int operatingCapacity;
 
-    private String operatingCapacityDetails;
+    private String opCapacityDetails;
 
-    private String operationGuidelines;
+    private String opGuidelines;
 
     private String referenceLink;
 
@@ -45,14 +51,13 @@ public class Guideline {
     public Guideline() {
     }
 
-    public Guideline(LocalDateTime createdAt, boolean canOperateOnSite, String canOperateOnSiteDetails,
+    public Guideline(boolean canOperateOnSite, String canOperateOnSiteDetails,
                      int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated,
                      String covidTestingDetails, String contactTracing, String contactTracingDetails,
                      int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
                      String referenceLink) {
-        this.createdAt = createdAt;
-        this.canOperateOnSite = canOperateOnSite;
-        this.canOperateOnSiteDetails = canOperateOnSiteDetails;
+        this.canOpOnSite = canOperateOnSite;
+        this.canOpOnSiteDetails = canOperateOnSiteDetails;
         this.groupSize = groupSize;
         this.groupSizeDetails = groupSizeDetails;
         this.covidTestingVaccinated = covidTestingVaccinated;
@@ -61,8 +66,8 @@ public class Guideline {
         this.contactTracing = contactTracing;
         this.contactTracingDetails = contactTracingDetails;
         this.operatingCapacity = operatingCapacity;
-        this.operatingCapacityDetails = operatingCapacityDetails;
-        this.operationGuidelines = operationGuidelines;
+        this.opCapacityDetails = operatingCapacityDetails;
+        this.opGuidelines = operationGuidelines;
         this.referenceLink = referenceLink;
     }
 
@@ -70,28 +75,24 @@ public class Guideline {
         return guidelineId;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public boolean isCanOpOnSite() {
+        return canOpOnSite;
     }
 
-    public boolean isCanOperateOnSite() {
-        return canOperateOnSite;
+    public void setCanOpOnSite(boolean canOpOnSite) {
+        this.canOpOnSite = canOpOnSite;
     }
 
-    public void setCanOperateOnSite(boolean canOperateOnSite) {
-        this.canOperateOnSite = canOperateOnSite;
+    public String getCanOpOnSiteDetails() {
+        return canOpOnSiteDetails;
     }
 
-    public String isCanOperateOnSiteDetails() {
-        return canOperateOnSiteDetails;
-    }
-
-    public void setCanOperateOnSiteDetails(String canOperateOnSiteDetails) {
-        this.canOperateOnSiteDetails = canOperateOnSiteDetails;
+    public void setCanOpOnSiteDetails(String canOpOnSiteDetails) {
+        this.canOpOnSiteDetails = canOpOnSiteDetails;
     }
 
     public int getGroupSize() {
@@ -158,20 +159,20 @@ public class Guideline {
         this.operatingCapacity = operatingCapacity;
     }
 
-    public String getOperatingCapacityDetails() {
-        return operatingCapacityDetails;
+    public String getOpCapacityDetails() {
+        return opCapacityDetails;
     }
 
-    public void setOperatingCapacityDetails(String operatingCapacityDetails) {
-        this.operatingCapacityDetails = operatingCapacityDetails;
+    public void setOpCapacityDetails(String opCapacityDetails) {
+        this.opCapacityDetails = opCapacityDetails;
     }
 
-    public String getOperationGuidelines() {
-        return operationGuidelines;
+    public String getOpGuidelines() {
+        return opGuidelines;
     }
 
-    public void setOperationGuidelines(String operationGuidelines) {
-        this.operationGuidelines = operationGuidelines;
+    public void setOpGuidelines(String opGuidelines) {
+        this.opGuidelines = opGuidelines;
     }
 
     public String getReferenceLink() {
@@ -180,5 +181,13 @@ public class Guideline {
 
     public void setReferenceLink(String referenceLink) {
         this.referenceLink = referenceLink;
+    }
+
+    public Industry getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(Industry industry) {
+        this.industry = industry;
     }
 }

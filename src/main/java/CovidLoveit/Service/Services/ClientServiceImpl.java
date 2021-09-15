@@ -2,7 +2,7 @@ package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Exception.ResourceNotFoundException;
-import CovidLoveit.Repositories.Interfaces.IClientRepository;
+import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,11 @@ public class ClientServiceImpl implements CovidLoveit.Service.Services.Interface
 
     // Use this logger object to log information of user's actions
     private Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
-    private IClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     // Injecting the required dependencies here
     @Autowired
-    public ClientServiceImpl(IClientRepository clientRepository){
+    public ClientServiceImpl(ClientRepository clientRepository){
         this.clientRepository = clientRepository;
     }
 

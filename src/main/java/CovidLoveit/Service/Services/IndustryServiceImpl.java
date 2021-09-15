@@ -2,7 +2,7 @@ package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Exception.ResourceNotFoundException;
-import CovidLoveit.Repositories.Interfaces.IIndustryRepository;
+import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,11 @@ public class IndustryServiceImpl implements CovidLoveit.Service.Services.Interfa
 
     // Use this logger object to log information of user's actions
     private Logger logger = LoggerFactory.getLogger(IndustryServiceImpl.class);
-    private IIndustryRepository industryRepository;
+    private IndustryRepository industryRepository;
 
     // Injecting the required dependencies here
     @Autowired
-    public IndustryServiceImpl(IIndustryRepository industryRepository){
+    public IndustryServiceImpl(IndustryRepository industryRepository){
         this.industryRepository = industryRepository;
     }
 

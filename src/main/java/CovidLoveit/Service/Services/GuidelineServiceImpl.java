@@ -2,7 +2,7 @@ package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Exception.ResourceNotFoundException;
-import CovidLoveit.Repositories.Interfaces.IGuidelineRepository;
+import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ import java.util.Optional;
 public class GuidelineServiceImpl implements CovidLoveit.Service.Services.Interfaces.GuidelineService {
 
     private Logger logger = LoggerFactory.getLogger(GuidelineServiceImpl.class);
-    private IGuidelineRepository guidelineRepository;
+    private GuidelineRepository guidelineRepository;
 
     @Autowired
-    public GuidelineServiceImpl(IGuidelineRepository guidelineRepository) {this.guidelineRepository = guidelineRepository; }
+    public GuidelineServiceImpl(GuidelineRepository guidelineRepository) {this.guidelineRepository = guidelineRepository; }
 
     @Override
     public Guideline addGuideline(boolean canOperateOnSite,
