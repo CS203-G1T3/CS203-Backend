@@ -2,6 +2,7 @@ package CovidLoveit.Service.Services.Interfaces;
 
 import CovidLoveit.Domain.Models.Client;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ClientService {
@@ -11,4 +12,6 @@ public interface ClientService {
     Client updateClient (UUID clientId, Client client);
 
     void deleteClient (UUID clientId);
+
+    Optional<Client> getClient(UUID clientId);
 }
