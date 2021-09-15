@@ -8,7 +8,7 @@ public interface ClientService {
 
     Client addClient (String email, boolean isAdmin);
 
-    Client updateClient (Client client);
+    Client updateClient (UUID clientId, Client client);
 
     void deleteClient (UUID clientId);
 }
