@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface IClientService {
 
-    Client addClient (String email, String companyName, String companyDesc, boolean isAdmin);
+    Client addClient (String email, boolean isAdmin);
 
     Client updateClient (Client client);
 
