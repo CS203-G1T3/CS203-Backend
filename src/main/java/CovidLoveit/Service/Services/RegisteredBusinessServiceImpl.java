@@ -3,7 +3,7 @@ package CovidLoveit.Service.Services;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
 import CovidLoveit.Exception.ResourceNotFoundException;
 import CovidLoveit.Repositories.Interfaces.IRegisteredBusinessRepository;
-import CovidLoveit.Service.Services.Interfaces.IRegisteredBusinessService;
+import CovidLoveit.Service.Services.Interfaces.RegisteredBusinessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,13 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class RegisteredBusinessService implements IRegisteredBusinessService {
+public class RegisteredBusinessServiceImpl implements RegisteredBusinessService {
 
-    private Logger logger = LoggerFactory.getLogger(RegisteredBusinessService.class);
+    private Logger logger = LoggerFactory.getLogger(RegisteredBusinessServiceImpl.class);
     private IRegisteredBusinessRepository registeredBusinessRepository;
 
     @Autowired
-    public RegisteredBusinessService(IRegisteredBusinessRepository registeredBusinessRepository) {this.registeredBusinessRepository = registeredBusinessRepository; }
+    public RegisteredBusinessServiceImpl(IRegisteredBusinessRepository registeredBusinessRepository) {this.registeredBusinessRepository = registeredBusinessRepository; }
 
     @Override
     public RegisteredBusiness addBusiness(String name, String description){
