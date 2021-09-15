@@ -44,7 +44,6 @@ public class ClientService implements IClientService {
         if (clientRecord.isPresent()) {
             Client clientUpdate = clientRecord.get();
             clientUpdate.setEmail(client.getEmail());
-            clientUpdate.setRegisteredBusiness(client.getRegisteredBusiness());
             clientUpdate.setAdmin(client.isAdmin());
 
             clientRepository.save(clientUpdate);
