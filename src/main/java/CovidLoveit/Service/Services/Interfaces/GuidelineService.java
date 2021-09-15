@@ -6,8 +6,8 @@ public interface GuidelineService {
 
     Guideline addGuideline(boolean canOperateOnSite, String canOperateOnSiteDetails, int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated, String covidTestingDetails, String contactTracing, String contactTracingDetails, int operatingCapacity, String operatingCapacityDetails, String operationGuidelines, String referenceLink);
 
-    Guideline updateGuideline(Guideline guideline);
+    Guideline updateGuideline(int guidelineId, Guideline guideline);
 
-    void deleteGuideline(Integer guidelineId);
+    void deleteGuideline(int guidelineId);
 
 }
