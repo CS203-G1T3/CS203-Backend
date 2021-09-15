@@ -3,7 +3,6 @@ package CovidLoveit.Service.Services;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Exception.ResourceNotFoundException;
 import CovidLoveit.Repositories.Interfaces.IClientRepository;
-import CovidLoveit.Service.Services.Interfaces.IClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class ClientService implements IClientService {
+public class ClientService implements CovidLoveit.Service.Services.Interfaces.ClientService {
 
     // Use this logger object to log information of user's actions
     private Logger logger = LoggerFactory.getLogger(ClientService.class);
