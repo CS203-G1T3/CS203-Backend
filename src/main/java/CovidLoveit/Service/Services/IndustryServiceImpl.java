@@ -43,7 +43,7 @@ public class IndustryServiceImpl implements IndustryService {
 
         industryOptional.orElseThrow(() -> {
             logger.warn(String.format("Industry with ID {%s} does not exist in DB.", industryId));
-            return new IndustryNotFoundException(String.format("Industry with ID {%s} not found.",industryId));
+            throw new IndustryNotFoundException(String.format("Industry with ID {%s} not found.",industryId));
         });
 
         Industry industryRecord = industryRepository.save(industry);
@@ -58,7 +58,7 @@ public class IndustryServiceImpl implements IndustryService {
 
         industryOptional.orElseThrow(() -> {
             logger.warn(String.format("Industry with ID {%s} does not exist in DB.", industryId));
-            return new IndustryNotFoundException(String.format("Industry with ID {%s} not found.",industryId));
+            throw new IndustryNotFoundException(String.format("Industry with ID {%s} not found.",industryId));
         });
 
         industryRepository.delete(industryOptional.get());

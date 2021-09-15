@@ -43,7 +43,7 @@ public class ClientServiceImpl implements ClientService {
 
         clientOptional.orElseThrow(() -> {
             logger.warn(String.format("Client with ID {%s} does not exist in DB.", clientId));
-            return new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId));
+            throw new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId));
         });
 
         logger.info(String.format("Successfully updated client with ID {%s}", clientId));
@@ -56,10 +56,15 @@ public class ClientServiceImpl implements ClientService {
 
         clientOptional.orElseThrow(() -> {
             logger.warn(String.format("Client with ID {%s} does not exist in DB.", clientId));
-            return new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId));
+            throw new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId));
         });
 
         clientRepository.delete(clientOptional.get());
         logger.info(String.format("Successfully removed client with ID {%s}", clientId));
+    }
+
+    @Override
+    public Optional<Client> getClient(UUID clientId){
+        return clientRepository.findById(clientId);
     }
 }
