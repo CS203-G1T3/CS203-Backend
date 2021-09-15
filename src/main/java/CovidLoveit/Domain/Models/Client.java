@@ -11,24 +11,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "CLIENT")
 public class Client {
-
-    // TODO: Remove the generated value when frontend application is up
-    @Id
-    @GeneratedValue
-    private UUID clientId;
-
-    private String email;
-
-    private boolean isAdmin = false;
-
-    @CreationTimestamp
-    @Basic(optional = false)
-    @Column(name = "createdAt", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
-    private RegisteredBusiness registeredBusiness;
-
+    
     public Client() {
     }
 
@@ -46,6 +29,23 @@ public class Client {
         this.isAdmin = isAdmin;
         this.registeredBusiness = registeredBusiness;
     }
+
+    // TODO: Remove the generated value when frontend application is up
+    @Id
+    @GeneratedValue
+    private UUID clientId;
+
+    private String email;
+
+    private boolean isAdmin = false;
+
+    @CreationTimestamp
+    @Basic(optional = false)
+    @Column(name = "createdAt", nullable = false, updatable = false)
+    private Date createdAt;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
+    private RegisteredBusiness registeredBusiness;
 
     public UUID getClientId() {
         return clientId;
