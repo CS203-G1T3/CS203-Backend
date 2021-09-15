@@ -18,7 +18,7 @@ public class RegisteredBusiness {
     @Column(name = "businessDesc")
     private String businessDesc;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "industryId")
     private Industry industry;
 
