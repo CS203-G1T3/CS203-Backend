@@ -4,7 +4,7 @@ import CovidLoveit.Domain.Models.Client;
 
 import java.util.UUID;
 
-public interface IClientService {
+public interface ClientService {
 
     Client addClient (String email, boolean isAdmin);
 
