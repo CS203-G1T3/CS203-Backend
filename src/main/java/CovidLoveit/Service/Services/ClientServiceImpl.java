@@ -1,8 +1,9 @@
 package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.Client;
-import CovidLoveit.Exception.ResourceNotFoundException;
+import CovidLoveit.Exception.ClientNotFoundException;
 import CovidLoveit.Repositories.Interfaces.ClientRepository;
+import CovidLoveit.Service.Services.Interfaces.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class ClientServiceImpl implements CovidLoveit.Service.Services.Interfaces.ClientService {
+public class ClientServiceImpl implements ClientService {
 
     // Use this logger object to log information of user's actions
     private Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
@@ -37,33 +38,22 @@ public class ClientServiceImpl implements CovidLoveit.Service.Services.Interface
     }
 
     @Override
-    public Client updateClient(Client client) {
-        Optional<Client> clientRecord = clientRepository.findById(client.getClientId());
+    public Client updateClient(UUID clientId, Client client) {
+        Optional<Client> clientOptional = clientRepository.findById(clientId);
 
-        if (clientRecord.isPresent()) {
-            Client clientUpdate = clientRecord.get();
-            clientUpdate.setEmail(client.getEmail());
-            clientUpdate.setAdmin(client.isAdmin());
+        clientOptional.orElseThrow(() -> new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId)));
 
-            clientRepository.save(clientUpdate);
-            logger.info(String.format("Successfully updated client with ID {%s}", client.getClientId()));
-            return clientUpdate;
-
-        } else {
-            logger.error(String.format("Client with ID {%s} does not exist in database.", client.getClientId()));
-            throw new ResourceNotFoundException(String.format("Client with ID {%s} not found.", client.getClientId()));
-        }
+        logger.info(String.format("Successfully updated client with ID {%s}", clientId));
+        return clientRepository.save(client);
     }
 
     @Override
     public void deleteClient(UUID clientId) {
         Optional<Client> clientOptional = clientRepository.findById(clientId);
 
-        if (clientOptional.isPresent()) {
-            clientRepository.delete(clientOptional.get());
-        } else {
-            logger.error(String.format("Client with ID {%s} does not exist in database.", clientId));
-            throw new ResourceNotFoundException(String.format("Client with ID {%s} not found.", clientId));
-        }
+        clientOptional.orElseThrow(() -> new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId)));
+
+        clientRepository.delete(clientOptional.get());
+        logger.info(String.format("Successfully removed client with ID {%s}", clientId));
     }
 }
