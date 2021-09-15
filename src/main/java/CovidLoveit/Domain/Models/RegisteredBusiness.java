@@ -9,10 +9,13 @@ public class RegisteredBusiness {
 
     @Id
     @GeneratedValue
+    @Column(name = "businessId", unique = true, nullable = false)
     private UUID businessId;
 
+    @Column(name = "businessName", nullable = false)
     private String businessName;
 
+    @Column(name = "businessDesc")
     private String businessDesc;
 
     @ManyToOne
@@ -32,10 +35,7 @@ public class RegisteredBusiness {
         this.businessDesc = desc;
     }
 
-
     public UUID getBusinessId() { return businessId; }
-
-    public void setBusinessId(UUID businessId) { this.businessId = businessId; }
 
     public String getBusinessName() { return businessName; }
 
