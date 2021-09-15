@@ -4,7 +4,7 @@ import CovidLoveit.Domain.Models.Industry;
 
 import java.util.UUID;
 
-public interface IIndustryService {
+public interface IndustryService {
 
     Industry addIndustry(String industryName, String industrySubtype, String description);
 
