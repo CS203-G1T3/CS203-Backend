@@ -31,10 +31,13 @@ public class Client {
     // TODO: Remove the generated value when frontend application is up
     @Id
     @GeneratedValue
+    @Column(name = "clientId", unique = true, nullable = false)
     private UUID clientId;
 
+    @Column(name = "email", unique = true, nullable = false, length = 100)
     private String email;
 
+    @Column(name = "isAdmin")
     private boolean isAdmin = false;
 
     @CreationTimestamp
