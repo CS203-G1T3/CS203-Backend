@@ -1,7 +1,10 @@
 package CovidLoveit.Domain.Models;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,11 +19,12 @@ public class Client {
 
     private String email;
 
-    private String compName;
+    private boolean isAdmin = false;
 
-    private String compDesc;
-
-    private boolean isAdmin;
+    @CreationTimestamp
+    @Basic(optional = false)
+    @Column(name = "createdAt", nullable = false, updatable = false)
+    private Date createdAt;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
     private RegisteredBusiness registeredBusiness;
@@ -28,11 +32,19 @@ public class Client {
     public Client() {
     }
 
-    public Client(String email, String compName, String compDesc, boolean isAdmin) {
+    public Client(String email){
         this.email = email;
-        this.compName = compName;
-        this.compDesc = compDesc;
+    }
+
+    public Client(String email, boolean isAdmin){
+        this.email = email;
         this.isAdmin = isAdmin;
+    }
+
+    public Client(String email, boolean isAdmin, RegisteredBusiness registeredBusiness) {
+        this.email = email;
+        this.isAdmin = isAdmin;
+        this.registeredBusiness = registeredBusiness;
     }
 
     public UUID getClientId() {
@@ -45,22 +57,6 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getCompanyName() {
-        return compName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.compName = companyName;
-    }
-
-    public String getCompanyDescription() {
-        return compDesc;
-    }
-
-    public void setCompanyDescription(String companyDescription) {
-        this.compDesc = companyDescription;
     }
 
     public RegisteredBusiness getRegisteredBusiness() {
