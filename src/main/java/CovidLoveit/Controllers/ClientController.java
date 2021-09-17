@@ -2,7 +2,7 @@ package CovidLoveit.Controllers;
 
 import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.Models.Client;
-import CovidLoveit.Exception.ClientNotFoundException;
+import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Service.Services.ClientServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +30,15 @@ public class ClientController {
     @PostMapping("/client")
     public Client addClient(@RequestBody ClientInputModel inputModel){
         Set<ConstraintViolation<ClientInputModel>> violations = inputModel.validate();
+        StringBuilder error = new StringBuilder();
 
         if(!violations.isEmpty()){
-            violations.stream().forEach(t -> logger.warn(t.getMessage()));
-            throw new ClientNotFoundException("Client input does not conform with the required format.");
+            violations.stream().forEach(t -> {
+                error.append(t.getMessage());
+                error.append(System.getProperty("line.separator"));
+                logger.warn(t.getMessage());
+            });
+            throw new ClientException(error.toString());
         }
 
         return clientService.addClient(inputModel.getEmail(), inputModel.isAdmin());
@@ -45,7 +50,7 @@ public class ClientController {
 
         if(!violations.isEmpty()){
             violations.stream().forEach(t -> logger.warn(t.getMessage()));
-            throw new ClientNotFoundException("Client input does not conform with the required format.");
+            throw new ClientException("Client input does not conform with the required format.");
         }
 
         Client client = new Client(inputModel.getEmail(), inputModel.isAdmin());
@@ -63,7 +68,7 @@ public class ClientController {
     public Client getClient(@PathVariable String clientId) {
         Optional<Client> client = clientService.getClient(UUID.fromString(clientId));
 
-        client.orElseThrow(() -> new ClientNotFoundException(String.format("Client {%s} not found", clientId)));
+        client.orElseThrow(() -> new ClientException(String.format("Client {%s} not found", clientId)));
 
         return client.get();
     }
