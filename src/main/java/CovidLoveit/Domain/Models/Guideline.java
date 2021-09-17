@@ -88,16 +88,16 @@ public class Guideline {
         return guidelineId;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
     public boolean isCanOpOnSite() {
         return canOpOnSite;
     }
 
     public void setCanOpOnSite(boolean canOpOnSite) {
         this.canOpOnSite = canOpOnSite;
+    }
+
+    public boolean getCanOpOnSite() {
+        return canOpOnSite;
     }
 
     public String getCanOpOnSiteDetails() {
