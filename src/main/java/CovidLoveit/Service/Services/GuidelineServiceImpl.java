@@ -50,7 +50,22 @@ public class GuidelineServiceImpl implements GuidelineService {
             throw new GuidelineException(String.format("Guideline ID {%d} is not found.", guidelineId));
         });
 
-        Guideline guidelineRecord = guidelineRepository.save(guideline);
+        var guidelineRecord = guidelineOptional.get();
+        guidelineRecord.setCanOpOnSite(guideline.getCanOpOnSite());
+        guidelineRecord.setCanOpOnSiteDetails(guideline.getCanOpOnSiteDetails());
+        guidelineRecord.setGroupSize(guideline.getGroupSize());
+        guidelineRecord.setGroupSizeDetails(guideline.getGroupSizeDetails());
+        guidelineRecord.setCovidTestingVaccinated(guideline.getCovidTestingVaccinated());
+        guidelineRecord.setCovidTestingUnvaccinated(guideline.getCovidTestingUnvaccinated());
+        guidelineRecord.setCovidTestingDetails(guideline.getCovidTestingDetails());
+        guidelineRecord.setContactTracing(guideline.getContactTracing());
+        guidelineRecord.setContactTracingDetails(guideline.getContactTracingDetails());
+        guidelineRecord.setOperatingCapacity(guideline.getOperatingCapacity());
+        guidelineRecord.setOpCapacityDetails(guideline.getOpCapacityDetails());
+        guidelineRecord.setOpGuidelines(guideline.getOpGuidelines());
+        guidelineRecord.setReferenceLink(guideline.getReferenceLink());
+
+        guidelineRepository.save(guidelineRecord);
         logger.info(String.format("Successfully updated Guideline {%d}", guidelineId));
         return guidelineRecord;
     }
