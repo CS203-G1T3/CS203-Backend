@@ -1,7 +1,7 @@
 package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.Industry;
-import CovidLoveit.Exception.IndustryNotFoundException;
+import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Service.Services.Interfaces.IndustryService;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class IndustryServiceImpl implements IndustryService {
 
         industryOptional.orElseThrow(() -> {
             logger.warn(String.format("Industry with ID {%s} does not exist in DB.", industryId));
-            throw new IndustryNotFoundException(String.format("Industry with ID {%s} not found.",industryId));
+            throw new IndustryException(String.format("Industry with ID {%s} not found.",industryId));
         });
 
         Industry industryRecord = industryRepository.save(industry);
@@ -58,7 +58,7 @@ public class IndustryServiceImpl implements IndustryService {
 
         industryOptional.orElseThrow(() -> {
             logger.warn(String.format("Industry with ID {%s} does not exist in DB.", industryId));
-            throw new IndustryNotFoundException(String.format("Industry with ID {%s} not found.",industryId));
+            throw new IndustryException(String.format("Industry with ID {%s} not found.",industryId));
         });
 
         industryRepository.delete(industryOptional.get());

@@ -1,7 +1,7 @@
 package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.Client;
-import CovidLoveit.Exception.ClientNotFoundException;
+import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Service.Services.Interfaces.ClientService;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class ClientServiceImpl implements ClientService {
 
         clientOptional.orElseThrow(() -> {
             logger.warn(String.format("Client with ID {%s} does not exist in DB.", clientId));
-            throw new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId));
+            throw new ClientException(String.format("Client with ID {%s} not found.", clientId));
         });
 
         logger.info(String.format("Successfully updated client with ID {%s}", clientId));
@@ -55,7 +55,7 @@ public class ClientServiceImpl implements ClientService {
 
         clientOptional.orElseThrow(() -> {
             logger.warn(String.format("Client with ID {%s} does not exist in DB.", clientId));
-            throw new ClientNotFoundException(String.format("Client with ID {%s} not found.", clientId));
+            throw new ClientException(String.format("Client with ID {%s} not found.", clientId));
         });
 
         clientRepository.delete(clientOptional.get());

@@ -1,7 +1,7 @@
 package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.Guideline;
-import CovidLoveit.Exception.GuidelineNotFoundException;
+import CovidLoveit.Exception.GuidelineException;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
 import CovidLoveit.Service.Services.Interfaces.GuidelineService;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class GuidelineServiceImpl implements GuidelineService {
 
         guidelineOptional.orElseThrow(() -> {
             logger.warn(String.format("Guideline with Id {%d} does not exist in DB.", guidelineId));
-            throw new GuidelineNotFoundException(String.format("Guideline ID {%d} is not found.", guidelineId));
+            throw new GuidelineException(String.format("Guideline ID {%d} is not found.", guidelineId));
         });
 
         Guideline guidelineRecord = guidelineRepository.save(guideline);
@@ -61,7 +61,7 @@ public class GuidelineServiceImpl implements GuidelineService {
 
         guidelineOptional.orElseThrow(() -> {
             logger.warn(String.format("Guideline with Id {%d} does not exist in DB.", guidelineId));
-            throw new GuidelineNotFoundException(String.format("Guideline ID {%d} is not found.", guidelineId));
+            throw new GuidelineException(String.format("Guideline ID {%d} is not found.", guidelineId));
         });
 
         guidelineRepository.delete(guidelineOptional.get());

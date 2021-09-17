@@ -1,7 +1,7 @@
 package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.Models.RegisteredBusiness;
-import CovidLoveit.Exception.RegisteredBusinessNotFoundException;
+import CovidLoveit.Exception.RegisteredBusinessException;
 import CovidLoveit.Repositories.Interfaces.RegisteredBusinessRepository;
 import CovidLoveit.Service.Services.Interfaces.RegisteredBusinessService;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
         //statement will only be true of Optional object businessRecord was created with a non-null value
         businessOptional.orElseThrow(() -> {
             logger.warn(String.format("Registered Business {%s} does not exist in DB.", businessId));
-            throw new RegisteredBusinessNotFoundException(String.format("Business with ID {%s} not found.", businessId));
+            throw new RegisteredBusinessException(String.format("Business with ID {%s} not found.", businessId));
         });
 
         RegisteredBusiness businessRecord = registeredBusinessRepository.save(registeredBusiness);
@@ -54,7 +54,7 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
 
         businessOptional.orElseThrow(() -> {
             logger.warn(String.format("Registered Business {%s} does not exist in DB.", businessId));
-            throw new RegisteredBusinessNotFoundException(String.format("Business with ID {%s} not found.", businessId));
+            throw new RegisteredBusinessException(String.format("Business with ID {%s} not found.", businessId));
         });
         
         registeredBusinessRepository.delete(businessOptional.get());
