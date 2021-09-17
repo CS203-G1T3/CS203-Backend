@@ -33,7 +33,6 @@ public class ClientServiceImpl implements ClientService {
         var savedClient = clientRepository.save(client);
 
         logger.info(String.format("Successfully added client {%s}", savedClient.getClientId()));
-
         return savedClient;
     }
 
