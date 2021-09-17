@@ -34,7 +34,7 @@ public class Client {
     private String email;
 
     @Column(name = "isAdmin")
-    private boolean isAdmin;
+    private boolean isAdmin = false;
 
     @CreationTimestamp
     @Basic(optional = false)
