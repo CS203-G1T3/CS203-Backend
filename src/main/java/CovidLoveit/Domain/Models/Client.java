@@ -30,7 +30,7 @@ public class Client {
     @Column(name = "clientId", unique = true, nullable = false)
     private UUID clientId;
 
-    @Column(name = "email", unique = true, nullable = false, length = 100)
+    @Column(name = "email", nullable = false, length = 100)
     private String email;
 
     @Column(name = "isAdmin")
