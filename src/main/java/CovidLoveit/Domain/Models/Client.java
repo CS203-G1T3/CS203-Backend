@@ -13,10 +13,6 @@ public class Client {
     public Client() {
     }
 
-    public Client(String email){
-        this.email = email;
-    }
-
     public Client(String email, boolean isAdmin){
         this.email = email;
         this.isAdmin = isAdmin;
