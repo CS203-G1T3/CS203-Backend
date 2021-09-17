@@ -47,10 +47,15 @@ public class ClientController {
     @PutMapping("/client/{clientId}")
     public Client updateClient(@PathVariable String clientId, @RequestBody ClientInputModel inputModel){
         Set<ConstraintViolation<ClientInputModel>> violations = inputModel.validate();
+        StringBuilder error = new StringBuilder();
 
         if(!violations.isEmpty()){
-            violations.stream().forEach(t -> logger.warn(t.getMessage()));
-            throw new ClientException("Client input does not conform with the required format.");
+            violations.stream().forEach(t -> {
+                error.append(t.getMessage());
+                error.append(System.getProperty("line.separator"));
+                logger.warn(t.getMessage());
+            });
+            throw new ClientException(error.toString());
         }
 
         Client client = new Client(inputModel.getEmail(), inputModel.isAdmin());
