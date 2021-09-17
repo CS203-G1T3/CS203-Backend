@@ -13,14 +13,6 @@ import java.util.UUID;
 public class ClientInputModel {
 
     public ClientInputModel() {
-
-    }
-
-    public ClientInputModel(UUID clientId, String email, boolean isAdmin, RegisteredBusinessInputModel registeredBusinessInputModel){
-        this.clientId = clientId;
-        this.email = email;
-        this.isAdmin = isAdmin;
-        this.registeredBusiness = registeredBusinessInputModel;
     }
 
     public ClientInputModel(UUID clientId, String email, boolean isAdmin){
@@ -37,7 +29,7 @@ public class ClientInputModel {
 //    @NotEmpty(message = "Client Id cannot be null or empty.")
     private UUID clientId;
 
-    @Email(message = "Email should be valid.")
+    @Email(message = "Email provided is invalid.")
     private String email;
 
     private boolean isAdmin;
