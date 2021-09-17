@@ -4,13 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-public class ClientNotFoundException extends RuntimeException{
+public class ClientException extends RuntimeException{
 
-    public ClientNotFoundException (String message) {
+    public ClientException(String message) {
         super(message);
     }
 
-    public ClientNotFoundException (String message, Throwable throwable){
+    public ClientException(String message, Throwable throwable){
         super(message, throwable);
     }
 
