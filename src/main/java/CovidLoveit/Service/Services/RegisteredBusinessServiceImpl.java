@@ -42,7 +42,11 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
             throw new RegisteredBusinessException(String.format("Business with ID {%s} not found.", businessId));
         });
 
-        RegisteredBusiness businessRecord = registeredBusinessRepository.save(registeredBusiness);
+        var businessRecord = businessOptional.get();
+        businessRecord.setBusinessName(registeredBusiness.getBusinessName());
+        businessRecord.setBusinessDesc(registeredBusiness.getBusinessDesc());
+
+        registeredBusinessRepository.save(businessRecord);
         logger.info(String.format("Successfully updated business with ID {%s}", businessId));
         return businessRecord;
 

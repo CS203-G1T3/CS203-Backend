@@ -46,7 +46,12 @@ public class IndustryServiceImpl implements IndustryService {
             throw new IndustryException(String.format("Industry with ID {%s} not found.",industryId));
         });
 
-        Industry industryRecord = industryRepository.save(industry);
+        var industryRecord = industryOptional.get();
+        industryRecord.setIndustryName(industry.getIndustryName());
+        industryRecord.setIndustrySubtype(industry.getIndustrySubtype());
+        industryRecord.setDescription(industry.getDescription());
+
+        industryRepository.save(industryRecord);
         logger.info(String.format("Successfully updated industry with ID {%s}", industry.getIndustryId()));
         return industryRecord;
 
