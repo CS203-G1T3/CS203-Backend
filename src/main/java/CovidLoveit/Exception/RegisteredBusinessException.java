@@ -4,13 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Registered Business Not Found")
-public class RegisteredBusinessNotFoundException extends RuntimeException{
+public class RegisteredBusinessException extends RuntimeException{
 
-    public RegisteredBusinessNotFoundException (String message){
+    public RegisteredBusinessException(String message){
         super(message);
     }
 
-    public RegisteredBusinessNotFoundException (String message, Throwable throwable){
+    public RegisteredBusinessException(String message, Throwable throwable){
         super(message, throwable);
     }
 }

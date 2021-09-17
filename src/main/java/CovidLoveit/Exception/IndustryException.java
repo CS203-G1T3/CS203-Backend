@@ -4,13 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Industry Not Found")
-public class IndustryNotFoundException extends RuntimeException{
+public class IndustryException extends RuntimeException{
 
-    public IndustryNotFoundException (String message){
+    public IndustryException(String message){
         super(message);
     }
 
-    public IndustryNotFoundException (String message, Throwable throwable){
+    public IndustryException(String message, Throwable throwable){
         super(message, throwable);
     }
 

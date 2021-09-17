@@ -4,13 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Guideline Not Found")
-public class GuidelineNotFoundException extends RuntimeException{
+public class GuidelineException extends RuntimeException{
 
-    public GuidelineNotFoundException (String message){
+    public GuidelineException(String message){
         super(message);
     }
 
-    public GuidelineNotFoundException (String message, Throwable throwable){
+    public GuidelineException(String message, Throwable throwable){
         super(message, throwable);
     }
 }
