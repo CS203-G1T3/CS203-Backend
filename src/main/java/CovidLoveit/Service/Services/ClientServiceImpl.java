@@ -45,8 +45,12 @@ public class ClientServiceImpl implements ClientService {
             throw new ClientException(String.format("Client with ID {%s} not found.", clientId));
         });
 
+        var clientRecord = clientOptional.get();
+        clientRecord.setEmail(client.getEmail());
+        clientRecord.setAdmin(client.isAdmin());
+
         logger.info(String.format("Successfully updated client with ID {%s}", clientId));
-        return clientRepository.save(client);
+        return clientRepository.save(clientRecord);
     }
 
     @Override
