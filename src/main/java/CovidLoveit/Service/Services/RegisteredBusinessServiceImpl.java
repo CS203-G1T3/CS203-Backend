@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -119,6 +120,11 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
     @Override
     public Optional<RegisteredBusiness> getBusiness(UUID businessId){
         return registeredBusinessRepository.findById(businessId);
+    }
+
+    @Override
+    public List<RegisteredBusiness> listRegisteredBusinesses(){
+        return registeredBusinessRepository.findAll();
     }
 
 

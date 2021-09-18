@@ -2,6 +2,7 @@ package CovidLoveit.Service.Services.Interfaces;
 
 import CovidLoveit.Domain.Models.RegisteredBusiness;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,5 +14,7 @@ public interface RegisteredBusinessService {
     void deleteBusiness(UUID businessId);
 
     Optional<RegisteredBusiness> getBusiness(UUID businessId);
+
+    List<RegisteredBusiness> listRegisteredBusinesses();
 
 }

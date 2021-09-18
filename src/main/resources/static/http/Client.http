@@ -1,0 +1,10 @@
+POST  http://localhost:8080/api/v1/client
+Content-Type: application/json
+
+{
+    "email": "jon@gmail.com",
+    "isAdmin": false
+}
+
+###
+GET http://localhost:8080/api/v1/client/4710c758-996f-4a89-a779-8dd7abb9cb34"

@@ -1,5 +1,6 @@
 package CovidLoveit.Controllers;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -86,6 +87,11 @@ public class RegisteredBusinessController {
         business.orElseThrow(() -> new RegisteredBusinessException(String.format("Registered Business {%s} not found", businessId)));
 
         return business.get();
+    }
+
+    @GetMapping("/registered-business")
+    public List<RegisteredBusiness> getAllRegisteredBusinesses() {
+        return registeredBusinessService.listRegisteredBusinesses();
     }
 
     
