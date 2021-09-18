@@ -30,7 +30,6 @@ public class RegisteredBusinessInputModel {
         this.clientId = client;
     }
 
-    //    @NotNull(message = "Business Id cannot be null or empty.")
     private UUID businessId;
 
     @NotBlank(message = "Business Name required.")
