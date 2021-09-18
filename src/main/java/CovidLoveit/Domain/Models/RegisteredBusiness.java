@@ -48,4 +48,9 @@ public class RegisteredBusiness {
     public Client getClient() { return client; }
 
     public void setClient(Client client) { this.client = client; }
+
+    public Industry getIndustry() { return this.industry; }
+
+    public void setIndustry(Industry industry) { this.industry = industry; }
+
 }

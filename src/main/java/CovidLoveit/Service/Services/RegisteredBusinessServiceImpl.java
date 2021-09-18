@@ -1,7 +1,13 @@
 package CovidLoveit.Service.Services;
 
+import CovidLoveit.Domain.Models.Client;
+import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
+import CovidLoveit.Exception.ClientException;
+import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Exception.RegisteredBusinessException;
+import CovidLoveit.Repositories.Interfaces.ClientRepository;
+import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Repositories.Interfaces.RegisteredBusinessRepository;
 import CovidLoveit.Service.Services.Interfaces.RegisteredBusinessService;
 import org.slf4j.Logger;
@@ -19,13 +25,38 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
 
     private Logger logger = LoggerFactory.getLogger(RegisteredBusinessServiceImpl.class);
     private RegisteredBusinessRepository registeredBusinessRepository;
+    private ClientRepository clientRepository;
+    private IndustryRepository industryRepository;
 
     @Autowired
-    public RegisteredBusinessServiceImpl(RegisteredBusinessRepository registeredBusinessRepository) {this.registeredBusinessRepository = registeredBusinessRepository; }
+    public RegisteredBusinessServiceImpl(RegisteredBusinessRepository registeredBusinessRepository, ClientRepository clientRepository, IndustryRepository industryRepository) {
+        this.registeredBusinessRepository = registeredBusinessRepository; 
+        this.clientRepository = clientRepository;
+        this.industryRepository = industryRepository;
+    }
 
     @Override
-    public RegisteredBusiness addBusiness(String name, String description){
+    public RegisteredBusiness addBusiness(String name, String description, UUID industryId, UUID clientId){
         var business = new RegisteredBusiness(name, description);
+        
+        Optional<Client> clientOptional = clientRepository.findById(clientId);
+        if (clientOptional.isPresent()) {
+            Client client = clientOptional.get();
+            business.setClient(client);
+        } else {
+            logger.warn(String.format("Client {%s} does not exist in DB.", clientId));
+            throw new ClientException(String.format("Client with ID {%s} not found.", clientId));
+        }
+
+        Optional<Industry> industryOptional = industryRepository.findById(industryId);
+        if (industryOptional.isPresent()) {
+            Industry industry = industryOptional.get();
+            business.setIndustry(industry);
+        } else {
+            logger.warn(String.format("Industry {%s} does not exist in DB.", industryId));
+            throw new IndustryException(String.format("Industry with ID {%s} not found.", industryId));
+        }
+        
         var savedBusiness = registeredBusinessRepository.save(business);
 
         logger.info(String.format("Successfully added business {%s}", savedBusiness.getBusinessName(), savedBusiness.getBusinessId()));
