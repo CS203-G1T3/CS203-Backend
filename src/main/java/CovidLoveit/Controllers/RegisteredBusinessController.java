@@ -1,6 +1,8 @@
 package CovidLoveit.Controllers;
 
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.validation.ConstraintViolation;
 
@@ -8,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -66,25 +70,22 @@ public class RegisteredBusinessController {
             throw new RegisteredBusinessException(error.toString());
         }
 
-        //TODO PICK UP FROM HERE
-        RegisteredBusiness registeredBusiness = new RegisteredBusiness(inputModel.getEmail(), inputModel.isAdmin());
-        Client clientRecord = clientService.updateClient(UUID.fromString(clientId), client);
-
-        return clientRecord;
+        RegisteredBusiness businessRecord = registeredBusinessService.updateBusiness(UUID.fromString(businessId), inputModel.getBusinessName(), inputModel.getBusinessDesc(), inputModel.getBusinessId(), inputModel.getClientId());
+        return businessRecord;
     }
 
-    @DeleteMapping("/client/{clientId}")
-    public void deleteClient(@PathVariable String clientId){
-        clientService.deleteClient(UUID.fromString(clientId));
+    @DeleteMapping("/registered-business/{businessId}")
+    public void deleteRegisteredBusiness(@PathVariable String businessId){
+        registeredBusinessService.deleteBusiness(UUID.fromString(businessId));
     }
 
-    @GetMapping("/client/{clientId}")
-    public Client getClient(@PathVariable String clientId) {
-        Optional<Client> client = clientService.getClient(UUID.fromString(clientId));
+    @GetMapping("/registered-business/{businessId}")
+    public RegisteredBusiness getRegistereBusiness(@PathVariable String businessId) {
+        Optional<RegisteredBusiness> business = registeredBusinessService.getBusiness(UUID.fromString(businessId));
 
-        client.orElseThrow(() -> new ClientException(String.format("Client {%s} not found", clientId)));
+        business.orElseThrow(() -> new RegisteredBusinessException(String.format("Registered Business {%s} not found", businessId)));
 
-        return client.get();
+        return business.get();
     }
 
     

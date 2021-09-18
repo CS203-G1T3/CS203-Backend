@@ -35,6 +35,15 @@ public class RegisteredBusiness {
         this.businessDesc = desc;
     }
 
+    public RegisteredBusiness(UUID businessId, String name, String desc, Industry industry, Client client){
+        this.businessId = businessId;
+        this.businessName = name;
+        this.businessDesc = desc;
+        this.industry = industry;
+        this.client = client;
+    }
+
+
     public UUID getBusinessId() { return businessId; }
 
     public String getBusinessName() { return businessName; }

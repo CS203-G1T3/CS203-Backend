@@ -39,6 +39,7 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
     public RegisteredBusiness addBusiness(String name, String description, UUID industryId, UUID clientId){
         var business = new RegisteredBusiness(name, description);
         
+        //check that client and industry exist in db
         Optional<Client> clientOptional = clientRepository.findById(clientId);
         if (clientOptional.isPresent()) {
             Client client = clientOptional.get();
@@ -64,8 +65,8 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
     }
 
     @Override
-    public RegisteredBusiness updateBusiness(UUID businessId, RegisteredBusiness registeredBusiness){
-        Optional<RegisteredBusiness> businessOptional = registeredBusinessRepository.findById(registeredBusiness.getBusinessId());
+    public RegisteredBusiness updateBusiness(UUID businessId, String name, String description, UUID industryId, UUID clientId){
+        Optional<RegisteredBusiness> businessOptional = registeredBusinessRepository.findById(businessId);
 
         //statement will only be true of Optional object businessRecord was created with a non-null value
         businessOptional.orElseThrow(() -> {
@@ -74,8 +75,27 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
         });
 
         var businessRecord = businessOptional.get();
-        businessRecord.setBusinessName(registeredBusiness.getBusinessName());
-        businessRecord.setBusinessDesc(registeredBusiness.getBusinessDesc());
+        businessRecord.setBusinessName(name);
+        businessRecord.setBusinessDesc(description);
+
+        //check that client and industry exist in db
+        Optional<Client> clientOptional = clientRepository.findById(clientId);
+        if (clientOptional.isPresent()) {
+            Client client = clientOptional.get();
+            businessRecord.setClient(client);
+        } else {
+            logger.warn(String.format("Client {%s} does not exist in DB.", clientId));
+            throw new ClientException(String.format("Client with ID {%s} not found.", clientId));
+        }
+
+        Optional<Industry> industryOptional = industryRepository.findById(industryId);
+        if (industryOptional.isPresent()) {
+            Industry industry = industryOptional.get();
+            businessRecord.setIndustry(industry);
+        } else {
+            logger.warn(String.format("Industry {%s} does not exist in DB.", industryId));
+            throw new IndustryException(String.format("Industry with ID {%s} not found.", industryId));
+        }
 
         registeredBusinessRepository.save(businessRecord);
         logger.info(String.format("Successfully updated business with ID {%s}", businessId));
@@ -95,6 +115,12 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
         registeredBusinessRepository.delete(businessOptional.get());
         logger.info(String.format("Successfully deleted business with ID {%s}", businessId));
     }
+
+    @Override
+    public Optional<RegisteredBusiness> getBusiness(UUID businessId){
+        return registeredBusinessRepository.findById(businessId);
+    }
+
 
 
 
