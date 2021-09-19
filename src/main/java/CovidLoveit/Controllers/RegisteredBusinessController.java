@@ -31,6 +31,8 @@ import CovidLoveit.Service.Services.Interfaces.RegisteredBusinessService;
 @RequestMapping("api/v1")
 public class RegisteredBusinessController {
     
+    // TODO: TEST OUT THIS CONTROLLER WHEN INDUSTRY CONTROLLER IS UP -jon
+
     private Logger logger = LoggerFactory.getLogger(RegisteredBusinessController.class);
     private RegisteredBusinessService registeredBusinessService;
 
