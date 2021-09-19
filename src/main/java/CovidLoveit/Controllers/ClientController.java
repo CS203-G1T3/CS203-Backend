@@ -3,7 +3,7 @@ package CovidLoveit.Controllers;
 import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Exception.ClientException;
-import CovidLoveit.Service.Services.ClientServiceImpl;
+import CovidLoveit.Service.Services.Interfaces.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ import java.util.UUID;
 public class ClientController {
 
     private Logger logger = LoggerFactory.getLogger(ClientController.class);
-    private ClientServiceImpl clientService;
+    private ClientService clientService;
 
     @Autowired
-    public ClientController(ClientServiceImpl clientService){
+    public ClientController(ClientService clientService){
         this.clientService = clientService;
     }
 
