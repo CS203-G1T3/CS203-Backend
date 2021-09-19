@@ -23,11 +23,11 @@ public class RegisteredBusinessInputModel {
         this.clientId = clientId;
     }
 
-    public RegisteredBusinessInputModel(String businessName, String businessDesc, UUID industry, UUID client) {
+    public RegisteredBusinessInputModel(String businessName, String businessDesc, UUID industryId, UUID clientId) {
         this.businessName = businessName;
         this.businessDesc = businessDesc;
-        this.industryId = industry;
-        this.clientId = client;
+        this.industryId = industryId;
+        this.clientId = clientId;
     }
 
     private UUID businessId;

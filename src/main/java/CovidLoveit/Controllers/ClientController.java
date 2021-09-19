@@ -1,18 +1,24 @@
 package CovidLoveit.Controllers;
 
+import CovidLoveit.Controllers.DataTransferObjects.ClientDTO;
 import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Service.Services.ClientServiceImpl;
+
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.ConstraintViolation;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1")
@@ -20,15 +26,17 @@ public class ClientController {
 
     private Logger logger = LoggerFactory.getLogger(ClientController.class);
     private ClientServiceImpl clientService;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public ClientController(ClientServiceImpl clientService){
+    public ClientController(ClientServiceImpl clientService, ModelMapper modelMapper){
         this.clientService = clientService;
+        this.modelMapper = modelMapper;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/client")
-    public Client addClient(@RequestBody ClientInputModel inputModel){
+    public ClientDTO addClient(@RequestBody ClientInputModel inputModel){
         Set<ConstraintViolation<ClientInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -41,11 +49,11 @@ public class ClientController {
             throw new ClientException(error.toString());
         }
 
-        return clientService.addClient(inputModel.getEmail(), inputModel.isAdmin());
+        return convertToDTO(clientService.addClient(inputModel.getEmail(), inputModel.isAdmin()));
     }
 
     @PutMapping("/client/{clientId}")
-    public Client updateClient(@PathVariable String clientId, @RequestBody ClientInputModel inputModel){
+    public ClientDTO updateClient(@PathVariable String clientId, @RequestBody ClientInputModel inputModel){
         Set<ConstraintViolation<ClientInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -61,7 +69,7 @@ public class ClientController {
         Client client = new Client(inputModel.getEmail(), inputModel.isAdmin());
         Client clientRecord = clientService.updateClient(UUID.fromString(clientId), client);
 
-        return clientRecord;
+        return convertToDTO(clientRecord);
     }
 
     @DeleteMapping("/client/{clientId}")
@@ -70,11 +78,27 @@ public class ClientController {
     }
 
     @GetMapping("/client/{clientId}")
-    public Client getClient(@PathVariable String clientId) {
+    public ClientDTO getClient(@PathVariable String clientId) {
         Optional<Client> client = clientService.getClient(UUID.fromString(clientId));
 
         client.orElseThrow(() -> new ClientException(String.format("Client {%s} not found", clientId)));
 
-        return client.get();
+        return convertToDTO(client.get());
+    }
+
+    @GetMapping("/client")
+    public List<ClientDTO> getAllClients() {
+        List<Client> clients = clientService.getAllClients();
+
+        return clients.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+    }
+
+
+    // convert to data transfer object for http requests
+    private ClientDTO convertToDTO(Client client) {
+        ClientDTO clientDTO = modelMapper.map(client, ClientDTO.class);
+        return clientDTO;
     }
 }

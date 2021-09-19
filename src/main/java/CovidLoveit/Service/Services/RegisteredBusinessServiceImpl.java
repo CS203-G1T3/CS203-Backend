@@ -44,6 +44,11 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
         Optional<Client> clientOptional = clientRepository.findById(clientId);
         if (clientOptional.isPresent()) {
             Client client = clientOptional.get();
+
+            //check that client does not already have business
+            if (client.getRegisteredBusiness()!= null) 
+                throw new ClientException(String.format("Client already has business"));
+            
             business.setClient(client);
         } else {
             logger.warn(String.format("Client {%s} does not exist in DB.", clientId));
@@ -123,7 +128,7 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
     }
 
     @Override
-    public List<RegisteredBusiness> listRegisteredBusinesses(){
+    public List<RegisteredBusiness> getAllRegisteredBusinesses(){
         return registeredBusinessRepository.findAll();
     }
 

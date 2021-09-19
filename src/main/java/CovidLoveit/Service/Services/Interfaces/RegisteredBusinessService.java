@@ -15,6 +15,6 @@ public interface RegisteredBusinessService {
 
     Optional<RegisteredBusiness> getBusiness(UUID businessId);
 
-    List<RegisteredBusiness> listRegisteredBusinesses();
+    List<RegisteredBusiness> getAllRegisteredBusinesses();
 
 }

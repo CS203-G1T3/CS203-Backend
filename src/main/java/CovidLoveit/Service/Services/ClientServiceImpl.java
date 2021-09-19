@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -70,4 +72,10 @@ public class ClientServiceImpl implements ClientService {
     public Optional<Client> getClient(UUID clientId){
         return clientRepository.findById(clientId);
     }
+
+    @Override
+    public List<Client> getAllClients(){
+        return clientRepository.findAll();
+    }
+
 }

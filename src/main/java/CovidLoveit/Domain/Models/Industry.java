@@ -64,7 +64,7 @@ public class Industry {
         return industryDesc;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String industryDesc) {
         this.industryDesc = industryDesc;
     }
 
