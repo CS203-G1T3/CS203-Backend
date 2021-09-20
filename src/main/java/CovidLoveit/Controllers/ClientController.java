@@ -4,8 +4,8 @@ import CovidLoveit.Controllers.DataTransferObjects.ClientDTO;
 import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Exception.ClientException;
-import CovidLoveit.Service.Services.ClientServiceImpl;
 
+import CovidLoveit.Service.Services.Interfaces.ClientService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +25,11 @@ import java.util.stream.Collectors;
 public class ClientController {
 
     private Logger logger = LoggerFactory.getLogger(ClientController.class);
-    private ClientServiceImpl clientService;
+    private ClientService clientService;
     private ModelMapper modelMapper;
 
     @Autowired
-    public ClientController(ClientServiceImpl clientService, ModelMapper modelMapper){
+    public ClientController(ClientService clientService, ModelMapper modelMapper){
         this.clientService = clientService;
         this.modelMapper = modelMapper;
     }
