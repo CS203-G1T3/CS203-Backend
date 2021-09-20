@@ -96,7 +96,6 @@ public class ClientController {
 
     // convert to data transfer object for http requests
     private ClientDTO convertToDTO(Client client) {
-        ClientDTO clientDTO = modelMapper.map(client, ClientDTO.class);
-        return clientDTO;
+        return modelMapper.map(client, ClientDTO.class);
     }
 }
