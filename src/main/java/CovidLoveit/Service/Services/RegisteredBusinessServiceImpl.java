@@ -66,7 +66,7 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
         
         var savedBusiness = registeredBusinessRepository.save(business);
 
-        logger.info(String.format("Successfully added business {%s}", savedBusiness.getBusinessName(), savedBusiness.getBusinessId()));
+        logger.info(String.format("Successfully added business {%s} with ID {%s}.", savedBusiness.getBusinessName(), savedBusiness.getBusinessId()));
         return savedBusiness;
     }
 
