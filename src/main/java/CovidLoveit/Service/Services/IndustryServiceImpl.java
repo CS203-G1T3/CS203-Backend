@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
 
 @Service
 @Transactional
@@ -73,5 +74,10 @@ public class IndustryServiceImpl implements IndustryService {
     @Override
     public Optional<Industry> getIndustry(UUID industryId) {
         return industryRepository.findById(industryId);
+    }
+
+    @Override
+    public List<Industry> getAllIndustries() {
+        return industryRepository.findAll();
     }
 }

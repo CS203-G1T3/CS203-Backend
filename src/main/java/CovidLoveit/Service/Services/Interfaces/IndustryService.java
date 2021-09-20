@@ -4,6 +4,7 @@ import CovidLoveit.Domain.Models.Industry;
 
 import java.util.UUID;
 import java.util.Optional;
+import java.util.List;
 
 public interface IndustryService {
 
@@ -14,4 +15,8 @@ public interface IndustryService {
     void deleteIndustry(UUID industryId);
 
     Optional<Industry> getIndustry(UUID industryId);
+
+    List<Industry> getAllIndustries();
+
+    //List<Industry> getIndustriesByIndustryName();
 }
