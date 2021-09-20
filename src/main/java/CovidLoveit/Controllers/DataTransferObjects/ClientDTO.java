@@ -36,13 +36,9 @@ public class ClientDTO {
         this.isAdmin = isAdmin;
     }
 
-    public Date getCreatedAt() {
-        return this.createdAt;
-    }
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
+    public Date getCreatedAt() { return this.createdAt; }
 
     public RegisteredBusinessDTO getRegisteredBusiness() {
         return this.registeredBusiness;
