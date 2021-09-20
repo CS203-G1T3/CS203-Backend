@@ -1,6 +1,6 @@
 package CovidLoveit.Controllers;
 
-import CovidLoveit.Controllers.DataTransferObjects.ClientDTO;
+import CovidLoveit.Domain.DataTransferObjects.ClientDTO;
 import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Exception.ClientException;

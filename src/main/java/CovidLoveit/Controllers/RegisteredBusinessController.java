@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import CovidLoveit.Controllers.DataTransferObjects.RegisteredBusinessDTO;
+import CovidLoveit.Domain.DataTransferObjects.RegisteredBusinessDTO;
 import CovidLoveit.Domain.InputModel.RegisteredBusinessInputModel;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
 import CovidLoveit.Exception.RegisteredBusinessException;

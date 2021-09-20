@@ -1,6 +1,4 @@
-package CovidLoveit.Controllers.DataTransferObjects;
-
-import java.util.UUID;
+package CovidLoveit.Domain.DataTransferObjects;
 
 
 // Data Transfer Object for http JSON response

@@ -1,4 +1,4 @@
-package CovidLoveit.Controllers.DataTransferObjects;
+package CovidLoveit.Domain.DataTransferObjects;
 
 import java.util.UUID;
 
