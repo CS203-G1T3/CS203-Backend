@@ -76,8 +76,9 @@ public class RegisteredBusinessController {
             throw new RegisteredBusinessException(error.toString());
         }
 
-        RegisteredBusiness businessRecord = registeredBusinessService.updateBusiness(UUID.fromString(businessId), inputModel.getBusinessName(), inputModel.getBusinessDesc(), inputModel.getBusinessId(), inputModel.getClientId());
-        return convertToDTO(businessRecord);
+        return convertToDTO(registeredBusinessService.updateBusiness(UUID.fromString(businessId),
+                inputModel.getBusinessName(), inputModel.getBusinessDesc(), inputModel.getBusinessId(),
+                inputModel.getClientId()));
     }
 
     @DeleteMapping("/registered-business/{businessId}")
@@ -105,8 +106,7 @@ public class RegisteredBusinessController {
 
     // convert to data transfer object for http requests
     private RegisteredBusinessDTO convertToDTO(RegisteredBusiness registeredBusiness) {
-        RegisteredBusinessDTO registeredBusinessDTO = modelMapper.map(registeredBusiness, RegisteredBusinessDTO.class);
-        return registeredBusinessDTO;
+        return modelMapper.map(registeredBusiness, RegisteredBusinessDTO.class);
     }
 
 }
