@@ -67,9 +67,7 @@ public class ClientController {
         }
 
         Client client = new Client(inputModel.getEmail(), inputModel.isAdmin());
-        Client clientRecord = clientService.updateClient(UUID.fromString(clientId), client);
-
-        return convertToDTO(clientRecord);
+        return convertToDTO(clientService.updateClient(UUID.fromString(clientId), client));
     }
 
     @DeleteMapping("/client/{clientId}")
