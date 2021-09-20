@@ -71,4 +71,6 @@ public class Client {
     public void setAdmin(boolean admin) {
         isAdmin = admin;
     }
+
+    public Date getCreatedAt() { return this.createdAt; }
 }
