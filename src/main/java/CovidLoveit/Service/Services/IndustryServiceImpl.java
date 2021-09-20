@@ -28,8 +28,8 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     @Override
-    public Industry addIndustry(String industryName, String industrySubtype, String description) {
-        var industry = new Industry(industryName, industrySubtype, description);
+    public Industry addIndustry(String industryName, String industrySubtype, String industryDesc) {
+        var industry = new Industry(industryName, industrySubtype, industryDesc);
         var savedIndustry = industryRepository.save(industry);
 
         logger.info(String.format("Successfully added industry {%s}", savedIndustry.getIndustryId()));
@@ -49,7 +49,7 @@ public class IndustryServiceImpl implements IndustryService {
         var industryRecord = industryOptional.get();
         industryRecord.setIndustryName(industry.getIndustryName());
         industryRecord.setIndustrySubtype(industry.getIndustrySubtype());
-        industryRecord.setDescription(industry.getDescription());
+        industryRecord.setIndustryDesc(industry.getIndustryDesc());
 
         industryRepository.save(industryRecord);
         logger.info(String.format("Successfully updated industry with ID {%s}", industry.getIndustryId()));
@@ -68,5 +68,10 @@ public class IndustryServiceImpl implements IndustryService {
 
         industryRepository.delete(industryOptional.get());
         logger.info(String.format("Successfully removed Industry with ID {%s}", industryId));
+    }
+
+    @Override
+    public Optional<Industry> getIndustry(UUID industryId) {
+        return industryRepository.findById(industryId);
     }
 }
