@@ -1,5 +1,6 @@
 package CovidLoveit.Service.Services;
 
+import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Exception.GuidelineException;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -80,6 +82,11 @@ public class GuidelineServiceImpl implements GuidelineService {
         });
 
         guidelineRepository.delete(guidelineOptional.get());
-        logger.info(String.format("Sucessfully removed Guideline {%d}", guidelineId));
+        logger.info(String.format("Successfully removed Guideline {%d}", guidelineId));
+    }
+
+    @Override
+    public Optional<Guideline> getGuideline(int guidelineId){
+        return guidelineRepository.findById(guidelineId);
     }
 }
