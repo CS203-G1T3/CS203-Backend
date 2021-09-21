@@ -1,6 +1,10 @@
 package CovidLoveit.Service.Services.Interfaces;
 
+import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Guideline;
+
+import java.util.Optional;
+import java.util.UUID;
 
 public interface GuidelineService {
 
@@ -9,5 +13,7 @@ public interface GuidelineService {
     Guideline updateGuideline(int guidelineId, Guideline guideline);
 
     void deleteGuideline(int guidelineId);
+
+    Optional<Guideline> getGuideline(int guidelineId);
 
 }
