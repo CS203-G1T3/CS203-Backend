@@ -1,5 +1,6 @@
 package CovidLoveit.Controllers;
 
+import CovidLoveit.Domain.InputModel.GuidelineInputModel;
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Exception.GuidelineException;
 import CovidLoveit.Service.Services.GuidelineServiceImpl;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1")
@@ -19,6 +21,11 @@ public class GuidelineController {
 
     @Autowired
     public GuidelineController(GuidelineServiceImpl guidelineService) {this.guidelineService = guidelineService; }
+
+    @PostMapping("/guideline/{clientId}")
+    public Guideline addGuideline(@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel) {
+        guidelineService.addGuideline(clientId, inputModel);
+    }
 
     @DeleteMapping("guideline/{guidelineId}")
     public void deleteGuideline(@PathVariable int guidelineId) {

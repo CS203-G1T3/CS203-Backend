@@ -56,7 +56,6 @@ public class GuidelineInputModel {
 
     }
 
-    @NotNull(message = "Guideline ID required.")
     private int guidelineId;
 
     @NotBlank(message = "Operation Status Required.")
