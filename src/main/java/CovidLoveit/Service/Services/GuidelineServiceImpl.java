@@ -1,8 +1,12 @@
 package CovidLoveit.Service.Services;
 
+import CovidLoveit.Domain.InputModel.GuidelineInputModel;
+import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Guideline;
+import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Exception.GuidelineException;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
+import CovidLoveit.Service.Services.Interfaces.ClientService;
 import CovidLoveit.Service.Services.Interfaces.GuidelineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -18,22 +23,30 @@ public class GuidelineServiceImpl implements GuidelineService {
 
     private Logger logger = LoggerFactory.getLogger(GuidelineServiceImpl.class);
     private GuidelineRepository guidelineRepository;
+    private ClientService clientService;
 
     @Autowired
-    public GuidelineServiceImpl(GuidelineRepository guidelineRepository) {this.guidelineRepository = guidelineRepository; }
+    public GuidelineServiceImpl(GuidelineRepository guidelineRepository, ClientService clientService) {
+        this.guidelineRepository = guidelineRepository;
+        this.clientService = clientService;
+    }
 
     @Override
-    public Guideline addGuideline(boolean canOperateOnSite, String canOperateOnSiteDetails, int groupSize,
-                                  String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated,
-                                  String covidTestingDetails, String contactTracing, String contactTracingDetails,
-                                  int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
-                                  String referenceLink)
+    public Guideline addGuideline(String clientId, GuidelineInputModel inputModel)
     {
-        var guideline = new Guideline(canOperateOnSite,
-                canOperateOnSiteDetails, groupSize, groupSizeDetails,
-                covidTestingVaccinated, covidTestingUnvaccinated, covidTestingDetails,
-                contactTracing, contactTracingDetails, operatingCapacity, operatingCapacityDetails,
-                operationGuidelines, referenceLink);
+        var sessionUser = clientService.getClient(UUID.fromString(clientId));
+        sessionUser.orElseThrow(() -> {
+            throw new ClientException(String.format("Client with ID {%s} not found", clientId));
+        });
+
+        if (!sessionUser.get().isAdmin()) {
+            throw new ClientException("Unauthorized access.");
+        }
+        var guideline = new Guideline(inputModel.isCanOpOnSite(),
+                inputModel.getCanOpOnSiteDetails(), inputModel.getGroupSize(), inputModel.getGroupSizeDetails(),
+                inputModel.getCovidTestingVaccinated(), inputModel.getCovidTestingUnvaccinated(), inputModel.getCovidTestingDetails(),
+                inputModel.getContactTracing(), inputModel.getContactTracingDetails(), inputModel.getOperatingCapacity(), inputModel.getOpCapacityDetails(),
+                inputModel.getOpGuidelines(), inputModel.getReferenceLink());
 
         var savedGuideline = guidelineRepository.save(guideline);
 
@@ -80,6 +93,11 @@ public class GuidelineServiceImpl implements GuidelineService {
         });
 
         guidelineRepository.delete(guidelineOptional.get());
-        logger.info(String.format("Sucessfully removed Guideline {%d}", guidelineId));
+        logger.info(String.format("Successfully removed Guideline {%d}", guidelineId));
+    }
+
+    @Override
+    public Optional<Guideline> getGuideline(int guidelineId){
+        return guidelineRepository.findById(guidelineId);
     }
 }
