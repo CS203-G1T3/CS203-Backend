@@ -24,7 +24,7 @@ public class GuidelineController {
 
     @PostMapping("/guideline/{clientId}")
     public Guideline addGuideline(@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel) {
-        guidelineService.addGuideline(clientId, inputModel);
+        return guidelineService.addGuideline(clientId, inputModel);
     }
 
     @DeleteMapping("guideline/{guidelineId}")
