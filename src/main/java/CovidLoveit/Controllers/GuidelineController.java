@@ -73,7 +73,7 @@ public class GuidelineController {
 
 
 
-        @PutMapping("/guideline/{clientId}/{guidelineId}")
+    @PutMapping("/guideline/{clientId}")
     public GuidelineDTO updateGuideline (@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel){
         Set<ConstraintViolation<GuidelineInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
