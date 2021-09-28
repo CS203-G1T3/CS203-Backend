@@ -25,7 +25,6 @@ public class ClientInputModel {
         this.isAdmin = isAdmin;
     }
 
-//    @NotEmpty(message = "Client Id cannot be null or empty.")
     private UUID clientId;
 
     @Email(message = "Email provided is invalid.")
