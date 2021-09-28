@@ -1,19 +1,23 @@
 package CovidLoveit.Service.Services.Interfaces;
 
+import CovidLoveit.Domain.InputModel.GuidelineInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Guideline;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface GuidelineService {
 
-    Guideline addGuideline(String clientId, boolean canOperateOnSite, String canOperateOnSiteDetails, int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated, String covidTestingDetails, String contactTracing, String contactTracingDetails, int operatingCapacity, String operatingCapacityDetails, String operationGuidelines, String referenceLink);
+    Guideline addGuideline(String clientId, GuidelineInputModel inputModel);
 
-    Guideline updateGuideline(int guidelineId, Guideline guideline);
+    Guideline updateGuideline(String clientId, GuidelineInputModel inputModel);
 
-    void deleteGuideline(int guidelineId);
+    void deleteGuideline(String clientId, int guidelineId);
 
     Optional<Guideline> getGuideline(int guidelineId);
+
+    List<Guideline> getAllGuidelines();
 
 }

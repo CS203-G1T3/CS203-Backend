@@ -72,10 +72,10 @@ public class GuidelineInputModel {
     @Size(min=3, max=512)
     private String groupSizeDetails;
 
-    @NotBlank(message = "Number of vaccinated employees required.")
+    @NotNull(message = "Number of vaccinated employees required.")
     private int covidTestingVaccinated;
 
-    @NotBlank(message = "Number of total unvaccinated employees required.")
+    @NotNull(message = "Number of total unvaccinated employees required.")
     private int covidTestingUnvaccinated;
 
     @NotBlank(message = "Covid testing details required.")
