@@ -68,8 +68,8 @@ public class Client {
         return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     public Date getCreatedAt() { return this.createdAt; }
