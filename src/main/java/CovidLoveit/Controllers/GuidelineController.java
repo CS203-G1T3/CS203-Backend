@@ -1,9 +1,7 @@
 package CovidLoveit.Controllers;
 
-import CovidLoveit.Domain.DataTransferObjects.ClientDTO;
 import CovidLoveit.Domain.DataTransferObjects.GuidelineDTO;
 import CovidLoveit.Domain.InputModel.GuidelineInputModel;
-import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Exception.GuidelineException;
 import CovidLoveit.Service.Services.GuidelineServiceImpl;
@@ -90,7 +88,7 @@ public class GuidelineController {
         }
 
         Guideline guideline = new Guideline();
-        return convertToDTO(guidelineService.updateGuideline((String.valueOf(inputModel.getGuidelineId())), inputModel));
+        return convertToDTO(guidelineService.updateGuideline(clientId, inputModel));
     }
 
     private GuidelineDTO convertToDTO(Guideline guideline) {

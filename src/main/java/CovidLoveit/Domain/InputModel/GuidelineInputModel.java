@@ -58,14 +58,14 @@ public class GuidelineInputModel {
 
     private int guidelineId;
 
-    @NotBlank(message = "Operation Status Required.")
+    @NotNull(message = "Operation Status Required.")
     private boolean canOpOnSite;
 
     @NotBlank(message = "Operation Site Details Required. ")
     @Size(min=3, max=512)
     private String canOpOnSiteDetails;
 
-    @NotBlank(message = "Group size required.")
+    @NotNull(message = "Group size required.")
     private int groupSize;
 
     @NotBlank(message = "Group size details required.")
@@ -90,7 +90,7 @@ public class GuidelineInputModel {
     @Size(min=3, max=512)
     private String contactTracingDetails;
 
-    @NotBlank(message = "Operating capacity reuired.")
+    @NotNull(message = "Operating capacity reuired.")
     private int operatingCapacity;
 
     @NotBlank(message = "Operating capacity details required.")
