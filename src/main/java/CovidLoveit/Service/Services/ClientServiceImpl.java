@@ -31,6 +31,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client addClient(String email, boolean isAdmin) {
+        var clientOptional = clientRepository.findByEmail(email);
+        if (clientOptional.isPresent()) {
+            logger.warn(String.format("Client with email {%s} already exists.", email));
+            throw new ClientException(String.format("Client with email {%s} already exists.", email));
+        }
+
         var client = new Client(email, isAdmin);
         var savedClient = clientRepository.save(client);
 
