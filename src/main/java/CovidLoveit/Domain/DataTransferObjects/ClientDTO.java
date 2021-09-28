@@ -8,7 +8,7 @@ public class ClientDTO {
     
     private UUID clientId;
     private String email;
-    private boolean isAdmin = false;
+    private boolean isAdmin;
     private Date createdAt;
     private RegisteredBusinessDTO registeredBusiness;
 
