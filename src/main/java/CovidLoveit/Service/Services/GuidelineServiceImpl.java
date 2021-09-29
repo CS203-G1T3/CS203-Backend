@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,38 +56,54 @@ public class GuidelineServiceImpl implements GuidelineService {
     }
 
     @Override
-    public Guideline updateGuideline(int guidelineId, Guideline guideline) {
-        Optional<Guideline> guidelineOptional = guidelineRepository.findById(guidelineId);
+    public Guideline updateGuideline(String clientId, GuidelineInputModel inputModel) {
+        Optional<Guideline> guidelineOptional = guidelineRepository.findById(inputModel.getGuidelineId());
 
+        var sessionUser = clientService.getClient(UUID.fromString(clientId));
+        sessionUser.orElseThrow(() -> {
+            throw new ClientException(String.format("Client with ID {%s} not found", clientId));
+        });
+
+        if (!sessionUser.get().isAdmin()) {
+            throw new ClientException("Unauthorized access.");
+        }
         guidelineOptional.orElseThrow(() -> {
-            logger.warn(String.format("Guideline with Id {%d} does not exist in DB.", guidelineId));
-            throw new GuidelineException(String.format("Guideline ID {%d} is not found.", guidelineId));
+            logger.warn(String.format("Guideline with Id {%d} does not exist in DB.", inputModel.getGuidelineId()));
+            throw new GuidelineException(String.format("Guideline ID {%d} is not found.", inputModel.getGuidelineId()));
         });
 
         var guidelineRecord = guidelineOptional.get();
-        guidelineRecord.setCanOpOnSite(guideline.getCanOpOnSite());
-        guidelineRecord.setCanOpOnSiteDetails(guideline.getCanOpOnSiteDetails());
-        guidelineRecord.setGroupSize(guideline.getGroupSize());
-        guidelineRecord.setGroupSizeDetails(guideline.getGroupSizeDetails());
-        guidelineRecord.setCovidTestingVaccinated(guideline.getCovidTestingVaccinated());
-        guidelineRecord.setCovidTestingUnvaccinated(guideline.getCovidTestingUnvaccinated());
-        guidelineRecord.setCovidTestingDetails(guideline.getCovidTestingDetails());
-        guidelineRecord.setContactTracing(guideline.getContactTracing());
-        guidelineRecord.setContactTracingDetails(guideline.getContactTracingDetails());
-        guidelineRecord.setOperatingCapacity(guideline.getOperatingCapacity());
-        guidelineRecord.setOpCapacityDetails(guideline.getOpCapacityDetails());
-        guidelineRecord.setOpGuidelines(guideline.getOpGuidelines());
-        guidelineRecord.setReferenceLink(guideline.getReferenceLink());
+        guidelineRecord.setCanOpOnSite(inputModel.isCanOpOnSite());
+        guidelineRecord.setCanOpOnSiteDetails(inputModel.getCanOpOnSiteDetails());
+        guidelineRecord.setGroupSize(inputModel.getGroupSize());
+        guidelineRecord.setGroupSizeDetails(inputModel.getGroupSizeDetails());
+        guidelineRecord.setCovidTestingVaccinated(inputModel.getCovidTestingVaccinated());
+        guidelineRecord.setCovidTestingUnvaccinated(inputModel.getCovidTestingUnvaccinated());
+        guidelineRecord.setCovidTestingDetails(inputModel.getCovidTestingDetails());
+        guidelineRecord.setContactTracing(inputModel.getContactTracing());
+        guidelineRecord.setContactTracingDetails(inputModel.getContactTracingDetails());
+        guidelineRecord.setOperatingCapacity(inputModel.getOperatingCapacity());
+        guidelineRecord.setOpCapacityDetails(inputModel.getOpCapacityDetails());
+        guidelineRecord.setOpGuidelines(inputModel.getOpGuidelines());
+        guidelineRecord.setReferenceLink(inputModel.getReferenceLink());
 
         guidelineRepository.save(guidelineRecord);
-        logger.info(String.format("Successfully updated Guideline {%d}", guidelineId));
+        logger.info(String.format("Successfully updated Guideline {%d}", inputModel.getGuidelineId()));
         return guidelineRecord;
     }
 
     @Override
-    public void deleteGuideline(int guidelineId) {
+    public void deleteGuideline(String clientId, int guidelineId) {
         Optional<Guideline> guidelineOptional = guidelineRepository.findById(guidelineId);
 
+        var sessionUser = clientService.getClient(UUID.fromString(clientId));
+        sessionUser.orElseThrow(() -> {
+            throw new ClientException(String.format("Client with ID {%s} not found", clientId));
+        });
+
+        if (!sessionUser.get().isAdmin()) {
+            throw new ClientException("Unauthorized access.");
+        }
         guidelineOptional.orElseThrow(() -> {
             logger.warn(String.format("Guideline with Id {%d} does not exist in DB.", guidelineId));
             throw new GuidelineException(String.format("Guideline ID {%d} is not found.", guidelineId));
@@ -99,5 +116,10 @@ public class GuidelineServiceImpl implements GuidelineService {
     @Override
     public Optional<Guideline> getGuideline(int guidelineId){
         return guidelineRepository.findById(guidelineId);
+    }
+
+    @Override
+    public List<Guideline> getAllGuidelines(){
+        return guidelineRepository.findAll();
     }
 }
