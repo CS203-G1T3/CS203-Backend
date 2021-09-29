@@ -7,3 +7,12 @@ Content-Type: application/json
   "isAdmin": true
 }
 
+###
+PUT http://localhost:8080/api/v1/client/{{ac2380ca-7fd3-47e5-9f51-f22000bd2e14}}
+Content-Type: application/json
+
+{
+  "email": "linashen@gmail.com",
+  "isAdmin": false
+}
+
