@@ -1,5 +1,7 @@
 package CovidLoveit.Domain.InputModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -56,6 +58,7 @@ public class ClientInputModel {
         this.email = email;
     }
 
+    @JsonProperty("isAdmin")
     public boolean isAdmin() {
         return isAdmin;
     }
