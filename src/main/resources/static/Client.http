@@ -1,4 +1,4 @@
-###
+### Endpoint for creating a client, takes in a JSON body
 POST http://localhost:8080/api/v1/client
 Content-Type: application/json
 
@@ -7,7 +7,7 @@ Content-Type: application/json
   "isAdmin": true
 }
 
-###
+### Endpoint for updating info of a client, takes in a JSON body, and the clientId as the path variable
 PUT http://localhost:8080/api/v1/client/{{ac2380ca-7fd3-47e5-9f51-f22000bd2e14}}
 Content-Type: application/json
 
@@ -16,4 +16,11 @@ Content-Type: application/json
   "isAdmin": false
 }
 
+### Endpoint for removing a client, takes in a clientId as the path variable
+DELETE http://localhost:8080/api/v1/client/{{clientId}}
 
+### Endpoint for getting a SINGLE client record, takes in clientId as the path variable
+GET http://localhost:8080/api/v1/client/{{clientId}}
+
+### Endpoint for getting all client record
+GET http://localhost:8080/api/v1/client
