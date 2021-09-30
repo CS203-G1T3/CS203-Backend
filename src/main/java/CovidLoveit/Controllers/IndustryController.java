@@ -4,7 +4,7 @@ import CovidLoveit.Domain.DataTransferObjects.IndustryDTO;
 import CovidLoveit.Domain.InputModel.IndustryInputModel;
 import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Exception.IndustryException;
-import CovidLoveit.Service.Services.Interfaces.IndustryService;
+import CovidLoveit.Service.Services.IndustryServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,18 +24,18 @@ import java.util.List;
 public class IndustryController {
 
     private Logger logger = LoggerFactory.getLogger(IndustryController.class);
-    private IndustryService industryService;
+    private IndustryServiceImpl industryService;
     private ModelMapper modelMapper;
 
     @Autowired
-    public IndustryController(IndustryService industryService, ModelMapper modelMapper){
+    public IndustryController(IndustryServiceImpl industryService, ModelMapper modelMapper){
         this.industryService = industryService;
         this.modelMapper = modelMapper;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/industry")
-    public IndustryDTO addIndustry(@RequestBody IndustryInputModel inputModel){
+    @PostMapping("/industry/{clientId}")
+    public IndustryDTO addIndustry(@PathVariable String clientId, @RequestBody IndustryInputModel inputModel){
         Set<ConstraintViolation<IndustryInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -48,11 +48,11 @@ public class IndustryController {
             throw new IndustryException(error.toString());
         }
 
-        return convertToDTO(industryService.addIndustry(inputModel.getIndustryName(), inputModel.getIndustrySubtype(), inputModel.getIndustryDesc()));
+        return convertToDTO(industryService.addIndustry(clientId, inputModel));
     }
 
-    @PutMapping("/industry/{industryId}")
-    public IndustryDTO updateIndustry(@PathVariable String industryId, @RequestBody IndustryInputModel inputModel){
+    @PutMapping("/industry/{clientId}")
+    public IndustryDTO updateIndustry(@PathVariable String clientId, @RequestBody IndustryInputModel inputModel){
         Set<ConstraintViolation<IndustryInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -65,13 +65,12 @@ public class IndustryController {
             throw new IndustryException(error.toString());
         }
 
-        Industry industry = new Industry(inputModel.getIndustryName(), inputModel.getIndustrySubtype(), inputModel.getIndustryDesc());
-        return convertToDTO(industryService.updateIndustry(UUID.fromString(industryId), industry));
+        return convertToDTO(industryService.updateIndustry(clientId, inputModel));
     }
 
-    @DeleteMapping("/industry/{industryId}")
-    public void deleteIndustry(@PathVariable String industryId){
-        industryService.deleteIndustry(UUID.fromString(industryId));
+    @DeleteMapping("/industry/{clientId}/{industryId}")
+    public void deleteIndustry(@PathVariable String clientId, @PathVariable String industryId){
+        industryService.deleteIndustry(clientId, UUID.fromString(industryId));
     }
 
     @GetMapping("/industry/{industryId}")
@@ -83,9 +82,21 @@ public class IndustryController {
         return convertToDTO(industry.get());
     }
 
-    @GetMapping("/industry")
-    public List<IndustryDTO> getAllIndustries() {
-        List<Industry> industries = industryService.getAllIndustries();
+    @GetMapping("/industrySubtypes")
+    public List<IndustryDTO> getAllIndustrySubtypes() {
+        List<Industry> industries = industryService.getAllIndustrySubtypes();
+
+        return industries.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/industryNames")
+    public List<String> getAllIndustries() {
+        return industryService.getAllIndustries();
+    }
+
+    @GetMapping("/industry/{industryName}")
+    public List<IndustryDTO> getIndustrySubtypesByIndustry(@PathVariable String industryName) {
+        List<Industry> industries = industryService.getIndustrySubtypesByIndustry(industryName);
 
         return industries.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
