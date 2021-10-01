@@ -90,7 +90,7 @@ public class GuidelineInputModel {
     @Size(min=3, max=512)
     private String contactTracingDetails;
 
-    @NotNull(message = "Operating capacity reuired.")
+    @NotNull(message = "Operating capacity required.")
     private int opCapacity;
 
     @NotBlank(message = "Operating capacity details required.")
