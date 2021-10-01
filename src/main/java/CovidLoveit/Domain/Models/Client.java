@@ -1,5 +1,6 @@
 package CovidLoveit.Domain.Models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -64,10 +65,12 @@ public class Client {
         this.registeredBusiness = registeredBusiness;
     }
 
+    @JsonProperty("isAdmin")
     public boolean isAdmin() {
-        return isAdmin;
+        return this.isAdmin;
     }
 
+    @JsonProperty("isAdmin")
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
