@@ -1,14 +1,25 @@
 package CovidLoveit.Service.Services.Interfaces;
 
 import CovidLoveit.Domain.Models.Industry;
+import CovidLoveit.Domain.InputModel.IndustryInputModel;
 
 import java.util.UUID;
+import java.util.Optional;
+import java.util.List;
 
 public interface IndustryService {
 
-    Industry addIndustry(String industryName, String industrySubtype, String description);
+    Industry addIndustry(String clientId, IndustryInputModel inputModel);
 
-    Industry updateIndustry(UUID industryId, Industry industry);
+    Industry updateIndustry(String clientId, IndustryInputModel inputModel);
 
-    void deleteIndustry(UUID industryId);
+    void deleteIndustry(String clientId, UUID industryId);
+
+    Optional<Industry> getIndustry(UUID industryId);
+
+    List<Industry> getAllIndustrySubtypes();
+
+    List<String> getAllIndustries();
+
+    List<Industry> getIndustrySubtypesByIndustry(String industryName);
 }

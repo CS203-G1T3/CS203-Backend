@@ -60,11 +60,11 @@ public class Industry {
         this.industrySubtype = industrySubtype;
     }
 
-    public String getDescription() {
+    public String getIndustryDesc() {
         return industryDesc;
     }
 
-    public void setDescription(String industryDesc) {
+    public void setIndustryDesc(String industryDesc) {
         this.industryDesc = industryDesc;
     }
 
