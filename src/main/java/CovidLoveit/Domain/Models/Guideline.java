@@ -1,5 +1,6 @@
 package CovidLoveit.Domain.Models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -88,6 +89,7 @@ public class Guideline {
         return guidelineId;
     }
 
+    @JsonProperty("isCanOpOnSite")
     public boolean isCanOpOnSite() {
         return canOpOnSite;
     }
