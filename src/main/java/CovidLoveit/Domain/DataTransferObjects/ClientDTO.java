@@ -1,5 +1,7 @@
 package CovidLoveit.Domain.DataTransferObjects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -28,11 +30,14 @@ public class ClientDTO {
         this.email = email;
     }
 
-    public boolean isIsAdmin() {
+    @JsonProperty("isAdmin")
+    public boolean isAdmin() {
         return this.isAdmin;
     }
 
-    public void setIsAdmin(boolean isAdmin) {
+
+    @JsonProperty("isAdmin")
+    public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 
