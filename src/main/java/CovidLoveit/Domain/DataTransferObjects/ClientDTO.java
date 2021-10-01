@@ -35,7 +35,6 @@ public class ClientDTO {
         return this.isAdmin;
     }
 
-    @JsonProperty("isAdmin")
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
