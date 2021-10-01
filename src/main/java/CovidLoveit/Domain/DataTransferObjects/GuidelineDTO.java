@@ -1,9 +1,12 @@
 package CovidLoveit.Domain.DataTransferObjects;
 
+import CovidLoveit.Domain.Models.Industry;
+
 public class GuidelineDTO {
 
-    private boolean canOperateOnSite;
-    private String canOperateOnSiteDetails;
+    private int guidelineId;
+    private boolean canOpOnSite;
+    private String canOpOnSiteDetails;
     private int groupSize;
     private String groupSizeDetails;
     private int covidTestingVaccinated;
@@ -11,25 +14,34 @@ public class GuidelineDTO {
     private String covidTestingDetails;
     private String contactTracing;
     private String contactTracingDetails;
-    private int operatingCapacity;
-    private String operatingCapacityDetails;
-    private String operationGuidelines;
+    private int opCapacity;
+    private String opCapacityDetails;
+    private String opGuidelines;
     private String referenceLink;
+    private Industry industry;
 
-    public boolean isCanOperateOnSite() {
-        return canOperateOnSite;
+    public int getGuidelineId() {
+        return guidelineId;
     }
 
-    public void setCanOperateOnSite(boolean canOperateOnSite) {
-        this.canOperateOnSite = canOperateOnSite;
+    public void setGuidelineId(int guidelineId) {
+        this.guidelineId = guidelineId;
     }
 
-    public String getCanOperateOnSiteDetails() {
-        return canOperateOnSiteDetails;
+    public boolean isCanOpOnSite() {
+        return canOpOnSite;
     }
 
-    public void setCanOperateOnSiteDetails(String canOperateOnSiteDetails) {
-        this.canOperateOnSiteDetails = canOperateOnSiteDetails;
+    public void setCanOpOnSite(boolean canOpOnSite) {
+        this.canOpOnSite = canOpOnSite;
+    }
+
+    public String getCanOpOnSiteDetails() {
+        return canOpOnSiteDetails;
+    }
+
+    public void setCanOpOnSiteDetails(String canOpOnSiteDetails) {
+        this.canOpOnSiteDetails = canOpOnSiteDetails;
     }
 
     public int getGroupSize() {
@@ -88,28 +100,28 @@ public class GuidelineDTO {
         this.contactTracingDetails = contactTracingDetails;
     }
 
-    public int getOperatingCapacity() {
-        return operatingCapacity;
+    public int getOpCapacity() {
+        return opCapacity;
     }
 
-    public void setOperatingCapacity(int operatingCapacity) {
-        this.operatingCapacity = operatingCapacity;
+    public void setOpCapacity(int opCapacity) {
+        this.opCapacity = opCapacity;
     }
 
-    public String getOperatingCapacityDetails() {
-        return operatingCapacityDetails;
+    public String getOpCapacityDetails() {
+        return opCapacityDetails;
     }
 
-    public void setOperatingCapacityDetails(String operatingCapacityDetails) {
-        this.operatingCapacityDetails = operatingCapacityDetails;
+    public void setOpCapacityDetails(String opCapacityDetails) {
+        this.opCapacityDetails = opCapacityDetails;
     }
 
-    public String getOperationGuidelines() {
-        return operationGuidelines;
+    public String getOpGuidelines() {
+        return opGuidelines;
     }
 
-    public void setOperationGuidelines(String operationGuidelines) {
-        this.operationGuidelines = operationGuidelines;
+    public void setOpGuidelines(String opGuidelines) {
+        this.opGuidelines = opGuidelines;
     }
 
     public String getReferenceLink() {
@@ -118,5 +130,13 @@ public class GuidelineDTO {
 
     public void setReferenceLink(String referenceLink) {
         this.referenceLink = referenceLink;
+    }
+
+    public Industry getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(Industry industry) {
+        this.industry = industry;
     }
 }
