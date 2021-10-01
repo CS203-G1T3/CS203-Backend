@@ -27,7 +27,7 @@ public class GuidelineInputModel {
         this.covidTestingDetails = covidTestingDetails;
         this.contactTracing = contactTracing;
         this.contactTracingDetails = contactTracingDetails;
-        this.operatingCapacity = operatingCapacity;
+        this.opCapacity = operatingCapacity;
         this.opCapacityDetails = operatingCapacityDetails;
         this.opGuidelines = operationGuidelines;
         this.referenceLink = referenceLink;
@@ -49,7 +49,7 @@ public class GuidelineInputModel {
         this.covidTestingDetails = covidTestingDetails;
         this.contactTracing = contactTracing;
         this.contactTracingDetails = contactTracingDetails;
-        this.operatingCapacity = operatingCapacity;
+        this.opCapacity = operatingCapacity;
         this.opCapacityDetails = operatingCapacityDetails;
         this.opGuidelines = operationGuidelines;
         this.referenceLink = referenceLink;
@@ -91,7 +91,7 @@ public class GuidelineInputModel {
     private String contactTracingDetails;
 
     @NotNull(message = "Operating capacity reuired.")
-    private int operatingCapacity;
+    private int opCapacity;
 
     @NotBlank(message = "Operating capacity details required.")
     @Size(min=3, max=512)
@@ -183,12 +183,12 @@ public class GuidelineInputModel {
         this.contactTracingDetails = contactTracingDetails;
     }
 
-    public int getOperatingCapacity() {
-        return operatingCapacity;
+    public int getOpCapacity() {
+        return opCapacity;
     }
 
-    public void setOperatingCapacity(int operatingCapacity) {
-        this.operatingCapacity = operatingCapacity;
+    public void setOpCapacity(int operatingCapacity) {
+        this.opCapacity = operatingCapacity;
     }
 
     public String getOpCapacityDetails() {
