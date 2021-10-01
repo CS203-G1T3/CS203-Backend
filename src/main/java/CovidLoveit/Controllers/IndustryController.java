@@ -90,7 +90,7 @@ public class IndustryController {
     }
 
     @GetMapping("/industryNames")
-    public List<String> getAllIndustries() {
+    public List<String> getAllIndustryName() {
         return industryService.getAllIndustries();
     }
 
