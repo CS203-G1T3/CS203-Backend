@@ -46,8 +46,8 @@ public class GuidelineServiceImpl implements GuidelineService {
         var guideline = new Guideline(inputModel.isCanOpOnSite(),
                 inputModel.getCanOpOnSiteDetails(), inputModel.getGroupSize(), inputModel.getGroupSizeDetails(),
                 inputModel.getCovidTestingVaccinated(), inputModel.getCovidTestingUnvaccinated(), inputModel.getCovidTestingDetails(),
-                inputModel.getContactTracing(), inputModel.getContactTracingDetails(), inputModel.getOperatingCapacity(), inputModel.getOpCapacityDetails(),
-                inputModel.getOpGuidelines(), inputModel.getReferenceLink());
+                inputModel.getContactTracing(), inputModel.getContactTracingDetails(), inputModel.getOpCapacity(),
+                inputModel.getOpCapacityDetails(), inputModel.getOpGuidelines(), inputModel.getReferenceLink());
 
         var savedGuideline = guidelineRepository.save(guideline);
 
@@ -82,7 +82,7 @@ public class GuidelineServiceImpl implements GuidelineService {
         guidelineRecord.setCovidTestingDetails(inputModel.getCovidTestingDetails());
         guidelineRecord.setContactTracing(inputModel.getContactTracing());
         guidelineRecord.setContactTracingDetails(inputModel.getContactTracingDetails());
-        guidelineRecord.setOperatingCapacity(inputModel.getOperatingCapacity());
+        guidelineRecord.setOpCapacity(inputModel.getOpCapacity());
         guidelineRecord.setOpCapacityDetails(inputModel.getOpCapacityDetails());
         guidelineRecord.setOpGuidelines(inputModel.getOpGuidelines());
         guidelineRecord.setReferenceLink(inputModel.getReferenceLink());
