@@ -1,6 +1,7 @@
 package CovidLoveit.Domain.DataTransferObjects;
 
 import CovidLoveit.Domain.Models.Industry;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GuidelineDTO {
 
@@ -28,6 +29,7 @@ public class GuidelineDTO {
         this.guidelineId = guidelineId;
     }
 
+    @JsonProperty("isCanOpOnSite")
     public boolean isCanOpOnSite() {
         return canOpOnSite;
     }
