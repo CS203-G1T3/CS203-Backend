@@ -53,6 +53,12 @@ public class ClientServiceImpl implements ClientService {
             throw new ClientException(String.format("Client with ID {%s} not found.", clientId));
         });
 
+        var existingClient = clientRepository.findByEmail(client.getEmail());
+        if (existingClient.get().getClientId() != clientOptional.get().getClientId()) {
+            logger.warn(String.format("Client with email {%s} already exists.", client.getEmail()));
+            throw new ClientException(String.format("Client with email {%s} already exists.", client.getEmail()));
+        }
+
         var clientRecord = clientOptional.get();
         clientRecord.setEmail(client.getEmail());
         clientRecord.setAdmin(client.isAdmin());
