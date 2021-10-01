@@ -45,8 +45,8 @@ public class Guideline {
     @Column(name = "contactTracingDetails")
     private String contactTracingDetails;
 
-    @Column(name = "operatingCapacity")
-    private int operatingCapacity;
+    @Column(name = "opCapacity")
+    private int opCapacity;
 
     @Column(name = "opCapacityDetails")
     private String opCapacityDetails;
@@ -78,7 +78,7 @@ public class Guideline {
         this.covidTestingDetails = covidTestingDetails;
         this.contactTracing = contactTracing;
         this.contactTracingDetails = contactTracingDetails;
-        this.operatingCapacity = operatingCapacity;
+        this.opCapacity = operatingCapacity;
         this.opCapacityDetails = operatingCapacityDetails;
         this.opGuidelines = operationGuidelines;
         this.referenceLink = referenceLink;
@@ -94,10 +94,6 @@ public class Guideline {
 
     public void setCanOpOnSite(boolean canOpOnSite) {
         this.canOpOnSite = canOpOnSite;
-    }
-
-    public boolean getCanOpOnSite() {
-        return canOpOnSite;
     }
 
     public String getCanOpOnSiteDetails() {
@@ -164,12 +160,12 @@ public class Guideline {
         this.contactTracingDetails = contactTracingDetails;
     }
 
-    public int getOperatingCapacity() {
-        return operatingCapacity;
+    public int getOpCapacity() {
+        return opCapacity;
     }
 
-    public void setOperatingCapacity(int operatingCapacity) {
-        this.operatingCapacity = operatingCapacity;
+    public void setOpCapacity(int operatingCapacity) {
+        this.opCapacity = operatingCapacity;
     }
 
     public String getOpCapacityDetails() {
