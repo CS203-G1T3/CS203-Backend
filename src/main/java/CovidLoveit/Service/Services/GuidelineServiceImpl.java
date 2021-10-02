@@ -36,13 +36,12 @@ public class GuidelineServiceImpl implements GuidelineService {
     public Guideline addGuideline(String clientId, GuidelineInputModel inputModel)
     {
         var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        sessionUser.orElseThrow(() -> {
+        if (sessionUser == null)
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
-        });
 
-        if (!sessionUser.get().isAdmin()) {
+        if (!sessionUser.getRoles().contains("ROLE_ADMIN"))
             throw new ClientException("Unauthorized access.");
-        }
+
         var guideline = new Guideline(inputModel.isCanOpOnSite(),
                 inputModel.getCanOpOnSiteDetails(), inputModel.getGroupSize(), inputModel.getGroupSizeDetails(),
                 inputModel.getCovidTestingVaccinated(), inputModel.getCovidTestingUnvaccinated(), inputModel.getCovidTestingDetails(),
@@ -60,13 +59,12 @@ public class GuidelineServiceImpl implements GuidelineService {
         Optional<Guideline> guidelineOptional = guidelineRepository.findById(inputModel.getGuidelineId());
 
         var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        sessionUser.orElseThrow(() -> {
+        if (sessionUser == null)
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
-        });
 
-        if (!sessionUser.get().isAdmin()) {
+        if (!sessionUser.getRoles().contains("ROLE_ADMIN"))
             throw new ClientException("Unauthorized access.");
-        }
+
         guidelineOptional.orElseThrow(() -> {
             logger.warn(String.format("Guideline with Id {%d} does not exist in DB.", inputModel.getGuidelineId()));
             throw new GuidelineException(String.format("Guideline ID {%d} is not found.", inputModel.getGuidelineId()));
@@ -97,13 +95,12 @@ public class GuidelineServiceImpl implements GuidelineService {
         Optional<Guideline> guidelineOptional = guidelineRepository.findById(guidelineId);
 
         var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        sessionUser.orElseThrow(() -> {
+        if (sessionUser == null)
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
-        });
 
-        if (!sessionUser.get().isAdmin()) {
+        if (!sessionUser.getRoles().contains("ROLE_ADMIN"))
             throw new ClientException("Unauthorized access.");
-        }
+
         guidelineOptional.orElseThrow(() -> {
             logger.warn(String.format("Guideline with Id {%d} does not exist in DB.", guidelineId));
             throw new GuidelineException(String.format("Guideline ID {%d} is not found.", guidelineId));
