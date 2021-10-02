@@ -150,6 +150,7 @@ public class ClientServiceImpl implements ClientService {
         return clientOptional.get();
     }
 
+    @Override
     public Client getClientByUsername(String username) {
         var client = clientRepository.findByUsername(username);
         client.orElseThrow(() -> {
