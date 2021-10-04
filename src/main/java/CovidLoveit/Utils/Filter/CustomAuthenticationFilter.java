@@ -52,7 +52,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Algorithm algorithm = Algorithm.HMAC256("abcdefghi".getBytes());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-                // Access Token valid time set to 10 minutes
+                // Access Token lifetime set to 10 minutes
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 10 * 60))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities()
@@ -62,8 +62,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .sign(algorithm);
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
-                // Refresh Token valid time set to 15 days
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 15 * 60 * 60 * 24))
+                // Refresh Token lifetime set to 3 Months
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 90 * 60 * 60 * 24))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities()
                         .stream()
