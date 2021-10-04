@@ -12,4 +12,7 @@ public interface IndustryRepository extends JpaRepository<Industry, UUID> {
     List<String> findDistinctIndustryName();
 
     List<Industry> findByIndustryName(String industryName);
+
+    @Query("SELECT industrySubtype FROM Industry")
+    List<String> getIndustrySubtypes();
 }
