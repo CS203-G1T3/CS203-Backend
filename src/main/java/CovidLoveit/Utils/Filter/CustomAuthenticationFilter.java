@@ -31,7 +31,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-
     }
 
     @Override
@@ -57,10 +56,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList()))
                 .sign(algorithm);
+
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
-                // Refresh Token lifetime set to 3 Months
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 90 * 60 * 60 * 24))
+                // Refresh Token lifetime set to 10 hours
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 10 * 60 * 60))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities()
                         .stream()
