@@ -114,10 +114,7 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     @Override
-    public List<Industry> getIndustrySubtypesByIndustry(String industryName) {
-        if(!getAllIndustries().contains(industryName)){
-            throw new IndustryException(String.format("Industry {%s} not found", industryName));
-        }
-        return industryRepository.findByIndustryName(industryName);
+    public List<String> getIndustrySubtypesByIndustry(String industryName) {
+        return industryRepository.findIndustrySubtypesByIndustryName(industryName);
     }
 }
