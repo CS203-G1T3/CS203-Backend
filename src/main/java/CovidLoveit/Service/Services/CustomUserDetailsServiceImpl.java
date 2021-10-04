@@ -31,12 +31,12 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Client> clientOptional = clientRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Client> clientOptional = clientRepository.findByEmail(email);
 
         clientOptional.orElseThrow(() -> {
-            logger.warn(String.format("Username {%s} not found in database.", username));
-            return new UsernameNotFoundException(String.format("Not found {%s}", username));
+            logger.warn(String.format("Email address {%s} not found in database.", email));
+            return new UsernameNotFoundException(String.format("Not found {%s}", email));
         });
 
         Client client = clientOptional.get();
@@ -46,6 +46,6 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
         });
 
-        return new CustomUserDetails(client.getUsername(), client.getPassword(), authorities);
+        return new CustomUserDetails(client.getEmail(), client.getPassword(), authorities);
     }
 }
