@@ -43,8 +43,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class ClientController {
 
     private Logger logger = LoggerFactory.getLogger(ClientController.class);
-    private ClientService clientService;
-    private ModelMapper modelMapper;
+    private final ClientService clientService;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public ClientController(ClientService clientService, ModelMapper modelMapper){
@@ -140,51 +140,6 @@ public class ClientController {
         .collect(Collectors.toList());
 
         return ResponseEntity.ok(clientRecords);
-    }
-
-    @GetMapping("/token/refresh")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
-
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            try{
-                String refresh_token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("abcdefghi".getBytes());
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(refresh_token);
-                String email = decodedJWT.getSubject();
-                Client client = clientService.getClientByEmail(email);
-
-                String access_token = JWT.create()
-                        .withSubject(client.getEmail())
-                        // Access Token valid time set to 10 minutes
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 10 * 60))
-                        .withIssuer(request.getRequestURL().toString())
-                        .withClaim("roles", client.getRoles()
-                                .stream()
-                                .map(Role::getRoleName)
-                                .collect(Collectors.toList()))
-                        .sign(algorithm);
-
-                Map<String, String> tokens = new HashMap<>();
-                tokens.put("access_token", access_token);
-                tokens.put("refresh_token", refresh_token);
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-
-            } catch (Exception ex){
-                logger.error("Error logging in: {}", ex.getMessage());
-                response.setHeader("error", ex.getMessage());
-                response.setStatus(FORBIDDEN.value());
-                Map<String, String> error = new HashMap<>();
-                error.put("error", ex.getMessage());
-                response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
-            }
-
-        } else {
-            throw new RuntimeException("Refresh token is missing");
-        }
     }
 
     // convert to data transfer object for http requests

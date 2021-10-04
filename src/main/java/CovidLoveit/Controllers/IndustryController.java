@@ -4,8 +4,7 @@ import CovidLoveit.Domain.DataTransferObjects.IndustryDTO;
 import CovidLoveit.Domain.InputModel.IndustryInputModel;
 import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Exception.IndustryException;
-import CovidLoveit.Service.Services.IndustryServiceImpl;
-import org.apache.coyote.Response;
+import CovidLoveit.Service.Services.Interfaces.IndustryService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,6 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.List;
 
 
@@ -29,11 +27,11 @@ import java.util.List;
 public class IndustryController {
 
     private Logger logger = LoggerFactory.getLogger(IndustryController.class);
-    private IndustryServiceImpl industryService;
-    private ModelMapper modelMapper;
+    private final IndustryService industryService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public IndustryController(IndustryServiceImpl industryService, ModelMapper modelMapper){
+    public IndustryController(IndustryService industryService, ModelMapper modelMapper){
         this.industryService = industryService;
         this.modelMapper = modelMapper;
     }

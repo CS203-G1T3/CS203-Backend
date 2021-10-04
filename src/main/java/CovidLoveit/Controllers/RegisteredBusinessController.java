@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
 
-import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +36,8 @@ import CovidLoveit.Service.Services.Interfaces.RegisteredBusinessService;
 public class RegisteredBusinessController {
     
     private Logger logger = LoggerFactory.getLogger(RegisteredBusinessController.class);
-    private RegisteredBusinessService registeredBusinessService;
-    private ModelMapper modelMapper;
+    private final RegisteredBusinessService registeredBusinessService;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public RegisteredBusinessController(RegisteredBusinessService registeredBusinessService, ModelMapper modelMapper){

@@ -4,7 +4,7 @@ import CovidLoveit.Domain.DataTransferObjects.GuidelineDTO;
 import CovidLoveit.Domain.InputModel.GuidelineInputModel;
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Exception.GuidelineException;
-import CovidLoveit.Service.Services.GuidelineServiceImpl;
+import CovidLoveit.Service.Services.Interfaces.GuidelineService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +25,11 @@ import java.util.stream.Collectors;
 public class GuidelineController {
 
     private Logger logger = LoggerFactory.getLogger(GuidelineController.class);
-    private GuidelineServiceImpl guidelineService;
-    private ModelMapper modelMapper;
+    private final GuidelineService guidelineService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public GuidelineController(GuidelineServiceImpl guidelineService, ModelMapper modelMapper) {
+    public GuidelineController(GuidelineService guidelineService, ModelMapper modelMapper) {
         this.guidelineService = guidelineService;
         this.modelMapper = modelMapper;
     }
