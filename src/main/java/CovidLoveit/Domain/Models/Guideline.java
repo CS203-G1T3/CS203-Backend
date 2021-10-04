@@ -69,7 +69,7 @@ public class Guideline {
                      int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated,
                      String covidTestingDetails, String contactTracing, String contactTracingDetails,
                      int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
-                     String referenceLink) {
+                     String referenceLink, Industry industry) {
         this.canOpOnSite = canOperateOnSite;
         this.canOpOnSiteDetails = canOperateOnSiteDetails;
         this.groupSize = groupSize;
@@ -83,6 +83,7 @@ public class Guideline {
         this.opCapacityDetails = operatingCapacityDetails;
         this.opGuidelines = operationGuidelines;
         this.referenceLink = referenceLink;
+        this.industry = industry;
     }
 
     public int getGuidelineId() {
