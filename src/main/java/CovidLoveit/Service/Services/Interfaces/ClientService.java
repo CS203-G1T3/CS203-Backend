@@ -20,8 +20,8 @@ public interface ClientService {
 
     Client getClient(UUID clientId);
 
-    public Client getClientByUsername(String username);
-
     List<Client> getAllClients();
+
+    Client getClientByEmail(String email);
 
 }
