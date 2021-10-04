@@ -67,7 +67,7 @@ public class ClientController {
         }
 
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/client/add").toUriString());
-        var client = new Client(inputModel.getUsername(), inputModel.getPassword(),
+        var client = new Client(inputModel.getPassword(),
                 inputModel.getRoles(), inputModel.getEmail());
 
         return ResponseEntity.created(uri).body(convertToClientDTO(clientService.addClient(client)));
@@ -107,7 +107,7 @@ public class ClientController {
             throw new ClientException(error.toString());
         }
 
-        Client client = new Client(inputModel.getClientId(), inputModel.getUsername(),
+        Client client = new Client(inputModel.getClientId(),
                 inputModel.getPassword(), inputModel.getRoles(), inputModel.getEmail());
         return ResponseEntity.ok(convertToClientDTO(clientService.updateClient(UUID.fromString(clientId), client)));
     }
@@ -151,11 +151,11 @@ public class ClientController {
                 Algorithm algorithm = Algorithm.HMAC256("abcdefghi".getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
-                String username = decodedJWT.getSubject();
-                Client client = clientService.getClientByUsername(username);
+                String email = decodedJWT.getSubject();
+                Client client = clientService.getClientByEmail(email);
 
                 String access_token = JWT.create()
-                        .withSubject(client.getUsername())
+                        .withSubject(client.getEmail())
                         // Access Token valid time set to 10 minutes
                         .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 10 * 60))
                         .withIssuer(request.getRequestURL().toString())
