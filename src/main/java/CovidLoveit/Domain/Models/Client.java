@@ -1,9 +1,10 @@
 package CovidLoveit.Domain.Models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
@@ -14,15 +15,22 @@ public class Client {
     public Client() {
     }
 
-    public Client(String email, boolean isAdmin){
+    public Client(String password, String email){
+        this.password = password;
         this.email = email;
-        this.isAdmin = isAdmin;
     }
 
-    public Client(String email, boolean isAdmin, RegisteredBusiness registeredBusiness) {
+    public Client(String password, Collection<Role> roles, String email) {
+        this.password = password;
+        this.roles = roles;
         this.email = email;
-        this.isAdmin = isAdmin;
-        this.registeredBusiness = registeredBusiness;
+    }
+
+    public Client(UUID clientId, String password, Collection<Role> roles, String email) {
+        this.clientId = clientId;
+        this.password = password;
+        this.roles = roles;
+        this.email = email;
     }
 
     // TODO: Remove the generated value when frontend application is up
@@ -31,11 +39,16 @@ public class Client {
     @Column(name = "clientId", unique = true, nullable = false)
     private UUID clientId;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "role")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "roleId")
+    private Collection<Role> roles = new ArrayList<>();
+
     @Column(name = "email", nullable = false, length = 100)
     private String email;
-
-    @Column(name = "isAdmin")
-    private boolean isAdmin;
 
     @CreationTimestamp
     @Basic(optional = false)
@@ -49,12 +62,36 @@ public class Client {
         return clientId;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public RegisteredBusiness getRegisteredBusiness() {
@@ -64,16 +101,4 @@ public class Client {
     public void setRegisteredBusiness(RegisteredBusiness registeredBusiness) {
         this.registeredBusiness = registeredBusiness;
     }
-
-    @JsonProperty("isAdmin")
-    public boolean isAdmin() {
-        return this.isAdmin;
-    }
-
-    @JsonProperty("isAdmin")
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-
-    public Date getCreatedAt() { return this.createdAt; }
 }

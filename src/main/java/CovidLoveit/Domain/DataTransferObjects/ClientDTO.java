@@ -1,7 +1,8 @@
 package CovidLoveit.Domain.DataTransferObjects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import CovidLoveit.Domain.Models.Role;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
@@ -9,46 +10,48 @@ import java.util.UUID;
 public class ClientDTO {
     
     private UUID clientId;
+    private Collection<Role> roles;
     private String email;
-    private boolean isAdmin;
     private Date createdAt;
     private RegisteredBusinessDTO registeredBusiness;
 
     public UUID getClientId() {
-        return this.clientId;
+        return clientId;
     }
 
     public void setClientId(UUID clientId) {
         this.clientId = clientId;
     }
 
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    @JsonProperty("isAdmin")
-    public boolean isAdmin() {
-        return this.isAdmin;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
-
-    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
-
-    public Date getCreatedAt() { return this.createdAt; }
 
     public RegisteredBusinessDTO getRegisteredBusiness() {
-        return this.registeredBusiness;
+        return registeredBusiness;
     }
 
-    public void setRegisteredBusiness(RegisteredBusinessDTO registeredBusinessDTO) {
-        this.registeredBusiness = registeredBusinessDTO;
+    public void setRegisteredBusiness(RegisteredBusinessDTO registeredBusiness) {
+        this.registeredBusiness = registeredBusiness;
     }
-
 }

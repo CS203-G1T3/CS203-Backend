@@ -4,20 +4,19 @@ import CovidLoveit.Domain.DataTransferObjects.IndustryDTO;
 import CovidLoveit.Domain.InputModel.IndustryInputModel;
 import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Exception.IndustryException;
-import CovidLoveit.Service.Services.IndustryServiceImpl;
+import CovidLoveit.Service.Services.Interfaces.IndustryService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.validation.ConstraintViolation;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URI;
+import java.util.*;
 
 
 @RestController
@@ -25,18 +24,18 @@ import java.util.List;
 public class IndustryController {
 
     private Logger logger = LoggerFactory.getLogger(IndustryController.class);
-    private IndustryServiceImpl industryService;
-    private ModelMapper modelMapper;
+    private final IndustryService industryService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public IndustryController(IndustryServiceImpl industryService, ModelMapper modelMapper){
+    public IndustryController(IndustryService industryService, ModelMapper modelMapper){
         this.industryService = industryService;
         this.modelMapper = modelMapper;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/industry/{clientId}")
-    public IndustryDTO addIndustry(@PathVariable String clientId, @RequestBody IndustryInputModel inputModel){
+    @PostMapping("/industry/add/{clientId}")
+    public ResponseEntity<IndustryDTO> addIndustry(@PathVariable String clientId, @RequestBody IndustryInputModel inputModel){
         Set<ConstraintViolation<IndustryInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -49,11 +48,12 @@ public class IndustryController {
             throw new IndustryException(error.toString());
         }
 
-        return convertToDTO(industryService.addIndustry(clientId, inputModel));
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/industry/add").toUriString());
+        return ResponseEntity.created(uri).body(convertToDTO(industryService.addIndustry(clientId, inputModel)));
     }
 
     @PutMapping("/industry/{clientId}")
-    public IndustryDTO updateIndustry(@PathVariable String clientId, @RequestBody IndustryInputModel inputModel){
+    public ResponseEntity<IndustryDTO> updateIndustry(@PathVariable String clientId, @RequestBody IndustryInputModel inputModel){
         Set<ConstraintViolation<IndustryInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -66,41 +66,48 @@ public class IndustryController {
             throw new IndustryException(error.toString());
         }
 
-        return convertToDTO(industryService.updateIndustry(clientId, inputModel));
+        return ResponseEntity.ok(convertToDTO(industryService.updateIndustry(clientId, inputModel)));
     }
 
     @DeleteMapping("/industry/{clientId}/{industryId}")
-    public void deleteIndustry(@PathVariable String clientId, @PathVariable String industryId){
+    public ResponseEntity<?> deleteIndustry(@PathVariable String clientId, @PathVariable String industryId){
         industryService.deleteIndustry(clientId, UUID.fromString(industryId));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/industry/{industryId}")
-    public IndustryDTO getIndustry(@PathVariable String industryId) {
+    public ResponseEntity<IndustryDTO> getIndustry(@PathVariable String industryId) {
         Optional<Industry> industry = industryService.getIndustry(UUID.fromString(industryId));
 
         industry.orElseThrow(() -> new IndustryException(String.format("Industry {%s} not found", industryId)));
 
-        return convertToDTO(industry.get());
+        return ResponseEntity.ok(convertToDTO(industry.get()));
     }
 
     @GetMapping("/industrySubtypes")
-    public List<IndustryDTO> getIndustrySubtypes(@RequestParam("industryName") Optional<String> industryName) {
+    public ResponseEntity<?> getIndustrySubtypes(@RequestParam("industryName") Optional<String> industryName) {
         
-        List<Industry> industries = new ArrayList<>();
+        List<String> industrySubtypes = new ArrayList<>();
 
         if (industryName.isPresent()) {
-            industries = industryService.getIndustrySubtypesByIndustry(industryName.get());
+            industrySubtypes = industryService.getIndustrySubtypesByIndustry(industryName.get());
         } 
         else {
-            industries = industryService.getAllIndustrySubtypes();
+            industrySubtypes = industryService.getAllIndustrySubtypes();
         }
-        
-        return industries.stream().map(this::convertToDTO).collect(Collectors.toList());
+
+        return ResponseEntity.ok(industrySubtypes);
     }
 
     @GetMapping("/industryNames")
     public List<String> getAllIndustryNames() {
         return industryService.getAllIndustries();
+    }
+
+    @GetMapping("/industry/{industryName}")
+    public ResponseEntity<?> getIndustrySubtypesByIndustry(@PathVariable String industryName) {
+        List<String> industrySubtypes = industryService.getIndustrySubtypesByIndustry(industryName);
+        return ResponseEntity.ok(industrySubtypes);
     }
 
     // convert to data transfer object for http requests

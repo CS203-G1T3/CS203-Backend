@@ -36,13 +36,12 @@ public class IndustryServiceImpl implements IndustryService {
     @Override
     public Industry addIndustry(String clientId, IndustryInputModel inputModel) {
         var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        sessionUser.orElseThrow(() -> {
-            throw new ClientException(String.format("Client with ID {%s} not found", clientId));
-        });
 
-        if (!sessionUser.get().isAdmin()) {
+        if (sessionUser == null)
+            throw new ClientException(String.format("Client with ID {%s} not found", clientId));
+
+        if (!sessionUser.getRoles().contains("ROLE_ADMIN"))
             throw new ClientException("Unauthorized access.");
-        }
 
         var industry = new Industry(inputModel.getIndustryName(), inputModel.getIndustrySubtype(), inputModel.getIndustryDesc());
         var savedIndustry = industryRepository.save(industry);
@@ -57,13 +56,11 @@ public class IndustryServiceImpl implements IndustryService {
         Optional<Industry> industryOptional = industryRepository.findById(inputModel.getIndustryId());
 
         var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        sessionUser.orElseThrow(() -> {
+        if (sessionUser == null)
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
-        });
 
-        if (!sessionUser.get().isAdmin()) {
+        if (!sessionUser.getRoles().contains("ROLE_ADMIN"))
             throw new ClientException("Unauthorized access.");
-        }
 
         industryOptional.orElseThrow(() -> {
             logger.warn(String.format("Industry with ID {%s} does not exist in DB.", inputModel.getIndustryId()));
@@ -86,13 +83,11 @@ public class IndustryServiceImpl implements IndustryService {
         Optional<Industry> industryOptional = industryRepository.findById(industryId);
 
         var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        sessionUser.orElseThrow(() -> {
+        if (sessionUser == null)
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
-        });
 
-        if (!sessionUser.get().isAdmin()) {
+        if (!sessionUser.getRoles().contains("ROLE_ADMIN"))
             throw new ClientException("Unauthorized access.");
-        }
 
         industryOptional.orElseThrow(() -> {
             logger.warn(String.format("Industry with ID {%s} does not exist in DB.", industryId));
@@ -109,8 +104,8 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     @Override
-    public List<Industry> getAllIndustrySubtypes() {
-        return industryRepository.findAll();
+    public List<String> getAllIndustrySubtypes() {
+        return industryRepository.getIndustrySubtypes();
     }
 
     @Override
@@ -119,10 +114,7 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     @Override
-    public List<Industry> getIndustrySubtypesByIndustry(String industryName) {
-        if(!getAllIndustries().contains(industryName)){
-            throw new IndustryException(String.format("Industry {%s} not found", industryName));
-        }
-        return industryRepository.findByIndustryName(industryName);
+    public List<String> getIndustrySubtypesByIndustry(String industryName) {
+        return industryRepository.findIndustrySubtypesByIndustryName(industryName);
     }
 }

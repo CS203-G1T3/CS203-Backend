@@ -4,14 +4,17 @@ import CovidLoveit.Domain.DataTransferObjects.GuidelineDTO;
 import CovidLoveit.Domain.InputModel.GuidelineInputModel;
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Exception.GuidelineException;
-import CovidLoveit.Service.Services.GuidelineServiceImpl;
+import CovidLoveit.Service.Services.Interfaces.GuidelineService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.ConstraintViolation;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,17 +26,17 @@ import java.util.stream.Collectors;
 public class GuidelineController {
 
     private Logger logger = LoggerFactory.getLogger(GuidelineController.class);
-    private GuidelineServiceImpl guidelineService;
-    private ModelMapper modelMapper;
+    private final GuidelineService guidelineService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public GuidelineController(GuidelineServiceImpl guidelineService, ModelMapper modelMapper) {
+    public GuidelineController(GuidelineService guidelineService, ModelMapper modelMapper) {
         this.guidelineService = guidelineService;
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/guideline/{clientId}")
-    public GuidelineDTO addGuideline(@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel) {
+    @PostMapping("/guideline/add/{clientId}")
+    public ResponseEntity<GuidelineDTO> addGuideline(@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel) {
         Set<ConstraintViolation<GuidelineInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -46,34 +49,38 @@ public class GuidelineController {
             throw new GuidelineException(error.toString());
         }
 
-        return convertToDTO(guidelineService.addGuideline(UUID.fromString(clientId), inputModel));
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/guideline/add").toUriString());
+        return ResponseEntity.created(uri).body(convertToDTO(guidelineService.addGuideline(clientId, inputModel)));
     }
 
     @DeleteMapping("guideline/{clientId}/{guidelineId}")
-    public void deleteGuideline(@PathVariable String clientId, @PathVariable String guidelineId) {
-        guidelineService.deleteGuideline(UUID.fromString(clientId), UUID.fromString(guidelineId));
+    public ResponseEntity<?> deleteGuideline(@PathVariable String clientId, @PathVariable String guidelineId) {
+        guidelineService.deleteGuideline(clientId, guidelineId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("guideline/{guidelineId}")
-    public GuidelineDTO getGuideline(@PathVariable String guidelineId) {
-        Optional<Guideline> guideline = guidelineService.getGuideline(UUID.fromString(guidelineId));
+    public ResponseEntity<GuidelineDTO> getGuideline(@PathVariable String guidelineId) {
+        Optional<Guideline> guideline = guidelineService.getGuideline(guidelineId);
 
-        guideline.orElseThrow(() -> new GuidelineException(String.format("Guideline {%d} not found", guidelineId)));
+        guideline.orElseThrow(() -> new GuidelineException(String.format("Guideline {%s} not found", guidelineId)));
 
-        return convertToDTO(guideline.get());
+        return ResponseEntity.ok(convertToDTO(guideline.get()));
     }
 
     @GetMapping("/guideline")
-    public List<GuidelineDTO> getAllGuidelines() {
+    public ResponseEntity<?> getAllGuidelines() {
         List<Guideline> guidelines = guidelineService.getAllGuidelines();
 
-        return guidelines.stream()
+        var guidelineDTOs = guidelines.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+
+        return ResponseEntity.ok(guidelineDTOs);
     }
 
     @PutMapping("/guideline/{clientId}")
-    public GuidelineDTO updateGuideline (@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel){
+    public ResponseEntity<GuidelineDTO> updateGuideline (@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel){
         Set<ConstraintViolation<GuidelineInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -86,7 +93,8 @@ public class GuidelineController {
             throw new GuidelineException(error.toString());
         }
 
-        return convertToDTO(guidelineService.updateGuideline(UUID.fromString(clientId), inputModel));
+
+        return ResponseEntity.ok(convertToDTO(guidelineService.updateGuideline(clientId, inputModel)));
     }
 
     private GuidelineDTO convertToDTO(Guideline guideline) {

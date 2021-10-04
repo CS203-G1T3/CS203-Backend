@@ -10,13 +10,13 @@ import java.util.UUID;
 
 public interface GuidelineService {
 
-    Guideline addGuideline(UUID clientId, GuidelineInputModel inputModel);
+    Guideline addGuideline(String clientId, GuidelineInputModel inputModel);
 
-    Guideline updateGuideline(UUID clientId, GuidelineInputModel inputModel);
+    Guideline updateGuideline(String clientId, GuidelineInputModel inputModel);
 
-    void deleteGuideline(UUID clientId, UUID guidelineId);
+    void deleteGuideline(String clientId, String guidelineId);
 
-    Optional<Guideline> getGuideline(UUID guidelineId);
+    Optional<Guideline> getGuideline(String guidelineId);
 
     List<Guideline> getAllGuidelines();
 

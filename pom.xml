@@ -11,8 +11,8 @@
 	<groupId>com.example</groupId>
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>CS203 Project</name>
+	<description>Covit_Loveit application </description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -66,6 +66,21 @@
             <artifactId>modelmapper</artifactId>
             <version>2.4.4</version>
         </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.18.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+		<scope>test</scope>
+	</dependency>
 
 	</dependencies>
 

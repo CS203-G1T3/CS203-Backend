@@ -38,17 +38,14 @@ public class GuidelineServiceImpl implements GuidelineService {
     }
 
     @Override
-    public Guideline addGuideline(UUID clientId, GuidelineInputModel inputModel) {
+    public Guideline addGuideline(String clientId, GuidelineInputModel inputModel)
+    {
+        var sessionUser = clientService.getClient(UUID.fromString(clientId));
+        if (sessionUser == null)
+            throw new ClientException(String.format("Client with ID {%s} not found", clientId));
 
-        var sessionUser = clientService.getClient(clientId);
-        sessionUser.orElseThrow(() -> {
-            // throw new ClientException(String.format("Client with ID {%s} not found", clientId.toString()));
-            throw new ClientException("Client not found");
-        });
-
-        if (!sessionUser.get().isAdmin()) {
+        if (!sessionUser.getRoles().contains("ROLE_ADMIN"))
             throw new ClientException("Unauthorized access.");
-        }
 
         // check industry exists
         UUID industryId = inputModel.getIndustryId();
@@ -71,17 +68,15 @@ public class GuidelineServiceImpl implements GuidelineService {
     }
 
     @Override
-    public Guideline updateGuideline(UUID clientId, GuidelineInputModel inputModel) {
+    public Guideline updateGuideline(String clientId, GuidelineInputModel inputModel) {
         Optional<Guideline> guidelineOptional = guidelineRepository.findById(inputModel.getGuidelineId());
 
-        var sessionUser = clientService.getClient(clientId);
-        sessionUser.orElseThrow(() -> {
-            throw new ClientException(String.format("Client with ID {%s} not found", clientId.toString()));
-        });
+        var sessionUser = clientService.getClient(UUID.fromString(clientId));
+        if (sessionUser == null)
+            throw new ClientException(String.format("Client with ID {%s} not found", clientId));
 
-        if (!sessionUser.get().isAdmin()) {
+        if (!sessionUser.getRoles().contains("ROLE_ADMIN"))
             throw new ClientException("Unauthorized access.");
-        }
 
         guidelineOptional.orElseThrow(() -> {
             logger.warn(String.format("Guideline with Id {%s} does not exist in DB.", inputModel.getGuidelineId().toString()));
@@ -117,29 +112,28 @@ public class GuidelineServiceImpl implements GuidelineService {
     }
 
     @Override
-    public void deleteGuideline(UUID clientId, UUID guidelineId) {
-        Optional<Guideline> guidelineOptional = guidelineRepository.findById(guidelineId);
+    public void deleteGuideline(String clientId, String guidelineId) {
+        Optional<Guideline> guidelineOptional = guidelineRepository.findById(UUID.fromString(guidelineId));
 
-        var sessionUser = clientService.getClient(clientId);
-        sessionUser.orElseThrow(() -> {
-            throw new ClientException(String.format("Client with ID {%s} not found", clientId.toString()));
-        });
+        var sessionUser = clientService.getClient(UUID.fromString(clientId));
+        if (sessionUser == null)
+            throw new ClientException(String.format("Client with ID {%s} not found", clientId));
 
-        if (!sessionUser.get().isAdmin()) {
+        if (!sessionUser.getRoles().contains("ROLE_ADMIN"))
             throw new ClientException("Unauthorized access.");
-        }
+
         guidelineOptional.orElseThrow(() -> {
-            logger.warn(String.format("Guideline with Id {%s} does not exist in DB.", guidelineId.toString()));
-            throw new GuidelineException(String.format("Guideline ID {%s} is not found.", guidelineId.toString()));
+            logger.warn(String.format("Guideline with Id {%s} does not exist in DB.", guidelineId));
+            throw new GuidelineException(String.format("Guideline ID {%s} is not found.", guidelineId));
         });
 
         guidelineRepository.delete(guidelineOptional.get());
-        logger.info(String.format("Successfully removed Guideline {%s}", guidelineId.toString()));
+        logger.info(String.format("Successfully removed Guideline {%s}", guidelineId));
     }
 
     @Override
-    public Optional<Guideline> getGuideline(UUID guidelineId){
-        return guidelineRepository.findById(guidelineId);
+    public Optional<Guideline> getGuideline(String guidelineId){
+        return guidelineRepository.findById(UUID.fromString(guidelineId));
     }
 
     @Override
