@@ -17,6 +17,8 @@ public class IndustryDTO {
         return industryId;
     }
 
+    public void setIndustryId(UUID industryId) { this.industryId = industryId; }
+
     public String getIndustryName() {
         return industryName;
     }
