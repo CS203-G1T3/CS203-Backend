@@ -21,9 +21,6 @@ public class ClientInputModel {
 
     private UUID clientId;
 
-    @NotBlank(message = "Username cannot be empty")
-    private String username;
-
     private String password;
 
     private Collection<Role> roles;
@@ -43,14 +40,6 @@ public class ClientInputModel {
 
     public void setClientId(UUID clientId) {
         this.clientId = clientId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
