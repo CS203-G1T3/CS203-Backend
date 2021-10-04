@@ -15,22 +15,19 @@ public class Client {
     public Client() {
     }
 
-    public Client(String username, String password, String email){
-        this.username = username;
+    public Client(String password, String email){
         this.password = password;
         this.email = email;
     }
 
-    public Client(String username, String password, Collection<Role> roles, String email) {
-        this.username = username;
+    public Client(String password, Collection<Role> roles, String email) {
         this.password = password;
         this.roles = roles;
         this.email = email;
     }
 
-    public Client(UUID clientId, String username, String password, Collection<Role> roles, String email) {
+    public Client(UUID clientId, String password, Collection<Role> roles, String email) {
         this.clientId = clientId;
-        this.username = username;
         this.password = password;
         this.roles = roles;
         this.email = email;
@@ -41,9 +38,6 @@ public class Client {
     @GeneratedValue
     @Column(name = "clientId", unique = true, nullable = false)
     private UUID clientId;
-
-    @Column(name = "username", unique = true, nullable = false)
-    private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -66,14 +60,6 @@ public class Client {
 
     public UUID getClientId() {
         return clientId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
