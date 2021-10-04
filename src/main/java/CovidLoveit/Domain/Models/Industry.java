@@ -25,7 +25,7 @@ public class Industry {
     @Column(name = "industryDesc")
     private String industryDesc;
 
-    @OneToMany(mappedBy = "industry")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "industry")
     private List<Guideline> guidelines;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "industry")
