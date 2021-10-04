@@ -145,6 +145,7 @@ public class ClientController {
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
+
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try{
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
