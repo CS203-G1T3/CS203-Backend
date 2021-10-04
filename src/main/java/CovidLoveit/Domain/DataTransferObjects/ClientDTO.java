@@ -10,7 +10,6 @@ import java.util.UUID;
 public class ClientDTO {
     
     private UUID clientId;
-    private String username;
     private Collection<Role> roles;
     private String email;
     private Date createdAt;
@@ -22,14 +21,6 @@ public class ClientDTO {
 
     public void setClientId(UUID clientId) {
         this.clientId = clientId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public Collection<Role> getRoles() {
