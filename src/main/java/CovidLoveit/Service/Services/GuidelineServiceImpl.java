@@ -47,7 +47,7 @@ public class GuidelineServiceImpl implements GuidelineService {
                 inputModel.getCanOpOnSiteDetails(), inputModel.getGroupSize(), inputModel.getGroupSizeDetails(),
                 inputModel.getCovidTestingVaccinated(), inputModel.getCovidTestingUnvaccinated(), inputModel.getCovidTestingDetails(),
                 inputModel.getContactTracing(), inputModel.getContactTracingDetails(), inputModel.getOpCapacity(),
-                inputModel.getOpCapacityDetails(), inputModel.getOpGuidelines(), inputModel.getReferenceLink());
+                inputModel.getOpCapacityDetails(), inputModel.getOpGuidelines(), inputModel.getReferenceLink(), inputModel.getIndustry());
 
         var savedGuideline = guidelineRepository.save(guideline);
 
@@ -86,6 +86,7 @@ public class GuidelineServiceImpl implements GuidelineService {
         guidelineRecord.setOpCapacityDetails(inputModel.getOpCapacityDetails());
         guidelineRecord.setOpGuidelines(inputModel.getOpGuidelines());
         guidelineRecord.setReferenceLink(inputModel.getReferenceLink());
+        guidelineRecord.setIndustry(inputModel.getIndustry());
 
         guidelineRepository.save(guidelineRecord);
         logger.info(String.format("Successfully updated Guideline {%d}", inputModel.getGuidelineId()));
