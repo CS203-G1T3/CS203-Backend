@@ -8,11 +8,13 @@ import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
 
+import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,8 +47,8 @@ public class RegisteredBusinessController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/registered-business")
-    public RegisteredBusinessDTO addRegisteredBusiness(@RequestBody RegisteredBusinessInputModel inputModel) {
+    @PostMapping("/registered-business/add")
+    public ResponseEntity<RegisteredBusinessDTO> addRegisteredBusiness(@RequestBody RegisteredBusinessInputModel inputModel) {
         Set<ConstraintViolation<RegisteredBusinessInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -59,11 +61,11 @@ public class RegisteredBusinessController {
             throw new RegisteredBusinessException(error.toString());
         }
 
-        return convertToDTO(registeredBusinessService.addBusiness(inputModel.getBusinessName(), inputModel.getBusinessDesc(), inputModel.getIndustryId(), inputModel.getClientId()));
+        return ResponseEntity.ok(convertToDTO(registeredBusinessService.addBusiness(inputModel.getBusinessName(), inputModel.getBusinessDesc(), inputModel.getIndustryId(), inputModel.getClientId())));
     }
 
     @PutMapping("/registered-business/{businessId}")
-    public RegisteredBusinessDTO updateRegisteredBusiness(@PathVariable String businessId, @RequestBody RegisteredBusinessInputModel inputModel){
+    public ResponseEntity<RegisteredBusinessDTO> updateRegisteredBusiness(@PathVariable String businessId, @RequestBody RegisteredBusinessInputModel inputModel){
         Set<ConstraintViolation<RegisteredBusinessInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -76,32 +78,34 @@ public class RegisteredBusinessController {
             throw new RegisteredBusinessException(error.toString());
         }
 
-        return convertToDTO(registeredBusinessService.updateBusiness(UUID.fromString(businessId),
+        return ResponseEntity.ok(convertToDTO(registeredBusinessService.updateBusiness(UUID.fromString(businessId),
                 inputModel.getBusinessName(), inputModel.getBusinessDesc(), inputModel.getBusinessId(),
-                inputModel.getClientId()));
+                inputModel.getClientId())));
     }
 
     @DeleteMapping("/registered-business/{businessId}")
-    public void deleteRegisteredBusiness(@PathVariable String businessId){
+    public ResponseEntity<?> deleteRegisteredBusiness(@PathVariable String businessId){
         registeredBusinessService.deleteBusiness(UUID.fromString(businessId));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/registered-business/{businessId}")
-    public RegisteredBusinessDTO getRegisteredBusiness(@PathVariable String businessId) {
+    public ResponseEntity<RegisteredBusinessDTO> getRegisteredBusiness(@PathVariable String businessId) {
         Optional<RegisteredBusiness> business = registeredBusinessService.getBusiness(UUID.fromString(businessId));
 
         business.orElseThrow(() -> new RegisteredBusinessException(String.format("Registered Business {%s} not found", businessId)));
 
-        return convertToDTO(business.get());
+        return ResponseEntity.ok(convertToDTO(business.get()));
     }
 
     @GetMapping("/registered-business")
-    public List<RegisteredBusinessDTO> getAllRegisteredBusinesses() {
+    public ResponseEntity<?> getAllRegisteredBusinesses() {
         List<RegisteredBusiness> registeredBusinesses = registeredBusinessService.getAllRegisteredBusinesses();
         
-        return registeredBusinesses.stream()
-        .map(this::convertToDTO)
-        .collect(Collectors.toList());
+        var registeredBusinessDTOs = registeredBusinesses.stream()
+                                                            .map(this::convertToDTO)
+                                                            .collect(Collectors.toList());
+        return ResponseEntity.ok(registeredBusinessDTOs);
     }
 
     // convert to data transfer object for http requests
