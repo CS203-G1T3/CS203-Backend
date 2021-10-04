@@ -29,6 +29,7 @@ public class CovidLoveitStartup {
     @Bean
     CommandLineRunner run(ClientService clientService) {
         return args -> {
+            // TODO: Remove seed data from here
             clientService.addRole(new Role("ADMIN"));
             clientService.addRole(new Role("USER"));
 
