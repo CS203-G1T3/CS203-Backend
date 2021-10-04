@@ -1,5 +1,7 @@
 package CovidLoveit.Domain.InputModel;
 
+import CovidLoveit.Domain.Models.Industry;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -17,7 +19,7 @@ public class GuidelineInputModel {
                                int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated,
                                String covidTestingDetails, String contactTracing, String contactTracingDetails,
                                int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
-                               String referenceLink) {
+                               String referenceLink, Industry industry) {
         this.canOpOnSite = canOperateOnSite;
         this.canOpOnSiteDetails = canOperateOnSiteDetails;
         this.groupSize = groupSize;
@@ -31,6 +33,7 @@ public class GuidelineInputModel {
         this.opCapacityDetails = operatingCapacityDetails;
         this.opGuidelines = operationGuidelines;
         this.referenceLink = referenceLink;
+        this.industry = industry;
 
     }
 
@@ -38,7 +41,7 @@ public class GuidelineInputModel {
                                int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated,
                                String covidTestingDetails, String contactTracing, String contactTracingDetails,
                                int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
-                               String referenceLink) {
+                               String referenceLink, Industry industry) {
         this.guidelineId = guidelineId;
         this.canOpOnSite = canOperateOnSite;
         this.canOpOnSiteDetails = canOperateOnSiteDetails;
@@ -53,6 +56,7 @@ public class GuidelineInputModel {
         this.opCapacityDetails = operatingCapacityDetails;
         this.opGuidelines = operationGuidelines;
         this.referenceLink = referenceLink;
+        this.industry = industry;
 
     }
 
@@ -101,9 +105,13 @@ public class GuidelineInputModel {
     @Size(min=3, max=1024)
     private String opGuidelines;
 
-    @NotNull(message = "Reference link if applicable, else please input NIL")
+    @NotNull(message = "Reference link if applicable, else please input NIL.")
     @Size(min=3, max=512)
     private String referenceLink;
+
+    @NotNull(message = "Please select an industry that this guideline applies to.")
+    private Industry industry;
+
 
     public Set<ConstraintViolation<GuidelineInputModel>> validate() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -221,5 +229,13 @@ public class GuidelineInputModel {
 
     public void setGuidelineId(int guidelineId) {
         this.guidelineId = guidelineId;
+    }
+
+    public Industry getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(Industry industry) {
+        this.industry = industry;
     }
 }
