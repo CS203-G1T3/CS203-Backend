@@ -50,12 +50,6 @@ public class ClientServiceImpl implements ClientService {
             throw new ClientException(String.format("Email address {%s} has already been taken.", client.getEmail()));
         }
 
-        var usernameVerification = clientRepository.findByUsername(client.getUsername());
-        if (usernameVerification.isPresent()) {
-            logger.warn(String.format("Username {%s} has already been taken.", client.getUsername()));
-            throw new ClientException(String.format("Username {%s} has already been taken.", client.getUsername()));
-        }
-
         // Encode the user's password before storing their credentials
         client.setPassword(bCryptPasswordEncoder.encode(client.getPassword()));
         var savedClient = clientRepository.save(client);
@@ -92,15 +86,8 @@ public class ClientServiceImpl implements ClientService {
             throw new ClientException(String.format("Client with email {%s} already exists.", client.getEmail()));
         }
 
-        var usernameVerification = clientRepository.findByUsername(client.getUsername());
-        if (usernameVerification.get().getClientId() != clientOptional.get().getClientId()) {
-            logger.warn(String.format("Username {%s} has already been taken.", client.getUsername()));
-            throw new ClientException(String.format("Username {%s} has already been taken.", client.getUsername()));
-        }
-
         var clientRecord = clientOptional.get();
         clientRecord.setEmail(client.getEmail());
-        clientRecord.setUsername(client.getUsername());
 
         logger.info(String.format("Successfully updated client with ID {%s}", clientId));
         return clientRepository.save(clientRecord);
@@ -120,13 +107,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void addRoleToClient(String username, String roleName) {
-        var user = clientRepository.findByUsername(username);
+    public void addRoleToClient(String email, String roleName) {
+        var user = clientRepository.findByEmail(email);
         var role = roleRepository.findByRoleName(roleName);
 
         user.orElseThrow(() -> {
-            logger.warn(String.format("Client with username {%s} does not exist in DB.", username));
-            throw new ClientException(String.format("Client with username {%s} not found.", username));
+            logger.warn(String.format("Client with email address {%s} does not exist in DB.", email));
+            throw new ClientException(String.format("Client with username {%s} not found.", email));
         });
 
         role.orElseThrow(() -> {
@@ -135,7 +122,7 @@ public class ClientServiceImpl implements ClientService {
         });
 
         user.get().getRoles().add(role.get());
-        logger.info(String.format("Added role {%s} to client {%s}.", roleName, username));
+        logger.info(String.format("Added role {%s} to client {%s}.", roleName, email));
     }
 
     @Override
@@ -151,19 +138,20 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client getClientByUsername(String username) {
-        var client = clientRepository.findByUsername(username);
-        client.orElseThrow(() -> {
-            logger.warn(String.format("Client with username {%s} does not exist in database.", username));
-            throw new ClientException(String.format("Client with username {%s} does not exist in database.", username));
-        });
-
-        return client.get();
+    public List<Client> getAllClients(){
+        return clientRepository.findAll();
     }
 
     @Override
-    public List<Client> getAllClients(){
-        return clientRepository.findAll();
+    public Client getClientByEmail(String email) {
+        var client = clientRepository.findByEmail(email);
+
+        client.orElseThrow(() -> {
+            logger.warn(String.format("Client with email address {%s} does not exist in database.", email));
+            throw new ClientException(String.format("Client with email address {%s} does not exist in database.", email));
+        });
+
+        return client.get();
     }
 
 }
