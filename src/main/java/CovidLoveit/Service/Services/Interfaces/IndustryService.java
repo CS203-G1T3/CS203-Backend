@@ -21,5 +21,5 @@ public interface IndustryService {
 
     List<String> getAllIndustries();
 
-    List<Industry> getIndustrySubtypesByIndustry(String industryName);
+    List<String> getIndustrySubtypesByIndustry(String industryName);
 }
