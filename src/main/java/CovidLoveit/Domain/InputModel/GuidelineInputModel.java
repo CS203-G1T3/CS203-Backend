@@ -1,7 +1,5 @@
 package CovidLoveit.Domain.InputModel;
 
-import CovidLoveit.Domain.Models.Industry;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -10,18 +8,28 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
+import java.util.UUID;
 
 public class GuidelineInputModel {
 
     public GuidelineInputModel(){}
 
-    public GuidelineInputModel(boolean canOperateOnSite, String canOperateOnSiteDetails,
-                               int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated,
-                               String covidTestingDetails, String contactTracing, String contactTracingDetails,
-                               int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
-                               String referenceLink, Industry industry) {
-        this.canOpOnSite = canOperateOnSite;
-        this.canOpOnSiteDetails = canOperateOnSiteDetails;
+    public GuidelineInputModel(boolean canOpOnSite, 
+                               String canOpOnSiteDetails,
+                               int groupSize, 
+                               String groupSizeDetails, 
+                               int covidTestingVaccinated, 
+                               int covidTestingUnvaccinated,
+                               String covidTestingDetails, 
+                               String contactTracing, 
+                               String contactTracingDetails,
+                               int opCapacity, 
+                               String opCapacityDetails, 
+                               String opGuidelines,
+                               String referenceLink, 
+                               UUID industryId) {
+        this.canOpOnSite = canOpOnSite;
+        this.canOpOnSiteDetails = canOpOnSiteDetails;
         this.groupSize = groupSize;
         this.groupSizeDetails = groupSizeDetails;
         this.covidTestingVaccinated = covidTestingVaccinated;
@@ -29,22 +37,30 @@ public class GuidelineInputModel {
         this.covidTestingDetails = covidTestingDetails;
         this.contactTracing = contactTracing;
         this.contactTracingDetails = contactTracingDetails;
-        this.opCapacity = operatingCapacity;
-        this.opCapacityDetails = operatingCapacityDetails;
-        this.opGuidelines = operationGuidelines;
+        this.opCapacity = opCapacity;
+        this.opCapacityDetails = opCapacityDetails;
+        this.opGuidelines = opGuidelines;
         this.referenceLink = referenceLink;
-        this.industry = industry;
-
+        this.industryId = industryId;
     }
 
-    public GuidelineInputModel(int guidelineId, boolean canOperateOnSite, String canOperateOnSiteDetails,
-                               int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated,
-                               String covidTestingDetails, String contactTracing, String contactTracingDetails,
-                               int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
-                               String referenceLink, Industry industry) {
-        this.guidelineId = guidelineId;
-        this.canOpOnSite = canOperateOnSite;
-        this.canOpOnSiteDetails = canOperateOnSiteDetails;
+    public GuidelineInputModel(UUID guidelineId,
+                               boolean canOpOnSite, 
+                               String canOpOnSiteDetails,
+                               int groupSize, 
+                               String groupSizeDetails, 
+                               int covidTestingVaccinated, 
+                               int covidTestingUnvaccinated,
+                               String covidTestingDetails, 
+                               String contactTracing, 
+                               String contactTracingDetails,
+                               int opCapacity, 
+                               String opCapacityDetails, 
+                               String opGuidelines,
+                               String referenceLink, 
+                               UUID industryId) {
+        this.canOpOnSite = canOpOnSite;
+        this.canOpOnSiteDetails = canOpOnSiteDetails;
         this.groupSize = groupSize;
         this.groupSizeDetails = groupSizeDetails;
         this.covidTestingVaccinated = covidTestingVaccinated;
@@ -52,15 +68,14 @@ public class GuidelineInputModel {
         this.covidTestingDetails = covidTestingDetails;
         this.contactTracing = contactTracing;
         this.contactTracingDetails = contactTracingDetails;
-        this.opCapacity = operatingCapacity;
-        this.opCapacityDetails = operatingCapacityDetails;
-        this.opGuidelines = operationGuidelines;
+        this.opCapacity = opCapacity;
+        this.opCapacityDetails = opCapacityDetails;
+        this.opGuidelines = opGuidelines;
         this.referenceLink = referenceLink;
-        this.industry = industry;
-
+        this.industryId = industryId;
     }
 
-    private int guidelineId;
+    private UUID guidelineId;
 
     @NotNull(message = "Operation Status Required.")
     private boolean canOpOnSite;
@@ -109,8 +124,8 @@ public class GuidelineInputModel {
     @Size(min=3, max=512)
     private String referenceLink;
 
-    @NotNull(message = "Please select an industry that this guideline applies to.")
-    private Industry industry;
+    @NotNull(message = "Please select the industry that this guideline applies to.")
+    private UUID industryId;
 
 
     public Set<ConstraintViolation<GuidelineInputModel>> validate() {
@@ -223,19 +238,19 @@ public class GuidelineInputModel {
         this.referenceLink = referenceLink;
     }
 
-    public int getGuidelineId() {
+    public UUID getGuidelineId() {
         return guidelineId;
     }
 
-    public void setGuidelineId(int guidelineId) {
+    public void setGuidelineId(UUID guidelineId) {
         this.guidelineId = guidelineId;
     }
 
-    public Industry getIndustry() {
-        return industry;
+    public UUID getIndustryId() {
+        return industryId;
     }
 
-    public void setIndustry(Industry industry) {
-        this.industry = industry;
+    public void setIndustrId(UUID industryId) {
+        this.industryId = industryId;
     }
 }

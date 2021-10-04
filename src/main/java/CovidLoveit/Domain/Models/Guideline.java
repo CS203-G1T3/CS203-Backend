@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "GUIDELINES")
@@ -13,7 +14,8 @@ public class Guideline {
 
     @Id
     @GeneratedValue
-    private int guidelineId;
+    @Column(name = "guidelineId", unique = true, nullable = false)
+    private UUID guidelineId;
 
     @CreationTimestamp
     @Column(name = "createdAt", nullable = false)
@@ -86,7 +88,7 @@ public class Guideline {
         this.industry = industry;
     }
 
-    public int getGuidelineId() {
+    public UUID getGuidelineId() {
         return guidelineId;
     }
 

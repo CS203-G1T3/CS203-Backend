@@ -15,6 +15,7 @@ import javax.validation.ConstraintViolation;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,17 +46,17 @@ public class GuidelineController {
             throw new GuidelineException(error.toString());
         }
 
-        return convertToDTO(guidelineService.addGuideline(clientId, inputModel));
+        return convertToDTO(guidelineService.addGuideline(UUID.fromString(clientId), inputModel));
     }
 
     @DeleteMapping("guideline/{clientId}/{guidelineId}")
-    public void deleteGuideline(@PathVariable String clientId, @PathVariable int guidelineId) {
-        guidelineService.deleteGuideline(clientId, guidelineId);
+    public void deleteGuideline(@PathVariable String clientId, @PathVariable String guidelineId) {
+        guidelineService.deleteGuideline(UUID.fromString(clientId), UUID.fromString(guidelineId));
     }
 
     @GetMapping("guideline/{guidelineId}")
-    public GuidelineDTO getGuideline(@PathVariable int guidelineId) {
-        Optional<Guideline> guideline = guidelineService.getGuideline(guidelineId);
+    public GuidelineDTO getGuideline(@PathVariable String guidelineId) {
+        Optional<Guideline> guideline = guidelineService.getGuideline(UUID.fromString(guidelineId));
 
         guideline.orElseThrow(() -> new GuidelineException(String.format("Guideline {%d} not found", guidelineId)));
 
@@ -71,8 +72,6 @@ public class GuidelineController {
                 .collect(Collectors.toList());
     }
 
-
-
     @PutMapping("/guideline/{clientId}")
     public GuidelineDTO updateGuideline (@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel){
         Set<ConstraintViolation<GuidelineInputModel>> violations = inputModel.validate();
@@ -87,8 +86,7 @@ public class GuidelineController {
             throw new GuidelineException(error.toString());
         }
 
-        Guideline guideline = new Guideline();
-        return convertToDTO(guidelineService.updateGuideline(clientId, inputModel));
+        return convertToDTO(guidelineService.updateGuideline(UUID.fromString(clientId), inputModel));
     }
 
     private GuidelineDTO convertToDTO(Guideline guideline) {

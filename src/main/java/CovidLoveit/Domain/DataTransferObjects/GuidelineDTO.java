@@ -1,11 +1,15 @@
 package CovidLoveit.Domain.DataTransferObjects;
 
 import CovidLoveit.Domain.Models.Industry;
+
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GuidelineDTO {
 
-    private int guidelineId;
+    private UUID guidelineId;
+    private UUID industryId;
     private boolean canOpOnSite;
     private String canOpOnSiteDetails;
     private int groupSize;
@@ -19,13 +23,12 @@ public class GuidelineDTO {
     private String opCapacityDetails;
     private String opGuidelines;
     private String referenceLink;
-    private Industry industry;
 
-    public int getGuidelineId() {
+    public UUID getGuidelineId() {
         return guidelineId;
     }
 
-    public void setGuidelineId(int guidelineId) {
+    public void setGuidelineId(UUID guidelineId) {
         this.guidelineId = guidelineId;
     }
 
@@ -134,11 +137,11 @@ public class GuidelineDTO {
         this.referenceLink = referenceLink;
     }
 
-    public Industry getIndustry() {
-        return industry;
+    public UUID getIndustryId() {
+        return industryId;
     }
 
-    public void setIndustry(Industry industry) {
-        this.industry = industry;
+    public void setIndustryId(UUID industryId) {
+        this.industryId = industryId;
     }
 }

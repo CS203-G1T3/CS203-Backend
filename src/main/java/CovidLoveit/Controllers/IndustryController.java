@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -83,22 +84,23 @@ public class IndustryController {
     }
 
     @GetMapping("/industrySubtypes")
-    public List<IndustryDTO> getAllIndustrySubtypes() {
-        List<Industry> industries = industryService.getAllIndustrySubtypes();
+    public List<IndustryDTO> getIndustrySubtypes(@RequestParam("industryName") Optional<String> industryName) {
+        
+        List<Industry> industries = new ArrayList<>();
 
+        if (industryName.isPresent()) {
+            industries = industryService.getIndustrySubtypesByIndustry(industryName.get());
+        } 
+        else {
+            industries = industryService.getAllIndustrySubtypes();
+        }
+        
         return industries.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/industryNames")
-    public List<String> getAllIndustryName() {
+    public List<String> getAllIndustryNames() {
         return industryService.getAllIndustries();
-    }
-
-    @GetMapping("/industry/{industryName}")
-    public List<IndustryDTO> getIndustrySubtypesByIndustry(@PathVariable String industryName) {
-        List<Industry> industries = industryService.getIndustrySubtypesByIndustry(industryName);
-
-        return industries.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     // convert to data transfer object for http requests
