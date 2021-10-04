@@ -34,8 +34,10 @@ public class CovidLoveitStartup {
             clientService.addRole(new Role("USER"));
 
             clientService.addClient(new Client("123456", "linsyhen99@gmail.com"));
+            clientService.addClient(new Client("123456", "ruwansadris.2020@smu.edu.sg"));
 
             clientService.addRoleToClient("linsyhen99@gmail.com", "ADMIN");
+            clientService.addRoleToClient("ruwansadris.2020@smu.edu.sg", "USER");
         };
     }
 
