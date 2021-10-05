@@ -131,7 +131,7 @@ public class ClientController {
         return ResponseEntity.ok(convertToClientDTO(client));
     }
 
-    @GetMapping("/clients")
+    @GetMapping("/client/all")
     public ResponseEntity<List<ClientDTO>> getAllClients() {
         List<Client> clients = clientService.getAllClients();
 

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.ConstraintViolation;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1")
@@ -86,7 +87,7 @@ public class IndustryController {
     @GetMapping("/industrySubtypes")
     public ResponseEntity<?> getIndustrySubtypes(@RequestParam("industryName") Optional<String> industryName) {
         
-        List<String> industrySubtypes = new ArrayList<>();
+        List<Industry> industrySubtypes = new ArrayList<>();
 
         if (industryName.isPresent()) {
             industrySubtypes = industryService.getIndustrySubtypesByIndustry(industryName.get());
@@ -95,7 +96,11 @@ public class IndustryController {
             industrySubtypes = industryService.getAllIndustrySubtypes();
         }
 
-        return ResponseEntity.ok(industrySubtypes);
+        var subtypeDTOs = industrySubtypes.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(subtypeDTOs);
     }
 
     @GetMapping("/industryNames")
@@ -105,8 +110,13 @@ public class IndustryController {
 
     @GetMapping("/industry/{industryName}")
     public ResponseEntity<?> getIndustrySubtypesByIndustry(@PathVariable String industryName) {
-        List<String> industrySubtypes = industryService.getIndustrySubtypesByIndustry(industryName);
-        return ResponseEntity.ok(industrySubtypes);
+        List<Industry> industrySubtypes = industryService.getIndustrySubtypesByIndustry(industryName);
+
+        var subtypeDTOs = industrySubtypes.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(subtypeDTOs);
     }
 
     // convert to data transfer object for http requests

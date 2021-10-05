@@ -135,7 +135,7 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     @Override
-    public List<String> getAllIndustrySubtypes() {
+    public List<Industry> getAllIndustrySubtypes() {
         return industryRepository.getIndustrySubtypes();
     }
 
@@ -145,7 +145,7 @@ public class IndustryServiceImpl implements IndustryService {
     }
 
     @Override
-    public List<String> getIndustrySubtypesByIndustry(String industryName) {
+    public List<Industry> getIndustrySubtypesByIndustry(String industryName) {
         return industryRepository.findIndustrySubtypesByIndustryName(industryName);
     }
 }

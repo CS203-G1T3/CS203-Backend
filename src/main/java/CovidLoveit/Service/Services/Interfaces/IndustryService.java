@@ -17,9 +17,9 @@ public interface IndustryService {
 
     Optional<Industry> getIndustry(UUID industryId);
 
-    List<String> getAllIndustrySubtypes();
+    List<Industry> getAllIndustrySubtypes();
 
     List<String> getAllIndustries();
 
-    List<String> getIndustrySubtypesByIndustry(String industryName);
+    List<Industry> getIndustrySubtypesByIndustry(String industryName);
 }

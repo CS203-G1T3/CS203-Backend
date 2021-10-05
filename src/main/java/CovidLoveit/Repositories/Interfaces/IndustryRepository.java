@@ -15,8 +15,8 @@ public interface IndustryRepository extends JpaRepository<Industry, UUID> {
     List<Industry> findByIndustryName(String industryName);
 
     @Query("SELECT industrySubtype FROM Industry")
-    List<String> getIndustrySubtypes();
+    List<Industry> getIndustrySubtypes();
 
     @Query("SELECT industrySubtype FROM Industry WHERE industryName = :#{#industry_name}")
-    List<String> findIndustrySubtypesByIndustryName(@Param("industry_name") String industryName);
+    List<Industry> findIndustrySubtypesByIndustryName(@Param("industry_name") String industryName);
 }
