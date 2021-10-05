@@ -1,11 +1,13 @@
 package CovidLoveit.Utils.Filter;
 
 import CovidLoveit.Domain.Models.CustomUserDetails;
+import CovidLoveit.Service.Services.Interfaces.ClientService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +31,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private Logger logger = LoggerFactory.getLogger(CustomAuthenticationFilter.class);
     private final AuthenticationManager authenticationManager;
+    @Autowired
+    private ClientService clientService;
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -45,6 +49,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+        var client = clientService.getClientByEmail(user.getUsername());
+
         // TODO: Change the secret key to application.properties file. Figure out how
         Algorithm algorithm = Algorithm.HMAC256("abcdefghi".getBytes());
         String access_token = JWT.create()
@@ -72,6 +78,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);
+        tokens.put("clientId", client.getClientId().toString());
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
