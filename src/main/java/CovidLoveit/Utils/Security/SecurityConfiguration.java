@@ -40,31 +40,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
+        
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.logout()
-                .permitAll()
-                .and()
-            .authorizeRequests()
-                .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll()
-                .antMatchers(GET, "/**/clients/*").hasRole("ADMIN")
-                .and()
-            .httpBasic();
+        http.logout().permitAll();
 
         http.authorizeRequests()
+                .antMatchers(GET, "/**/clients/*").hasRole("ADMIN")
                 .antMatchers(POST, "/**/guideline/*").hasRole("ADMIN")
                 .antMatchers(PUT, "/**/guideline/*").hasRole("ADMIN")
                 .antMatchers(DELETE, "/**/guideline/*").hasRole("ADMIN")
-                .and()
-            .httpBasic();
-
-        http.authorizeRequests()
                 .antMatchers(POST, "/**/industry/*").hasRole("ADMIN")
                 .antMatchers(PUT, "/**/industry/*").hasRole("ADMIN")
                 .antMatchers(DELETE, "/**/industry/*").hasRole("ADMIN")
-                .anyRequest().authenticated()
-                .and()
-            .httpBasic();
+                .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll()
+                .anyRequest().authenticated();
+
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
