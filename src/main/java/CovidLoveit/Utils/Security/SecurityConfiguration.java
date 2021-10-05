@@ -67,7 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(PUT, "/**/industry/*").hasRole("ADMIN")
             .antMatchers(DELETE, "/**/industry/*").hasRole("ADMIN")
             .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll()
-            .anyRequest().authenticated();
+            .anyRequest().permitAll();
 
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
