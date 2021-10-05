@@ -31,7 +31,6 @@ public class IndustryInputModel {
     @NotBlank(message = "Industry Name required.")
     private String industryName;
 
-    @NotBlank(message = "Industry Subtype required.")
     private String industrySubtype;
 
     @NotNull(message = "Industry Description required.")
