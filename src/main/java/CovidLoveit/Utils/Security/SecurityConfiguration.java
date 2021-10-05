@@ -47,14 +47,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
 
-        // Delete the HTTP-only cookie upon logout
-        http.cors()
-            .and()
-            .logout()
-            .deleteCookies("remember-me")
-            .permitAll();
-
-        http.authorizeRequests()
+        http.cors().and()
+            .authorizeRequests()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
             .antMatchers(POST, "/**/logout").permitAll()
             .antMatchers(POST, "/api/login").permitAll()
