@@ -15,7 +15,5 @@ public interface EmployeeRecordService {
 
     EmployeeRecord getEmployeeById(String employeeId);
 
-    List<EmployeeRecord> getAllEmployee();
-
     List<EmployeeRecord> getEmployeesByBusiness(UUID businessId);
 }
