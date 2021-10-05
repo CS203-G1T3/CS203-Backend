@@ -142,6 +142,7 @@ public class ClientController {
         return ResponseEntity.ok(clientRecords);
     }
 
+    // TODO: Fix the endpoint mapping
     @GetMapping("/client/email/{email}")
     public ResponseEntity<ClientDTO> getClientByEmail(@PathVariable String email) {
         var client = clientService.getClientByEmail(email);
