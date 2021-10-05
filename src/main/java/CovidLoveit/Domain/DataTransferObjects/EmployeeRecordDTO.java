@@ -2,7 +2,7 @@ package CovidLoveit.Domain.DataTransferObjects;
 
 import java.time.LocalDate;
 
-public class EmloyeeRecordDTO {
+public class EmployeeRecordDTO {
 
     private String employeeId;
     private String employeeName;
