@@ -3,6 +3,8 @@ package CovidLoveit.Domain.Models;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "EMPLOYEE_RECORD")
 public class EmployeeRecord {
 
     public EmployeeRecord() {
