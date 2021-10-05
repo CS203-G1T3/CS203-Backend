@@ -1,6 +1,7 @@
 package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.InputModel.IndustryInputModel;
+import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Exception.IndustryException;
@@ -40,15 +41,25 @@ public class IndustryServiceImpl implements IndustryService {
         if (sessionUser == null)
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
 
-        if (!sessionUser.getRoles().contains("ROLE_ADMIN"))
+        boolean isAdmin = false;
+        var roles = sessionUser.getRoles();
+        for(Role role: roles) {
+            if(role.getRoleName().equals("ADMIN")){
+                isAdmin = true;
+                break;
+            }
+        }
+
+        if(isAdmin) {
+            var industry = new Industry(inputModel.getIndustryName(), inputModel.getIndustrySubtype(), inputModel.getIndustryDesc());
+            var savedIndustry = industryRepository.save(industry);
+
+            logger.info(String.format("Successfully added industry {%s}", savedIndustry.getIndustryId()));
+            return savedIndustry;
+
+        } else {
             throw new ClientException("Unauthorized access.");
-
-        var industry = new Industry(inputModel.getIndustryName(), inputModel.getIndustrySubtype(), inputModel.getIndustryDesc());
-        var savedIndustry = industryRepository.save(industry);
-
-        logger.info(String.format("Successfully added industry {%s}", savedIndustry.getIndustryId()));
-
-        return savedIndustry;
+        }
     }
 
     @Override
