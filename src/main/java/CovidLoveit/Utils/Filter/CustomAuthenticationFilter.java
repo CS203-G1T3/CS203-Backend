@@ -69,7 +69,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
                 // Refresh Token lifetime set to 30 days
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 30 * 60 * 60 * 24))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 15 * 60 * 60 * 24))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities()
                         .stream()
