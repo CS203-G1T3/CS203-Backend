@@ -82,6 +82,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         cookie.setHttpOnly(true);
         cookie.setPath("/");
 
-        response.addHeader("cookie-jar", refresh_token);
+        response.addCookie(cookie);
     }
 }
