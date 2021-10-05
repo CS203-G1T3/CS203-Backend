@@ -56,10 +56,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-            .antMatchers(POST, "/api/login").permitAll()
             .antMatchers(POST, "/**/client/add").permitAll()
             .antMatchers(POST, "/**/role/add").hasRole("ADMIN")
-            .antMatchers(GET, "/**/clients/*").hasRole("ADMIN")
+            .antMatchers(GET, "/**/client/all/*").hasRole("ADMIN")
             .antMatchers(POST, "/**/guideline/add/*").hasRole("ADMIN")
             .antMatchers(PUT, "/**/guideline/*").hasRole("ADMIN")
             .antMatchers(DELETE, "/**/guideline/*").hasRole("ADMIN")
@@ -67,7 +66,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(PUT, "/**/industry/*").hasRole("ADMIN")
             .antMatchers(DELETE, "/**/industry/*").hasRole("ADMIN")
             .antMatchers(GET, "/**/registered-businesses").hasRole("ADMIN")
-            .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll()
+            .antMatchers("/api/token/refresh/**").permitAll()
+            .antMatchers(POST, "/api/login/*").permitAll()
             .anyRequest().authenticated();
 
         http.addFilter(customAuthenticationFilter);
