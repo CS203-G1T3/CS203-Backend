@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 @RequestMapping("api/v1")
 public class GuidelineController {

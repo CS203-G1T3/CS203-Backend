@@ -18,7 +18,7 @@ import javax.validation.ConstraintViolation;
 import java.net.URI;
 import java.util.*;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("api/v1")
 public class IndustryController {
