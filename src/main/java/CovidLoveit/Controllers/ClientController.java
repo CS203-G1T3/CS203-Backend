@@ -142,6 +142,13 @@ public class ClientController {
         return ResponseEntity.ok(clientRecords);
     }
 
+    @GetMapping("/client/{email}")
+    public ResponseEntity<ClientDTO> getClientByEmail(@PathVariable String email) {
+        var client = clientService.getClientByEmail(email);
+
+        return ResponseEntity.ok(convertToClientDTO(client));
+    }
+
     // convert to data transfer object for http requests
     private ClientDTO convertToClientDTO(Client client) {
         return modelMapper.map(client, ClientDTO.class);
