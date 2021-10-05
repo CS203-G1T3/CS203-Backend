@@ -22,7 +22,6 @@ import CovidLoveit.Domain.Models.RegisteredBusiness;
 import CovidLoveit.Exception.RegisteredBusinessException;
 import CovidLoveit.Service.Services.Interfaces.RegisteredBusinessService;
 
-@CrossOrigin
 @RestController
 @RequestMapping("api/v1")
 public class RegisteredBusinessController {
