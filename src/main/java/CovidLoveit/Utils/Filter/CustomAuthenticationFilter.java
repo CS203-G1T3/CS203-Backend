@@ -82,14 +82,5 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         tokens.put("refresh_token", refresh_token);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-
-        // Setting up http-only cookie to store the refresh token
-        Cookie jwtTokenCookie = new Cookie("refreshToken", refresh_token);
-        jwtTokenCookie.setMaxAge(7 * 60 * 60 * 24);
-        jwtTokenCookie.setSecure(true);
-        jwtTokenCookie.setHttpOnly(true);
-        jwtTokenCookie.setPath("/");
-
-        response.addCookie(jwtTokenCookie);
     }
 }
