@@ -50,24 +50,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // Delete the HTTP-only cookie upon logout
         http.cors()
             .and()
-            .formLogin()
-            .permitAll()
-            .and()
             .logout()
             .deleteCookies("remember-me")
             .permitAll();
 
         http.authorizeRequests()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-            .antMatchers(POST, "/**/clients/add").permitAll()
+            .antMatchers(POST, "/**/client/add").permitAll()
+            .antMatchers(POST, "/**/role/add").hasRole("ADMIN")
             .antMatchers(GET, "/**/clients/*").hasRole("ADMIN")
-            .antMatchers(POST, "/**/guideline/*").hasRole("ADMIN")
+            .antMatchers(POST, "/**/guideline/add/*").hasRole("ADMIN")
             .antMatchers(PUT, "/**/guideline/*").hasRole("ADMIN")
             .antMatchers(DELETE, "/**/guideline/*").hasRole("ADMIN")
-            .antMatchers(POST, "/**/industry/*").hasRole("ADMIN")
+            .antMatchers(POST, "/**/industry/add/*").hasRole("ADMIN")
             .antMatchers(PUT, "/**/industry/*").hasRole("ADMIN")
             .antMatchers(DELETE, "/**/industry/*").hasRole("ADMIN")
-            .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll();
+            .antMatchers(GET, "/**/registered-businesses").hasRole("ADMIN")
+            .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll()
+            .anyRequest().authenticated();
 
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
