@@ -88,7 +88,7 @@ public class RegisteredBusinessController {
         return ResponseEntity.ok(convertToDTO(business.get()));
     }
 
-    @GetMapping("/registered-business")
+    @GetMapping("/registered-businesses")
     public ResponseEntity<?> getAllRegisteredBusinesses() {
         List<RegisteredBusiness> registeredBusinesses = registeredBusinessService.getAllRegisteredBusinesses();
         
