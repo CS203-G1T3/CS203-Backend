@@ -71,17 +71,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
-//        tokens.put("refresh_token", refresh_token);
+        tokens.put("refresh_token", refresh_token);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
         // Setting up http-only cookie to store the refresh token
-        Cookie cookie = new Cookie("remember-me", refresh_token);
-        cookie.setMaxAge(7 * 60 * 60 * 24);
-        cookie.setSecure(true);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-
-        response.addCookie(cookie);
+//        Cookie cookie = new Cookie("remember-me", refresh_token);
+//        cookie.setMaxAge(7 * 60 * 60 * 24);
+//        cookie.setSecure(true);
+//        cookie.setHttpOnly(true);
+//        cookie.setPath("/");
+//
+//        response.addCookie(cookie);
     }
 }

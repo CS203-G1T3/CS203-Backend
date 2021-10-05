@@ -59,16 +59,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-            .anyRequest().permitAll();
-//                .antMatchers(GET, "/**/clients/*").hasRole("ADMIN")
-//                .antMatchers(POST, "/**/guideline/*").hasRole("ADMIN")
-//                .antMatchers(PUT, "/**/guideline/*").hasRole("ADMIN")
-//                .antMatchers(DELETE, "/**/guideline/*").hasRole("ADMIN")
-//                .antMatchers(POST, "/**/industry/*").hasRole("ADMIN")
-//                .antMatchers(PUT, "/**/industry/*").hasRole("ADMIN")
-//                .antMatchers(DELETE, "/**/industry/*").hasRole("ADMIN")
-//                .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll()
-//                .anyRequest().authenticated();
+            .antMatchers(GET, "/**/clients/*").hasRole("ADMIN")
+            .antMatchers(POST, "/**/guideline/*").hasRole("ADMIN")
+            .antMatchers(PUT, "/**/guideline/*").hasRole("ADMIN")
+            .antMatchers(DELETE, "/**/guideline/*").hasRole("ADMIN")
+            .antMatchers(POST, "/**/industry/*").hasRole("ADMIN")
+            .antMatchers(PUT, "/**/industry/*").hasRole("ADMIN")
+            .antMatchers(DELETE, "/**/industry/*").hasRole("ADMIN")
+            .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll()
+            .anyRequest().authenticated();
 
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
