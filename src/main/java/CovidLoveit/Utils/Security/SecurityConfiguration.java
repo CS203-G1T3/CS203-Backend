@@ -43,7 +43,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.logout().permitAll();
+
+        // Delete the HTTP-only cookie upon logout
+        http.logout().deleteCookies("remember-me").permitAll();
+
+        http.formLogin();
 
         http.authorizeRequests()
                 .antMatchers(GET, "/**/clients/*").hasRole("ADMIN")
