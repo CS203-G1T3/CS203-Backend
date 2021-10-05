@@ -6,14 +6,17 @@ import CovidLoveit.Exception.RegisteredBusinessException;
 import CovidLoveit.Repositories.Interfaces.EmployeeRecordRepository;
 import CovidLoveit.Repositories.Interfaces.RegisteredBusinessRepository;
 import CovidLoveit.Service.Services.Interfaces.EmployeeRecordService;
-import jdk.jfr.Registered;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+@Service
+@Transactional
 public class EmployeeRecordServiceImpl implements EmployeeRecordService {
 
     private Logger logger = LoggerFactory.getLogger(EmployeeRecordServiceImpl.class);
@@ -81,11 +84,6 @@ public class EmployeeRecordServiceImpl implements EmployeeRecordService {
         }
 
         return employee;
-    }
-
-    @Override
-    public List<EmployeeRecord> getAllEmployee() {
-        return employeeRepository.findAll();
     }
 
     @Override
