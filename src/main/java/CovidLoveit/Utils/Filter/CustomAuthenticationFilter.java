@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +24,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,11 +32,10 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Configurable
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private Logger logger = LoggerFactory.getLogger(CustomAuthenticationFilter.class);
     private final AuthenticationManager authenticationManager;
-    @Autowired
-    private ClientService clientService;
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -49,7 +52,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        var client = clientService.getClientByEmail(user.getUsername());
 
         // TODO: Change the secret key to application.properties file. Figure out how
         Algorithm algorithm = Algorithm.HMAC256("abcdefghi".getBytes());
@@ -78,17 +80,16 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);
-        tokens.put("clientId", client.getClientId().toString());
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
         // Setting up http-only cookie to store the refresh token
-//        Cookie cookie = new Cookie("remember-me", refresh_token);
-//        cookie.setMaxAge(7 * 60 * 60 * 24);
-//        cookie.setSecure(true);
-//        cookie.setHttpOnly(true);
-//        cookie.setPath("/");
-//
-//        response.addCookie(cookie);
+        Cookie jwtTokenCookie = new Cookie("refreshToken", refresh_token);
+        jwtTokenCookie.setMaxAge(7 * 60 * 60 * 24);
+        jwtTokenCookie.setSecure(true);
+        jwtTokenCookie.setHttpOnly(true);
+        jwtTokenCookie.setPath("/");
+
+        response.addCookie(jwtTokenCookie);
     }
 }
