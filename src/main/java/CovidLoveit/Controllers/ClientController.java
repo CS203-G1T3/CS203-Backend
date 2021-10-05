@@ -118,14 +118,14 @@ public class ClientController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/role/{roleName}/updateClient/{username}")
-    public ResponseEntity<?> addRoleToClient(@PathVariable String username, @PathVariable String roleName) {
-        clientService.addRoleToClient(username, roleName);
+    @PutMapping("/role/{roleName}/updateClient/{email}")
+    public ResponseEntity<?> addRoleToClient(@PathVariable String email, @PathVariable String roleName) {
+        clientService.addRoleToClient(email, roleName);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/client/{clientId}")
-    public ResponseEntity<ClientDTO> getClient(@PathVariable String clientId) {
+    public ResponseEntity<ClientDTO> getClientById(@PathVariable String clientId) {
         var client = clientService.getClient(UUID.fromString(clientId));
 
         return ResponseEntity.ok(convertToClientDTO(client));
