@@ -1,7 +1,9 @@
 package CovidLoveit.Service.Services;
 
+import CovidLoveit.Domain.InputModel.EmployeeRecordInputModel;
 import CovidLoveit.Domain.Models.EmployeeRecord;
 import CovidLoveit.Exception.EmployeeRecordException;
+import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Exception.RegisteredBusinessException;
 import CovidLoveit.Repositories.Interfaces.EmployeeRecordRepository;
 import CovidLoveit.Repositories.Interfaces.RegisteredBusinessRepository;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,46 +34,73 @@ public class EmployeeRecordServiceImpl implements EmployeeRecordService {
     }
 
     @Override
-    public EmployeeRecord addEmployee(EmployeeRecord employeeRecord) {
-        var employee = employeeRepository.getById(employeeRecord.getEmployeeId());
-        if (employee != null) {
-            logger.warn(String.format("Employee with EID {%s} already exist in DB.", employeeRecord.getEmployeeId()));
-            throw new EmployeeRecordException(String.format("Employee with EID {%s} already exist in DB.", employeeRecord.getEmployeeId()));
+    public EmployeeRecord addEmployee(EmployeeRecordInputModel inputModel) {
+        var employeeRecord = employeeRepository.findById(inputModel.getEmployeeId());
+        if (employeeRecord.isPresent()){
+            logger.warn(String.format("Employee with EID {%s} already exist in DB.", inputModel.getEmployeeId()));
+            throw new EmployeeRecordException(String.format("Employee with EID {%s} already exist in DB.", inputModel.getEmployeeId()));
         }
 
-        var savedEmployee = employeeRepository.save(employeeRecord);
-        logger.info(String.format("Successfully added employee with EID {%s}", employeeRecord.getEmployeeId()));
+        var businessId = inputModel.getBusinessId();
+        var registeredBusiness = registeredBusinessRepository.findById(businessId);
+        registeredBusiness.orElseThrow(() -> {
+            throw new RegisteredBusinessException(String.format("Business with ID {%s} not found", inputModel.getBusinessId()));
+        });
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dob = LocalDate.parse(inputModel.getDateOfBirth(), formatter);
+        LocalDate swabDate = LocalDate.parse(inputModel.getLastSwabDate(), formatter);
+
+        var employee = new EmployeeRecord(inputModel.getEmployeeId(), inputModel.getEmployeeName(), dob,
+                inputModel.getVaccine(), swabDate, inputModel.getSwabResult());
+
+        employee.setBusiness(registeredBusiness.get());
+
+        var savedEmployee = employeeRepository.save(employee);
+        logger.info(String.format("Successfully added employee with EID {%s}", inputModel.getEmployeeId()));
         return savedEmployee;
     }
 
     @Override
-    public EmployeeRecord updateEmployee(EmployeeRecord employeeRecord) {
-        var employee = employeeRepository.getById(employeeRecord.getEmployeeId());
-        if (employee == null) {
-            logger.warn(String.format("Employee with EID {%s} does not exist in DB.", employeeRecord.getEmployeeId()));
-            throw new EmployeeRecordException(String.format("Employee with EID {%s} does not exist in DB.", employeeRecord.getEmployeeId()));
-        }
+    public EmployeeRecord updateEmployee(EmployeeRecordInputModel inputModel) {
+        var employeeOptional = employeeRepository.findById(inputModel.getEmployeeId());
+        employeeOptional.orElseThrow(() -> {
+            logger.warn(String.format("Employee with EID {%s} does not exist in DB.", inputModel.getEmployeeId()));
+            throw new EmployeeRecordException(String.format("Employee with EID {%s} does not exist in DB.", inputModel.getEmployeeId()));
+        });
 
-        employee.setEmployeeName(employeeRecord.getEmployeeName());
-        employee.setBusiness(employeeRecord.getBusiness());
-        employee.setDateOfBirth(employeeRecord.getDateOfBirth());
-        employee.setVaccine(employeeRecord.getVaccine());
-        employee.setLastSwabDate(employeeRecord.getLastSwabDate());
-        employee.setSwabResult(employeeRecord.getSwabResult());
+        var businessId = inputModel.getBusinessId();
+        var registeredBusiness = registeredBusinessRepository.findById(businessId);
+        registeredBusiness.orElseThrow(() -> {
+            throw new RegisteredBusinessException(String.format("Business with ID {%s} not found", inputModel.getBusinessId()));
+        });
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dob = LocalDate.parse(inputModel.getDateOfBirth(), formatter);
+        LocalDate swabDate = LocalDate.parse(inputModel.getLastSwabDate(), formatter);
+
+        var employee = employeeOptional.get();
+        employee.setEmployeeName(inputModel.getEmployeeName());
+        employee.setBusiness(registeredBusiness.get());
+        employee.setDateOfBirth(dob);
+        employee.setVaccine(inputModel.getVaccine());
+        employee.setLastSwabDate(swabDate);
+        employee.setSwabResult(inputModel.getSwabResult());
 
         var savedEmployee = employeeRepository.save(employee);
 
-        logger.info(String.format("Successfully updated employee with ID {%s}", employeeRecord.getEmployeeId()));
+        logger.info(String.format("Successfully updated employee with ID {%s}", inputModel.getEmployeeId()));
         return savedEmployee;
     }
 
     @Override
     public void deleteEmployee(String employeeId) {
-        var employee = employeeRepository.getById(employeeId);
-        if (employee == null) {
+        var employeeOptional = employeeRepository.findById(employeeId);
+        employeeOptional.orElseThrow(() -> {
             logger.warn(String.format("Employee with EID {%s} does not exist in DB.", employeeId));
             throw new EmployeeRecordException(String.format("Employee with EID {%s} does not exist in DB.", employeeId));
-        }
+
+        });
 
         employeeRepository.deleteById(employeeId);
         logger.info(String.format("Successfully removed employee with ID {%s}", employeeId));
@@ -77,22 +108,23 @@ public class EmployeeRecordServiceImpl implements EmployeeRecordService {
 
     @Override
     public EmployeeRecord getEmployeeById(String employeeId) {
-        var employee = employeeRepository.getById(employeeId);
-        if (employee == null) {
+        var employee = employeeRepository.findById(employeeId);
+        employee.orElseThrow(() -> {
             logger.warn(String.format("Employee with EID {%s} does not exist in DB.", employeeId));
             throw new EmployeeRecordException(String.format("Employee with EID {%s} does not exist in DB.", employeeId));
-        }
 
-        return employee;
+        });
+
+        return employee.get();
     }
 
     @Override
     public List<EmployeeRecord> getEmployeesByBusiness(UUID businessId) {
-        var business = registeredBusinessRepository.getById(businessId);
-        if (business == null) {
+        var business = registeredBusinessRepository.findById(businessId);
+        business.orElseThrow(() -> {
             logger.warn(String.format("Business with ID {%s} does not exist in DB.", businessId));
             throw new RegisteredBusinessException(String.format("Business with ID {%s} does not exist in DB.", businessId));
-        }
+        });
 
         return employeeRepository.getEmployeeByBusiness(businessId.toString());
     }
