@@ -1,6 +1,7 @@
 package CovidLoveit.Domain.Models;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -25,6 +26,9 @@ public class RegisteredBusiness {
     @OneToOne
     @JoinColumn(name = "clientId")
     private Client client;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "business")
+    private List<EmployeeRecord> employeeRecords;
 
     public RegisteredBusiness(){
 
@@ -62,4 +66,11 @@ public class RegisteredBusiness {
 
     public void setIndustry(Industry industry) { this.industry = industry; }
 
+    public List<EmployeeRecord> getEmployeeRecords() {
+        return employeeRecords;
+    }
+
+    public void setEmployeeRecords(List<EmployeeRecord> employeeRecords) {
+        this.employeeRecords = employeeRecords;
+    }
 }
