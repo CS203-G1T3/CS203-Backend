@@ -53,32 +53,6 @@ public class GuidelineController {
         return ResponseEntity.created(uri).body(convertToDTO(guidelineService.addGuideline(clientId, inputModel)));
     }
 
-    @DeleteMapping("guideline/{clientId}/{guidelineId}")
-    public ResponseEntity<?> deleteGuideline(@PathVariable String clientId, @PathVariable String guidelineId) {
-        guidelineService.deleteGuideline(clientId, guidelineId);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("guideline/{guidelineId}")
-    public ResponseEntity<GuidelineDTO> getGuideline(@PathVariable String guidelineId) {
-        Optional<Guideline> guideline = guidelineService.getGuideline(guidelineId);
-
-        guideline.orElseThrow(() -> new GuidelineException(String.format("Guideline {%s} not found", guidelineId)));
-
-        return ResponseEntity.ok(convertToDTO(guideline.get()));
-    }
-
-    @GetMapping("/guideline")
-    public ResponseEntity<?> getAllGuidelines() {
-        List<Guideline> guidelines = guidelineService.getAllGuidelines();
-
-        var guidelineDTOs = guidelines.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(guidelineDTOs);
-    }
-
     @PutMapping("/guideline/{clientId}")
     public ResponseEntity<GuidelineDTO> updateGuideline (@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel){
         Set<ConstraintViolation<GuidelineInputModel>> violations = inputModel.validate();
@@ -95,6 +69,35 @@ public class GuidelineController {
 
 
         return ResponseEntity.ok(convertToDTO(guidelineService.updateGuideline(clientId, inputModel)));
+    }
+
+    @DeleteMapping("guideline/{clientId}/{guidelineId}")
+    public ResponseEntity<?> deleteGuideline(@PathVariable String clientId, @PathVariable String guidelineId) {
+        guidelineService.deleteGuideline(clientId, guidelineId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("guideline/{guidelineId}")
+    public ResponseEntity<GuidelineDTO> getGuideline(@PathVariable String guidelineId) {
+        var guideline = guidelineService.getGuideline(guidelineId);
+        return ResponseEntity.ok(convertToDTO(guideline));
+    }
+
+    @GetMapping("/guidelines")
+    public ResponseEntity<?> getAllGuidelines() {
+        List<Guideline> guidelines = guidelineService.getAllGuidelines();
+
+        var guidelineDTOs = guidelines.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(guidelineDTOs);
+    }
+
+    @GetMapping("guideline/byIndustry/{industryId}")
+    public ResponseEntity<GuidelineDTO> getLatestGuidelineByIndustry(@PathVariable String industryId) {
+        var guideline = guidelineService.getLatestGuidelineByIndustry(industryId);
+        return ResponseEntity.ok(convertToDTO(guideline));
     }
 
     private GuidelineDTO convertToDTO(Guideline guideline) {
