@@ -1,5 +1,6 @@
 package CovidLoveit.Service.Services.Interfaces;
 
+import CovidLoveit.Domain.InputModel.EmployeeRecordInputModel;
 import CovidLoveit.Domain.Models.EmployeeRecord;
 
 import java.util.List;
@@ -7,9 +8,9 @@ import java.util.UUID;
 
 public interface EmployeeRecordService {
 
-    EmployeeRecord addEmployee(EmployeeRecord employee);
+    EmployeeRecord addEmployee(EmployeeRecordInputModel employee);
 
-    EmployeeRecord updateEmployee(EmployeeRecord employeeRecord);
+    EmployeeRecord updateEmployee(EmployeeRecordInputModel employeeRecord);
 
     void deleteEmployee(String employeeId);
 
