@@ -75,7 +75,7 @@ public class IndustryController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/industry/{industryId}")
+    @GetMapping("/industry/id/{industryId}")
     public ResponseEntity<IndustryDTO> getIndustry(@PathVariable String industryId) {
         Optional<Industry> industry = industryService.getIndustry(UUID.fromString(industryId));
 
@@ -87,7 +87,7 @@ public class IndustryController {
     @GetMapping("/industrySubtypes")
     public ResponseEntity<?> getIndustrySubtypes(@RequestParam("industryName") Optional<String> industryName) {
         
-        List<Industry> industrySubtypes = new ArrayList<>();
+        List<Industry> industrySubtypes;
 
         if (industryName.isPresent()) {
             industrySubtypes = industryService.getIndustrySubtypesByIndustry(industryName.get());
@@ -106,17 +106,6 @@ public class IndustryController {
     @GetMapping("/industryNames")
     public List<String> getAllIndustryNames() {
         return industryService.getAllIndustries();
-    }
-
-    @GetMapping("/industry/{industryName}")
-    public ResponseEntity<?> getIndustrySubtypesByIndustry(@PathVariable String industryName) {
-        List<Industry> industrySubtypes = industryService.getIndustrySubtypesByIndustry(industryName);
-
-        var subtypeDTOs = industrySubtypes.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(subtypeDTOs);
     }
 
     // convert to data transfer object for http requests
