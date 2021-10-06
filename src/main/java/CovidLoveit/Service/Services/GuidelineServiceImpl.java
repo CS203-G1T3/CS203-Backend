@@ -8,7 +8,9 @@ import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Exception.GuidelineException;
 import CovidLoveit.Exception.IndustryException;
+import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
+import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Service.Services.Interfaces.ClientService;
 import CovidLoveit.Service.Services.Interfaces.GuidelineService;
 import CovidLoveit.Service.Services.Interfaces.IndustryService;
@@ -29,33 +31,37 @@ public class GuidelineServiceImpl implements GuidelineService {
 
     private Logger logger = LoggerFactory.getLogger(GuidelineServiceImpl.class);
     private GuidelineRepository guidelineRepository;
-    private ClientService clientService;
-    private IndustryService industryService;
+    private IndustryRepository industryRepository;
+    private ClientRepository clientRepository;
 
     @Autowired
-    public GuidelineServiceImpl(GuidelineRepository guidelineRepository, ClientService clientService, IndustryService industryService) {
+    public GuidelineServiceImpl(GuidelineRepository guidelineRepository, ClientRepository clientRepository,
+                                IndustryRepository industryRepository)
+    {
         this.guidelineRepository = guidelineRepository;
-        this.clientService = clientService;
-        this.industryService = industryService;
+        this.clientRepository = clientRepository;
+        this.industryRepository = industryRepository;
     }
 
     @Override
     public Guideline addGuideline(String clientId, GuidelineInputModel inputModel)
     {
-        var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        if (sessionUser == null)
+        var sessionUser = clientRepository.findById(UUID.fromString(clientId));
+        sessionUser.orElseThrow(() -> {
+            logger.warn(String.format("Client with ID {%s} not found", clientId));
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
+        });
 
         // check industry exists
         UUID industryId = inputModel.getIndustryId();
-        var industry = industryService.getIndustry(industryId);
+        var industry = industryRepository.findById(industryId);
         industry.orElseThrow(() -> {
             // throw new IndustryException(String.format("Industry with ID {%s} not found", industryId.toString()));
             throw new IndustryException("Industry with ID {%s} not found");
         });
 
         boolean isAdmin = false;
-        var roles = sessionUser.getRoles();
+        var roles = sessionUser.get().getRoles();
         for(Role role: roles) {
             if(role.getRoleName().equals("ADMIN")){
                 isAdmin = true;
@@ -90,17 +96,20 @@ public class GuidelineServiceImpl implements GuidelineService {
 
         // check industry exists
         UUID industryId = inputModel.getIndustryId();
-        var industry = industryService.getIndustry(industryId);
+        var industry = industryRepository.findById(industryId);
         industry.orElseThrow(() -> {
+            logger.warn(String.format("Industry with ID {%s} not found", industryId.toString()));
             throw new IndustryException(String.format("Industry with ID {%s} not found", industryId.toString()));
         });
 
-        var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        if (sessionUser == null)
+        var sessionUser = clientRepository.findById(UUID.fromString(clientId));
+        sessionUser.orElseThrow(() -> {
+            logger.warn(String.format("Client with ID {%s} not found", clientId));
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
+        });
 
         boolean isAdmin = false;
-        var roles = sessionUser.getRoles();
+        var roles = sessionUser.get().getRoles();
         for(Role role: roles) {
             if(role.getRoleName().equals("ADMIN")){
                 isAdmin = true;
@@ -142,12 +151,14 @@ public class GuidelineServiceImpl implements GuidelineService {
             throw new GuidelineException(String.format("Guideline ID {%s} is not found.", guidelineId));
         });
 
-        var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        if (sessionUser == null)
+        var sessionUser = clientRepository.findById(UUID.fromString(clientId));
+        sessionUser.orElseThrow(() -> {
+            logger.warn(String.format("Client with ID {%s} not found", clientId));
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
+        });
 
         boolean isAdmin = false;
-        var roles = sessionUser.getRoles();
+        var roles = sessionUser.get().getRoles();
         for(Role role: roles) {
             if(role.getRoleName().equals("ADMIN")){
                 isAdmin = true;
@@ -166,8 +177,25 @@ public class GuidelineServiceImpl implements GuidelineService {
     }
 
     @Override
-    public Optional<Guideline> getGuideline(String guidelineId){
-        return guidelineRepository.findById(UUID.fromString(guidelineId));
+    public Guideline getGuideline(String guidelineId){
+        Optional<Guideline> guidelineOptional = guidelineRepository.findById(UUID.fromString(guidelineId));
+        guidelineOptional.orElseThrow(() -> {
+            logger.warn(String.format("Guideline with Id {%s} does not exist in DB.", guidelineId));
+            throw new GuidelineException(String.format("Guideline ID {%s} is not found.", guidelineId));
+        });
+
+        return guidelineOptional.get();
+    }
+
+    @Override
+    public Guideline getLatestGuidelineByIndustry(String industryId){
+        var industry = industryRepository.findById(UUID.fromString(industryId));
+        industry.orElseThrow(() -> {
+            logger.warn(String.format("Industry with ID {%s} not found", industryId.toString()));
+            throw new IndustryException(String.format("Industry with ID {%s} not found", industryId.toString()));
+        });
+
+        return guidelineRepository.findLatestGuidelineByIndustry(industry.get());
     }
 
     @Override
