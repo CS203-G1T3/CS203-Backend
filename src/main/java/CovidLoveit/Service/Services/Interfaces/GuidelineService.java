@@ -16,7 +16,9 @@ public interface GuidelineService {
 
     void deleteGuideline(String clientId, String guidelineId);
 
-    Optional<Guideline> getGuideline(String guidelineId);
+    Guideline getGuideline(String guidelineId);
+
+    Guideline getLatestGuidelineByIndustry(String industryId);
 
     List<Guideline> getAllGuidelines();
 
