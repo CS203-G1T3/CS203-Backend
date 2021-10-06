@@ -5,6 +5,7 @@ import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Exception.IndustryException;
+import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Service.Services.Interfaces.ClientService;
 import CovidLoveit.Service.Services.Interfaces.IndustryService;
@@ -25,24 +26,25 @@ public class IndustryServiceImpl implements IndustryService {
     // Use this logger object to log information of user's actions
     private Logger logger = LoggerFactory.getLogger(IndustryServiceImpl.class);
     private IndustryRepository industryRepository;
-    private ClientService clientService;
+    private ClientRepository clientRepository;
 
     // Injecting the required dependencies here
     @Autowired
-    public IndustryServiceImpl(IndustryRepository industryRepository, ClientService clientService){
+    public IndustryServiceImpl(IndustryRepository industryRepository, ClientRepository clientRepository){
         this.industryRepository = industryRepository;
-        this.clientService = clientService;
+        this.clientRepository = clientRepository;
     }
 
     @Override
     public Industry addIndustry(String clientId, IndustryInputModel inputModel) {
-        var sessionUser = clientService.getClient(UUID.fromString(clientId));
-
-        if (sessionUser == null)
+        var sessionUser = clientRepository.findById(UUID.fromString(clientId));
+        sessionUser.orElseThrow(() -> {
+            logger.warn(String.format("Client with ID {%s} not found", clientId));
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
+        });
 
         boolean isAdmin = false;
-        var roles = sessionUser.getRoles();
+        var roles = sessionUser.get().getRoles();
         for(Role role: roles) {
             if(role.getRoleName().equals("ADMIN")){
                 isAdmin = true;
@@ -70,12 +72,14 @@ public class IndustryServiceImpl implements IndustryService {
             throw new IndustryException(String.format("Industry with ID {%s} not found.", inputModel.getIndustryId()));
         });
 
-        var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        if (sessionUser == null)
+        var sessionUser = clientRepository.findById(UUID.fromString(clientId));
+        sessionUser.orElseThrow(() -> {
+            logger.warn(String.format("Client with ID {%s} not found", clientId));
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
+        });
 
         boolean isAdmin = false;
-        var roles = sessionUser.getRoles();
+        var roles = sessionUser.get().getRoles();
         for(Role role: roles) {
             if(role.getRoleName().equals("ADMIN")){
                 isAdmin = true;
@@ -106,12 +110,14 @@ public class IndustryServiceImpl implements IndustryService {
             throw new IndustryException(String.format("Industry with ID {%s} not found.",industryId));
         });
 
-        var sessionUser = clientService.getClient(UUID.fromString(clientId));
-        if (sessionUser == null)
+        var sessionUser = clientRepository.findById(UUID.fromString(clientId));
+        sessionUser.orElseThrow(() -> {
+            logger.warn(String.format("Client with ID {%s} not found", clientId));
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
+        });
 
         boolean isAdmin = false;
-        var roles = sessionUser.getRoles();
+        var roles = sessionUser.get().getRoles();
         for(Role role: roles) {
             if(role.getRoleName().equals("ADMIN")){
                 isAdmin = true;
