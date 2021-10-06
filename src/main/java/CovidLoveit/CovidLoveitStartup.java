@@ -49,6 +49,7 @@ public class CovidLoveitStartup {
 
 
             var industry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Food & Beverage", "Hawker", "Hawker actually sells good food"));
+            var anotherIndustry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Entertainment", "Fitness First", "Bro come workout and you wont regret."));
 
             businessService.addBusiness("ABC food kind", "TSL comes here quite often i think", industry.getIndustryId(), user.getClientId());
 
