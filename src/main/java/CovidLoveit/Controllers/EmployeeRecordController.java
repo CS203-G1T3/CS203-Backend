@@ -15,6 +15,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.ConstraintViolation;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -51,11 +53,8 @@ public class EmployeeRecordController {
                 .fromCurrentContextPath()
                 .path("/api/v1/employeeRecord/add")
                 .toUriString());
-        var employee = new EmployeeRecord(inputModel.getEmployeeId(), inputModel.getEmployeeName(),
-                inputModel.getDateOfBirth(), inputModel.getVaccine(), inputModel.getLastSwabDate(),
-                inputModel.getSwabResult());
 
-        return ResponseEntity.created(uri).body(convertToEmployeeRecordDTO(employeeRecordService.addEmployee(employee)));
+        return ResponseEntity.created(uri).body(convertToEmployeeRecordDTO(employeeRecordService.addEmployee(inputModel)));
     }
 
     @PutMapping("/employeeRecord")
@@ -72,9 +71,7 @@ public class EmployeeRecordController {
             throw new EmployeeRecordException(error.toString());
         }
 
-        var employee = new EmployeeRecord(inputModel.getEmployeeId(), inputModel.getEmployeeName(),
-                inputModel.getDateOfBirth(), inputModel.getVaccine(), inputModel.getLastSwabDate(),
-                inputModel.getSwabResult());
+        var employee = employeeRecordService.updateEmployee(inputModel);
 
         return ResponseEntity.ok(convertToEmployeeRecordDTO(employee));
     }
