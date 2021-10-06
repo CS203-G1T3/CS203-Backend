@@ -1,15 +1,13 @@
 package CovidLoveit.Domain.InputModel;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Past;
-import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
+import java.util.UUID;
 
 public class EmployeeRecordInputModel {
 
@@ -22,15 +20,18 @@ public class EmployeeRecordInputModel {
     @NotEmpty(message = "Please provide an employee name.")
     private String employeeName;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @Past(message = "Please input a valid date of birth.")
-    private LocalDate dateOfBirth;
+    @NotEmpty(message = "Please input a valid date of birth format dd/MM/yyyy")
+    private String dateOfBirth;
 
     private String vaccine;
 
-    private LocalDate lastSwabDate;
+    @NotEmpty(message = "Please input a valid date format dd/MM/yyyy")
+    private String lastSwabDate;
 
     private String swabResult;
+
+    @NotNull(message = "Company ID required.")
+    private UUID businessId;
 
     public Set<ConstraintViolation<EmployeeRecordInputModel>> validate() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -54,11 +55,11 @@ public class EmployeeRecordInputModel {
         this.employeeName = employeeName;
     }
 
-    public LocalDate getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -70,11 +71,11 @@ public class EmployeeRecordInputModel {
         this.vaccine = vaccine;
     }
 
-    public LocalDate getLastSwabDate() {
+    public String getLastSwabDate() {
         return lastSwabDate;
     }
 
-    public void setLastSwabDate(LocalDate lastSwabDate) {
+    public void setLastSwabDate(String lastSwabDate) {
         this.lastSwabDate = lastSwabDate;
     }
 
@@ -84,5 +85,13 @@ public class EmployeeRecordInputModel {
 
     public void setSwabResult(String swabResult) {
         this.swabResult = swabResult;
+    }
+
+    public UUID getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(UUID businessId) {
+        this.businessId = businessId;
     }
 }
