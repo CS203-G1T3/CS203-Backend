@@ -126,6 +126,6 @@ public class EmployeeRecordServiceImpl implements EmployeeRecordService {
             throw new RegisteredBusinessException(String.format("Business with ID {%s} does not exist in DB.", businessId));
         });
 
-        return employeeRepository.getEmployeeByBusiness(businessId.toString());
+        return employeeRepository.findEmployeeRecordByBusiness(business.get());
     }
 }
