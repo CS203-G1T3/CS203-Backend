@@ -42,8 +42,8 @@ public class CovidLoveitStartup {
             clientService.addRole(new Role("ADMIN"));
             clientService.addRole(new Role("USER"));
 
-            var adminUser = clientService.addClient(new ClientInputModel("123456", "linsyhen99@gmail.com"));
-            var user = clientService.addClient(new ClientInputModel("123456", "ruwansadris.2020@smu.edu.sg"));
+            var adminUser = clientService.addClient(new ClientInputModel("linsyhen99@gmail.com", "123456"));
+            var user = clientService.addClient(new ClientInputModel("ruwansadris.2020@smu.edu.sg", "123456"));
 
             clientService.addRoleToClient("linsyhen99@gmail.com", "ADMIN");
             clientService.addRoleToClient("ruwansadris.2020@smu.edu.sg", "USER");
