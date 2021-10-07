@@ -34,44 +34,44 @@ public class CovidLoveitStartup {
         ConfigurableApplicationContext context = SpringApplication.run(CovidLoveitStartup.class, args);
     }
 
-    @Bean
-    CommandLineRunner run(ClientService clientService, IndustryService industryService,
-                          GuidelineService guidelineService, RegisteredBusinessService businessService) {
-        return args -> {
-            // TODO: Remove seed data from here
-            clientService.addRole(new Role("ADMIN"));
-            clientService.addRole(new Role("USER"));
-
-            var adminUser = clientService.addClient(new ClientInputModel("linsyhen99@gmail.com", "123456"));
-            var user = clientService.addClient(new ClientInputModel("ruwansadris.2020@smu.edu.sg", "123456"));
-
-            clientService.addRoleToClient("linsyhen99@gmail.com", "ADMIN");
-            clientService.addRoleToClient("ruwansadris.2020@smu.edu.sg", "USER");
-
-
-            var industry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Food & Beverage", "Hawker", "Hawker actually sells good food"));
-            var anotherIndustry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Entertainment", "Fitness First", "Bro come workout and you wont regret."));
-
-            businessService.addBusiness("ABC food kind", "TSL comes here quite often i think", industry.getIndustryId(), user.getClientId());
-
-            guidelineService.addGuideline(adminUser.getClientId().toString(), new GuidelineInputModel(
-                    true,
-                    "Sure why not",
-                    2,
-                    "Mingle in groups of 2",
-                    5000,
-                    5000000,
-                    "Tested negative",
-                    "+6593959697",
-                    "This is my number",
-                    50,
-                    "Only allowed 50 workers at each time slot",
-                    "Operate as per normal",
-                    "www.facebook.com",
-                    industry.getIndustryId()
-            ));
-        };
-    }
+//    @Bean
+//    CommandLineRunner run(ClientService clientService, IndustryService industryService,
+//                          GuidelineService guidelineService, RegisteredBusinessService businessService) {
+//        return args -> {
+//            // TODO: Remove seed data from here
+//            clientService.addRole(new Role("ADMIN"));
+//            clientService.addRole(new Role("USER"));
+//
+//            var adminUser = clientService.addClient(new ClientInputModel("linsyhen99@gmail.com", "123456"));
+//            var user = clientService.addClient(new ClientInputModel("ruwansadris.2020@smu.edu.sg", "123456"));
+//
+//            clientService.addRoleToClient("linsyhen99@gmail.com", "ADMIN");
+//            clientService.addRoleToClient("ruwansadris.2020@smu.edu.sg", "USER");
+//
+//
+//            var industry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Food & Beverage", "Hawker", "Hawker actually sells good food"));
+//            var anotherIndustry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Entertainment", "Fitness First", "Bro come workout and you wont regret."));
+//
+//            businessService.addBusiness("ABC food kind", "TSL comes here quite often i think", industry.getIndustryId(), user.getClientId());
+//
+//            guidelineService.addGuideline(adminUser.getClientId().toString(), new GuidelineInputModel(
+//                    true,
+//                    "Sure why not",
+//                    2,
+//                    "Mingle in groups of 2",
+//                    5000,
+//                    5000000,
+//                    "Tested negative",
+//                    "+6593959697",
+//                    "This is my number",
+//                    50,
+//                    "Only allowed 50 workers at each time slot",
+//                    "Operate as per normal",
+//                    "www.facebook.com",
+//                    industry.getIndustryId()
+//            ));
+//        };
+//    }
 
     @Bean
     public ModelMapper modelMapper() {
