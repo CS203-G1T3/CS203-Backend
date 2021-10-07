@@ -10,33 +10,20 @@ import CovidLoveit.Exception.ClientException;
 
 import CovidLoveit.Exception.RoleException;
 import CovidLoveit.Service.Services.Interfaces.ClientService;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("api/v1")
@@ -67,10 +54,8 @@ public class ClientController {
         }
 
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/client/add").toUriString());
-        var client = new Client(inputModel.getPassword(),
-                inputModel.getRoles(), inputModel.getEmail());
 
-        return ResponseEntity.created(uri).body(convertToClientDTO(clientService.addClient(client)));
+        return ResponseEntity.created(uri).body(convertToClientDTO(clientService.addClient(inputModel)));
     }
 
     @PostMapping("/role/add")
@@ -107,9 +92,7 @@ public class ClientController {
             throw new ClientException(error.toString());
         }
 
-        Client client = new Client(inputModel.getClientId(),
-                inputModel.getPassword(), inputModel.getRoles(), inputModel.getEmail());
-        return ResponseEntity.ok(convertToClientDTO(clientService.updateClient(UUID.fromString(clientId), client)));
+        return ResponseEntity.ok(convertToClientDTO(clientService.updateClient(UUID.fromString(clientId), inputModel)));
     }
 
     @DeleteMapping("/client/{clientId}")
