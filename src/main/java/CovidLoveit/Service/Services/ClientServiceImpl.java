@@ -79,7 +79,7 @@ public class ClientServiceImpl implements ClientService {
         var roleRecord = roleRepository.findByRoleName(role.getRoleName());
         if (roleRecord.isPresent()) {
             logger.warn(String.format("Role {%s} already exists in DB.", role.getRoleName()));
-            throw new RoleException(String.format("Role {%s} already exists", role));
+            throw new RoleException(String.format("Role {%s} already exists", role.getRoleName()));
         }
 
         var savedRole = roleRepository.save(role);
