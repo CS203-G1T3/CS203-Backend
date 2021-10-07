@@ -1,5 +1,6 @@
 package CovidLoveit.Service.Services;
 
+import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.CustomUserDetails;
 import CovidLoveit.Domain.Models.Role;
@@ -43,15 +44,28 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client addClient(Client client) {
-        var emailVerification = clientRepository.findByEmail(client.getEmail());
+    public Client addClient(ClientInputModel inputModel) {
+        var emailVerification = clientRepository.findByEmail(inputModel.getEmail());
         if (emailVerification.isPresent()) {
-            logger.warn(String.format("Email address {%s} has already been taken.", client.getEmail()));
-            throw new ClientException(String.format("Email address {%s} has already been taken.", client.getEmail()));
+            logger.warn(String.format("Email address {%s} has already been taken.", inputModel.getEmail()));
+            throw new ClientException(String.format("Email address {%s} has already been taken.", inputModel.getEmail()));
+        }
+
+        var roles = inputModel.getRoles();
+        Collection<Role> clientRoles = new ArrayList<Role>();
+        for(String role : roles) {
+            var roleVerification = roleRepository.findByRoleName(role);
+            roleVerification.orElseThrow(() -> {
+                logger.warn(String.format("Role {%s} not found in DB.", role));
+                throw new RoleException(String.format("Role {%s} not found in DB.", role));
+            });
+            clientRoles.add(roleVerification.get());
         }
 
         // Encode the user's password before storing their credentials
-        client.setPassword(bCryptPasswordEncoder.encode(client.getPassword()));
+        inputModel.setPassword(bCryptPasswordEncoder.encode(inputModel.getPassword()));
+
+        var client = new Client(inputModel.getPassword(), clientRoles, inputModel.getEmail());
         var savedClient = clientRepository.save(client);
 
         logger.info(String.format("Successfully added client {%s}", savedClient.getClientId()));
@@ -72,22 +86,33 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client updateClient(UUID clientId, Client client) {
-        Optional<Client> clientOptional = clientRepository.findById(clientId);
-
+    public Client updateClient(UUID clientId, ClientInputModel inputModel) {
+        var clientOptional = clientRepository.findById(clientId);
         clientOptional.orElseThrow(() -> {
             logger.warn(String.format("Client with ID {%s} does not exist in DB.", clientId));
             throw new ClientException(String.format("Client with ID {%s} not found.", clientId));
         });
 
-        var emailVerification = clientRepository.findByEmail(client.getEmail());
+        var emailVerification = clientRepository.findByEmail(inputModel.getEmail());
         if (emailVerification.get().getClientId() != clientOptional.get().getClientId()) {
-            logger.warn(String.format("Client with email {%s} already exists.", client.getEmail()));
-            throw new ClientException(String.format("Client with email {%s} already exists.", client.getEmail()));
+            logger.warn(String.format("Client with email {%s} already exists.", inputModel.getEmail()));
+            throw new ClientException(String.format("Client with email {%s} already exists.", inputModel.getEmail()));
+        }
+
+        var roles = inputModel.getRoles();
+        Collection<Role> clientRoles = new ArrayList<Role>();
+        for(String role : roles) {
+            var roleVerification = roleRepository.findByRoleName(role);
+            roleVerification.orElseThrow(() -> {
+                logger.warn(String.format("Role {%s} not found in DB.", role));
+                throw new RoleException(String.format("Role {%s} not found in DB.", role));
+            });
+            clientRoles.add(roleVerification.get());
         }
 
         var clientRecord = clientOptional.get();
-        clientRecord.setEmail(client.getEmail());
+        clientRecord.setEmail(inputModel.getEmail());
+        clientRecord.setRoles(clientRoles);
 
         logger.info(String.format("Successfully updated client with ID {%s}", clientId));
         return clientRepository.save(clientRecord);
