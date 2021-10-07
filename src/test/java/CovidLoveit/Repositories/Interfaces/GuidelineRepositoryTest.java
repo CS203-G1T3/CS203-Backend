@@ -2,6 +2,7 @@ package CovidLoveit.Repositories.Interfaces;
 
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Domain.Models.Industry;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,6 +19,12 @@ class GuidelineRepositoryTest {
     private IndustryRepository industryRepositoryTest;
     @Autowired
     private GuidelineRepository underTest;
+
+    @AfterEach
+    void tearDown() {
+        industryRepositoryTest.deleteAll();
+        underTest.deleteAll();
+    }
 
     @Test
     void shouldReturnTheLatestGuidelineRecordByIndustry() throws InterruptedException {

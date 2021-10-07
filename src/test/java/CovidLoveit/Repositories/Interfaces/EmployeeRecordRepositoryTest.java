@@ -2,6 +2,7 @@ package CovidLoveit.Repositories.Interfaces;
 
 import CovidLoveit.Domain.Models.EmployeeRecord;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -19,6 +20,12 @@ class EmployeeRecordRepositoryTest {
     private RegisteredBusinessRepository businessTestRepository;
     @Autowired
     private EmployeeRecordRepository underTest;
+
+    @AfterEach
+    void tearDown() {
+        businessTestRepository.deleteAll();
+        underTest.deleteAll();
+    }
 
     @Test
     void checkIfEmployeeExistsByBusiness() {
