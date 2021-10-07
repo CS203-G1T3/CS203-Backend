@@ -96,7 +96,7 @@ public class ClientServiceImpl implements ClientService {
         });
 
         var emailVerification = clientRepository.findByEmail(inputModel.getEmail());
-        if (emailVerification.get().getClientId() != clientOptional.get().getClientId()) {
+        if (emailVerification.isPresent() && emailVerification.get().getClientId() != clientOptional.get().getClientId()) {
             logger.warn(String.format("Client with email {%s} already exists.", inputModel.getEmail()));
             throw new ClientException(String.format("Client with email {%s} already exists.", inputModel.getEmail()));
         }
