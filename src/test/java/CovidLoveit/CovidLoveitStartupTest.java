@@ -3,7 +3,7 @@ package CovidLoveit;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-class CovidLoveitStartup {
+class CovidLoveitStartupTest {
 
 	@Test
 	void contextLoads() {
