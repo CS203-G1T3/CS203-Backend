@@ -19,7 +19,7 @@ public class Industry {
     @Column(name = "industryName", nullable = false)
     private String industryName;
 
-    @Column(name = "industrySubtype", nullable = false)
+    @Column(name = "industrySubtype", unique = true, nullable = false)
     private String industrySubtype;
 
     @Column(name = "industryDesc")
