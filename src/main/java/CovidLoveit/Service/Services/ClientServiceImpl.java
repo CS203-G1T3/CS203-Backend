@@ -53,13 +53,15 @@ public class ClientServiceImpl implements ClientService {
 
         var roles = inputModel.getRoles();
         Collection<Role> clientRoles = new ArrayList<Role>();
-        for(String role : roles) {
-            var roleVerification = roleRepository.findByRoleName(role);
-            roleVerification.orElseThrow(() -> {
-                logger.warn(String.format("Role {%s} not found in DB.", role));
-                throw new RoleException(String.format("Role {%s} not found in DB.", role));
-            });
-            clientRoles.add(roleVerification.get());
+        if(roles != null && roles.size() != 0) {
+            for(String role : roles) {
+                var roleVerification = roleRepository.findByRoleName(role);
+                roleVerification.orElseThrow(() -> {
+                    logger.warn(String.format("Role {%s} not found in DB.", role));
+                    throw new RoleException(String.format("Role {%s} not found in DB.", role));
+                });
+                clientRoles.add(roleVerification.get());
+            }
         }
 
         // Encode the user's password before storing their credentials
@@ -101,13 +103,15 @@ public class ClientServiceImpl implements ClientService {
 
         var roles = inputModel.getRoles();
         Collection<Role> clientRoles = new ArrayList<Role>();
-        for(String role : roles) {
-            var roleVerification = roleRepository.findByRoleName(role);
-            roleVerification.orElseThrow(() -> {
-                logger.warn(String.format("Role {%s} not found in DB.", role));
-                throw new RoleException(String.format("Role {%s} not found in DB.", role));
-            });
-            clientRoles.add(roleVerification.get());
+        if(roles != null && roles.size() != 0) {
+            for(String role : roles) {
+                var roleVerification = roleRepository.findByRoleName(role);
+                roleVerification.orElseThrow(() -> {
+                    logger.warn(String.format("Role {%s} not found in DB.", role));
+                    throw new RoleException(String.format("Role {%s} not found in DB.", role));
+                });
+                clientRoles.add(roleVerification.get());
+            }
         }
 
         var clientRecord = clientOptional.get();
