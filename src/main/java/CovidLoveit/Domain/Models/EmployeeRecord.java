@@ -20,6 +20,17 @@ public class EmployeeRecord {
         this.swabResult = swabResult;
     }
 
+    public EmployeeRecord(String employeeId, String employeeName, LocalDate dateOfBirth,
+                          String vaccine, LocalDate lastSwabDate, String swabResult, RegisteredBusiness business) {
+        this.employeeId = employeeId;
+        this.employeeName = employeeName;
+        this.dateOfBirth = dateOfBirth;
+        this.vaccine = vaccine;
+        this.lastSwabDate = lastSwabDate;
+        this.swabResult = swabResult;
+        this.business = business;
+    }
+
     @Id
     @Column(name = "EID", unique = true, nullable = false)
     private String employeeId;
