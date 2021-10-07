@@ -1,5 +1,6 @@
 package CovidLoveit.Service.Services.Interfaces;
 
+import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Role;
 
@@ -8,11 +9,11 @@ import java.util.UUID;
 
 public interface ClientService {
 
-    Client addClient (Client client);
+    Client addClient (ClientInputModel inputModel);
 
     Role addRole(Role role);
 
-    Client updateClient (UUID clientId, Client client);
+    Client updateClient (UUID clientId, ClientInputModel inputModel);
 
     void deleteClient (UUID clientId);
 
