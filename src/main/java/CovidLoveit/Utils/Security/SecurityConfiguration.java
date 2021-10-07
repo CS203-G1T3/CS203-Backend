@@ -45,29 +45,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         
         http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(STATELESS);
-
         http.cors().and()
             .authorizeRequests()
             .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-            .antMatchers(POST, "/**/logout").permitAll()
-            .antMatchers(POST, "/api/login").permitAll()
-            .antMatchers(POST, "/**/client/add").permitAll()
-            .antMatchers(POST, "/**/role/add").hasRole("ADMIN")
-            .antMatchers(GET, "/**/client/all/*").hasRole("ADMIN")
-            .antMatchers(POST, "/**/guideline/add/*").hasRole("ADMIN")
-            .antMatchers(PUT, "/**/guideline/*").hasRole("ADMIN")
-            .antMatchers(DELETE, "/**/guideline/*").hasRole("ADMIN")
-            .antMatchers(POST, "/**/industry/add/*").hasRole("ADMIN")
-            .antMatchers(PUT, "/**/industry/*").hasRole("ADMIN")
-            .antMatchers(DELETE, "/**/industry/*").hasRole("ADMIN")
-            .antMatchers(GET, "/**/registered-businesses").hasRole("ADMIN")
+            .antMatchers("/**/logout").permitAll()
+            .antMatchers("/api/login").permitAll()
             .antMatchers("/api/token/refresh/**").permitAll()
-            .antMatchers(POST, "/api/login/*").permitAll()
-            .anyRequest().authenticated();
-
-        http.addFilter(customAuthenticationFilter);
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+            .antMatchers("/**/client/add").permitAll()
+            .antMatchers("/**/role").hasRole("ADMIN")
+            .antMatchers("/**/guideline/add/*", "/**/guideline/*").hasRole("ADMIN")
+            .anyRequest().authenticated().and()
+            .sessionManagement().sessionCreationPolicy(STATELESS).and()
+            .addFilter(customAuthenticationFilter)
+            .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
