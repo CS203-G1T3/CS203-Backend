@@ -1,5 +1,6 @@
 package CovidLoveit;
 
+import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.InputModel.GuidelineInputModel;
 import CovidLoveit.Domain.InputModel.IndustryInputModel;
 import CovidLoveit.Domain.Models.Client;
@@ -41,8 +42,8 @@ public class CovidLoveitStartup {
             clientService.addRole(new Role("ADMIN"));
             clientService.addRole(new Role("USER"));
 
-            var adminUser = clientService.addClient(new Client("123456", "linsyhen99@gmail.com"));
-            var user = clientService.addClient(new Client("123456", "ruwansadris.2020@smu.edu.sg"));
+            var adminUser = clientService.addClient(new ClientInputModel("123456", "linsyhen99@gmail.com"));
+            var user = clientService.addClient(new ClientInputModel("123456", "ruwansadris.2020@smu.edu.sg"));
 
             clientService.addRoleToClient("linsyhen99@gmail.com", "ADMIN");
             clientService.addRoleToClient("ruwansadris.2020@smu.edu.sg", "USER");
