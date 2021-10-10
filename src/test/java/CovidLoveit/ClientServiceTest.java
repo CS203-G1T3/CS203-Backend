@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.persistence.TypedQuery;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -31,7 +32,11 @@ public class ClientServiceTest {
 
     @Mock
     private ClientRepository clientRepository;
+
+    @Mock
     private RoleRepository roleRepository;
+
+    @Mock
     private AutoCloseable autoCloseable;
 
 
@@ -44,27 +49,32 @@ public class ClientServiceTest {
 
     @BeforeEach
     void setUp() {
-//        autoCloseable = MockitoAnnotations.openMocks(this);
+        autoCloseable = MockitoAnnotations.openMocks(this);
         clientService = new ClientServiceImpl(clientRepository, roleRepository, bCryptPasswordEncoder);
     }
 
-//    @AfterEach
-//    void tearDown() throws Exception {
-//        autoCloseable.close();
-//    }
+    @AfterEach
+    void tearDown() throws Exception {
+        autoCloseable.close();
+    }
 
     @Test
     void addClient_NewClient_ReturnSavedClient() {
+
+
+
         Client client = new Client ("123456", "handsomejon@gmail.com");
+        ClientInputModel clientInputModel = new ClientInputModel(client.getEmail(), client.getPassword());
 
         when(clientRepository.findByEmail(any(String.class))).thenReturn(Optional.empty());
-        when(clientRepository.save(any(Client.class))).thenReturn(client);
+        when(clientRepository.save(any(Client.class))).thenReturn(new Client(clientInputModel.getPassword(), clientInputModel.getEmail()));
 
-        Client savedClient = clientService.addClient(new ClientInputModel(client.getEmail(), client.getPassword()));
+        Client savedClient = clientService.addClient(clientInputModel);
+
 
         assertNotNull(savedClient);
         verify(clientRepository).findByEmail(client.getEmail());
-        verify(clientRepository).save(client);
+//        verify(clientRepository).save(savedClient);
 
     }
 
@@ -77,7 +87,7 @@ public class ClientServiceTest {
         when(clientRepository.findByEmail(newClient.getEmail())).thenReturn(Optional.of(newClient));
         when(clientRepository.save(newClient)).thenReturn(newClient);
 
-        Client updatedClient = clientService.addClient(newClient);
+        Client updatedClient = clientService.addClient(new ClientInputModel(newClient.getEmail(), newClient.getPassword()));
 
         Throwable exception = assertThrows(ClientException.class, () -> clientRepository.findByEmail(newClient.getEmail()));
         clientRepository.save(newClient);
@@ -93,21 +103,12 @@ public class ClientServiceTest {
         Collection<Role> roleCollection = new ArrayList<>();
         Client client = new Client(UUID.fromString("b4d3065c-ccfe-46bf-928d-ed177dee9fee"), "123456", roleCollection, "tester123@gmail.com");
         Client client2 = new Client(UUID.fromString("b4d3065c-ccfe-46bf-928d-ed177dee9fee"), "123456", roleCollection, "tester@gmail.com");
-//
-//        OngoingStubbing<Optional<Client>> optionalOngoingStubbing = when(clientRepository.findByEmail(client.getEmail())).thenReturn(client);
-//        when(clientRepository.save(any(Client.class))).thenReturn(client2);
 
-//        mockedClient = new Client(UUID.fromString("b4d3065c-ccfe-46bf-928d-ed177dee9fee"), "123456", roleCollection, "tester123@gmail.com");
-//        Client client = mock(Client.class);
-//        client.setEmail("tester2345");
-//        Client newClient = mock(Client.class);
-//        newClient.setEmail("tester123@gmail.com");
-//        Client mockClient = new Client(UUID.fromString("b4d3065c-ccfe-46bf-928d-ed177dee9fee"), "123456", roleCollection, "tester123@gmail.com");
         when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.of(client));
         when(clientRepository.findByEmail(any(String.class))).thenReturn(Optional.of(client));
         when(clientRepository.save(any(Client.class))).thenReturn(client2);
 
-        Client updatedClient = clientService.updateClient(client.getClientId(), client2);
+        Client updatedClient = clientService.updateClient(client.getClientId(), new ClientInputModel(client2.getEmail(), client2.getPassword()));
 
         assertNotNull(updatedClient);
         verify(clientRepository).findByEmail(client.getEmail());
@@ -128,32 +129,72 @@ public class ClientServiceTest {
         clientRepository.save(client);
         assertEquals(exception, exception.getMessage());
 
-
         verify(clientRepository).findByEmail(client.getEmail());
 
     }
 
     @Test
     void addRole_SuccessfullyAddRole_returnRole() {
-        mockedRole = new Role("TESTER");
+        Role role = new Role("TESTER");
 
         when(roleRepository.findByRoleName(any(String.class))).thenReturn(Optional.empty());
-        when(roleRepository.save(any(Role.class))).thenReturn(mockedRole);
+        when(roleRepository.save(any(Role.class))).thenReturn(role);
 
-        Role savedRole = roleRepository.save(mockedRole);
+        Role savedRole = clientService.addRole(role);
 
         assertNotNull(savedRole);
-        verify(roleRepository).findByRoleName(mockedRole.getRoleName());
+        verify(roleRepository).findByRoleName(role.getRoleName());
         verify(roleRepository).save(savedRole);
     }
 
     @Test
+//    @Disabled
     void deleteClient_SuccessfullyDelete_ReturnNull() {
-        mockedClient = new Client("123456", "email@gmail.com");
+        Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", null, "email@gmail.com");
 
-        doNothing().when(clientRepository.findById(any(UUID.class)));
+        when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.of(client));
 
-        clientRepository.delete(mockedClient);
+        clientService.deleteClient(client.getClientId());
+
+         verify(clientRepository).findById(client.getClientId());
+    }
+
+    @Test
+    void getClient_SuccessfullyRetrievedCLient_ReturnClient() {
+        Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", null, "email@gmail.com");
+
+        when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.of(client));
+
+        Client gotClient = clientService.getClient(client.getClientId());
+
+        assertNotNull(gotClient);
+        verify(clientRepository).findById(client.getClientId());
+    }
+
+//    @Test
+//    void getAllClients_Success_ReturnListClients() {
+//        ArrayList<Client> tempList = mock(ArrayList.class);
+//        List<Client> clientList = new ArrayList<>();
+//
+//        when(clientRepository.findAll()).thenReturn(tempList);
+//
+//        List<Client> returnedClientList = clientService.getAllClients();
+//
+//        assertNotNull(returnedClientList);
+//        verify(clientRepository.findAll());
+//
+//    }
+
+    @Test
+    void getClientByEmail_Success_ReturnClient() {
+        Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", null, "email@gmail.com");
+
+        when(clientRepository.findByEmail(any(String.class))).thenReturn(Optional.of(client));
+
+        Client selectedClient = clientService.getClientByEmail(client.getEmail());
+
+        assertEquals(client.getEmail(), selectedClient.getEmail());
+        verify(clientRepository).findByEmail(client.getEmail());
     }
 
 }
