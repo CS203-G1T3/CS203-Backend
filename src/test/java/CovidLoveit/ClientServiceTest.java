@@ -60,9 +60,6 @@ public class ClientServiceTest {
 
     @Test
     void addClient_NewClient_ReturnSavedClient() {
-
-
-
         Client client = new Client ("123456", "handsomejon@gmail.com");
         ClientInputModel clientInputModel = new ClientInputModel(client.getEmail(), client.getPassword());
 
@@ -117,7 +114,7 @@ public class ClientServiceTest {
 
     @Test
     @Disabled
-    void updateClient_ClientNotFound_ReturnException() {
+    void updateClient_ClientNotFound_ReturnNull() {
 //        Collection<Role> roleCollection = new ArrayList<>();
         Client client = new Client( "123456", "tester123@gmail.com");
 
@@ -125,11 +122,13 @@ public class ClientServiceTest {
         when(clientRepository.findByEmail(client.getEmail())).thenReturn(Optional.of(client));
         when(clientRepository.save(any(Client.class))).thenReturn(client);
 
-        Throwable exception = assertThrows(ClientException.class, () -> clientRepository.findByEmail(client.getEmail()));
-        clientRepository.save(client);
-        assertEquals(exception, exception.getMessage());
+        Client updatedClient = clientService.updateClient(client.getClientId(), new ClientInputModel(client.getEmail(), client.getPassword()));
 
+        assertNull(updatedClient);
+
+        verify(clientRepository).findById(client.getClientId());
         verify(clientRepository).findByEmail(client.getEmail());
+        verify(clientRepository).save(client);
 
     }
 
@@ -171,19 +170,18 @@ public class ClientServiceTest {
         verify(clientRepository).findById(client.getClientId());
     }
 
-//    @Test
-//    void getAllClients_Success_ReturnListClients() {
-//        ArrayList<Client> tempList = mock(ArrayList.class);
-//        List<Client> clientList = new ArrayList<>();
-//
-//        when(clientRepository.findAll()).thenReturn(tempList);
-//
-//        List<Client> returnedClientList = clientService.getAllClients();
-//
-//        assertNotNull(returnedClientList);
-//        verify(clientRepository.findAll());
-//
-//    }
+    @Test
+    void getAllClients_Success_ReturnListClients() {
+        ArrayList<Client> tempList = mock(ArrayList.class);
+
+        when(clientRepository.findAll()).thenReturn(tempList);
+
+        List<Client> returnedClientList = clientService.getAllClients();
+
+        assertNotNull(returnedClientList);
+        verify(clientRepository).findAll();
+
+    }
 
     @Test
     void getClientByEmail_Success_ReturnClient() {
