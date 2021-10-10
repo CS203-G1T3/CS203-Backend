@@ -2,6 +2,7 @@ package CovidLoveit.Domain.Models;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Table(name = "EMPLOYEE_RECORD")
@@ -10,7 +11,7 @@ public class EmployeeRecord {
     public EmployeeRecord() {
     }
 
-    public EmployeeRecord(String employeeId, String employeeName, LocalDate dateOfBirth,
+    public EmployeeRecord(UUID employeeId, String employeeName, LocalDate dateOfBirth,
                           String vaccine, LocalDate lastSwabDate, String swabResult) {
         this.employeeId = employeeId;
         this.employeeName = employeeName;
@@ -20,9 +21,20 @@ public class EmployeeRecord {
         this.swabResult = swabResult;
     }
 
+    public EmployeeRecord(String employeeName, LocalDate dateOfBirth,
+                          String vaccine, LocalDate lastSwabDate, String swabResult) {
+        this.employeeName = employeeName;
+        this.dateOfBirth = dateOfBirth;
+        this.vaccine = vaccine;
+        this.lastSwabDate = lastSwabDate;
+        this.swabResult = swabResult;
+    }
+
+
     @Id
+    @GeneratedValue
     @Column(name = "EID", unique = true, nullable = false)
-    private String employeeId;
+    private UUID employeeId;
 
     @Column(name = "employee_name")
     private String employeeName;
@@ -43,11 +55,11 @@ public class EmployeeRecord {
     @JoinColumn(name = "businessId")
     private RegisteredBusiness business;
 
-    public String getEmployeeId() {
+    public UUID getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(UUID employeeId) {
         this.employeeId = employeeId;
     }
 

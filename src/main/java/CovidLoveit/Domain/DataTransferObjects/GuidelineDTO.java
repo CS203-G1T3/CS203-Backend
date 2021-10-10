@@ -2,6 +2,7 @@ package CovidLoveit.Domain.DataTransferObjects;
 
 import CovidLoveit.Domain.Models.Industry;
 
+import java.util.Date;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,6 +24,7 @@ public class GuidelineDTO {
     private String opCapacityDetails;
     private String opGuidelines;
     private String referenceLink;
+    private Date createdAt;
 
     public UUID getGuidelineId() {
         return guidelineId;
@@ -143,5 +145,14 @@ public class GuidelineDTO {
 
     public void setIndustryId(UUID industryId) {
         this.industryId = industryId;
+    }
+    
+    @JsonProperty("createdAt")
+    public Date getCreatedAt(){
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

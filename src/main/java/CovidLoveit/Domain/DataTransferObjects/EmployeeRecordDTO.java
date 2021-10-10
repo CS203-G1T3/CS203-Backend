@@ -1,21 +1,22 @@
 package CovidLoveit.Domain.DataTransferObjects;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class EmployeeRecordDTO {
 
-    private String employeeId;
+    private UUID employeeId;
     private String employeeName;
     private LocalDate dateOfBirth;
     private String vaccine;
     private LocalDate lastSwabDate;
     private String swabResult;
 
-    public String getEmployeeId() {
+    public UUID getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(UUID employeeId) {
         this.employeeId = employeeId;
     }
 

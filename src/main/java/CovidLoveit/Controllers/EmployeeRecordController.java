@@ -78,13 +78,13 @@ public class EmployeeRecordController {
 
     @DeleteMapping("/employeeRecord/{employeeId}")
     public ResponseEntity<?> deleteEmployee(@PathVariable String employeeId) {
-        employeeRecordService.deleteEmployee(employeeId);
+        employeeRecordService.deleteEmployee(UUID.fromString(employeeId));
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/employeeRecord/{employeeId}")
     public ResponseEntity<EmployeeRecordDTO> getEmployeeById(@PathVariable String employeeId) {
-        var employee = employeeRecordService.getEmployeeById(employeeId);
+        var employee = employeeRecordService.getEmployeeById(UUID.fromString(employeeId));
         return ResponseEntity.ok(convertToEmployeeRecordDTO(employee));
     }
 

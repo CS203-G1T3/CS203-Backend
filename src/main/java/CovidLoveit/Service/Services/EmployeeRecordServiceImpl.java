@@ -35,11 +35,6 @@ public class EmployeeRecordServiceImpl implements EmployeeRecordService {
 
     @Override
     public EmployeeRecord addEmployee(EmployeeRecordInputModel inputModel) {
-        var employeeRecord = employeeRepository.findById(inputModel.getEmployeeId());
-        if (employeeRecord.isPresent()){
-            logger.warn(String.format("Employee with EID {%s} already exist in DB.", inputModel.getEmployeeId()));
-            throw new EmployeeRecordException(String.format("Employee with EID {%s} already exist in DB.", inputModel.getEmployeeId()));
-        }
 
         var businessId = inputModel.getBusinessId();
         var registeredBusiness = registeredBusinessRepository.findById(businessId);
@@ -51,7 +46,7 @@ public class EmployeeRecordServiceImpl implements EmployeeRecordService {
         LocalDate dob = LocalDate.parse(inputModel.getDateOfBirth(), formatter);
         LocalDate swabDate = LocalDate.parse(inputModel.getLastSwabDate(), formatter);
 
-        var employee = new EmployeeRecord(inputModel.getEmployeeId(), inputModel.getEmployeeName(), dob,
+        var employee = new EmployeeRecord(inputModel.getEmployeeName(), dob,
                 inputModel.getVaccine(), swabDate, inputModel.getSwabResult());
 
         employee.setBusiness(registeredBusiness.get());
@@ -94,7 +89,7 @@ public class EmployeeRecordServiceImpl implements EmployeeRecordService {
     }
 
     @Override
-    public void deleteEmployee(String employeeId) {
+    public void deleteEmployee(UUID employeeId) {
         var employeeOptional = employeeRepository.findById(employeeId);
         employeeOptional.orElseThrow(() -> {
             logger.warn(String.format("Employee with EID {%s} does not exist in DB.", employeeId));
@@ -107,7 +102,7 @@ public class EmployeeRecordServiceImpl implements EmployeeRecordService {
     }
 
     @Override
-    public EmployeeRecord getEmployeeById(String employeeId) {
+    public EmployeeRecord getEmployeeById(UUID employeeId) {
         var employee = employeeRepository.findById(employeeId);
         employee.orElseThrow(() -> {
             logger.warn(String.format("Employee with EID {%s} does not exist in DB.", employeeId));

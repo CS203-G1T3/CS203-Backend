@@ -81,14 +81,14 @@ public class GuidelineInputModel {
     private boolean canOpOnSite;
 
     @NotBlank(message = "Operation Site Details Required. ")
-    @Size(min=3, max=512)
+    @Size(min=3)
     private String canOpOnSiteDetails;
 
     @NotNull(message = "Group size required.")
     private int groupSize;
 
     @NotBlank(message = "Group size details required.")
-    @Size(min=3, max=512)
+    @Size(min=3)
     private String groupSizeDetails;
 
     @NotNull(message = "Number of vaccinated employees required.")
@@ -98,30 +98,30 @@ public class GuidelineInputModel {
     private int covidTestingUnvaccinated;
 
     @NotBlank(message = "Covid testing details required.")
-    @Size(min=3, max=512)
+    @Size(min=3)
     private String covidTestingDetails;
 
     @NotBlank(message = "Contact tracing required.")
-    @Size(min=3, max=512)
+    @Size(min=3)
     private String contactTracing;
 
     @NotBlank(message = "Contact tracing details required.")
-    @Size(min=3, max=512)
+    @Size(min=3)
     private String contactTracingDetails;
 
     @NotNull(message = "Operating capacity required.")
     private int opCapacity;
 
     @NotBlank(message = "Operating capacity details required.")
-    @Size(min=3, max=512)
+    @Size(min=3)
     private String opCapacityDetails;
 
     @NotBlank(message = "Operation guidelines required.")
-    @Size(min=3, max=1024)
+    @Size(min=3)
     private String opGuidelines;
 
     @NotNull(message = "Reference link if applicable, else please input NIL.")
-    @Size(min=3, max=512)
+    @Size(min=3)
     private String referenceLink;
 
     @NotNull(message = "Please select the industry that this guideline applies to.")

@@ -14,8 +14,27 @@ public class EmployeeRecordInputModel {
     public EmployeeRecordInputModel() {
     }
 
-    @NotEmpty(message = "Please provide an employee ID.")
-    private String employeeId;
+    public EmployeeRecordInputModel(String employeeName, String dateOfBirth, String vaccine, String lastSwabDate, String swabResult, UUID businessId) {
+        this.employeeName = employeeName;
+        this.dateOfBirth = dateOfBirth;
+        this.vaccine = vaccine;
+        this.lastSwabDate = lastSwabDate;
+        this.swabResult = swabResult;
+        this.businessId = businessId;
+    }
+
+    public EmployeeRecordInputModel(UUID employeeId, String employeeName, String dateOfBirth, String vaccine, String lastSwabDate, String swabResult, UUID businessId) {
+        this.employeeId = employeeId;
+        this.employeeName = employeeName;
+        this.dateOfBirth = dateOfBirth;
+        this.vaccine = vaccine;
+        this.lastSwabDate = lastSwabDate;
+        this.swabResult = swabResult;
+        this.businessId = businessId;
+    }
+
+
+    private UUID employeeId;
 
     @NotEmpty(message = "Please provide an employee name.")
     private String employeeName;
@@ -39,11 +58,11 @@ public class EmployeeRecordInputModel {
         return validator.validate(this);
     }
 
-    public String getEmployeeId() {
+    public UUID getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(UUID employeeId) {
         this.employeeId = employeeId;
     }
 

@@ -12,9 +12,9 @@ public interface EmployeeRecordService {
 
     EmployeeRecord updateEmployee(EmployeeRecordInputModel employeeRecord);
 
-    void deleteEmployee(String employeeId);
+    void deleteEmployee(UUID employeeId);
 
-    EmployeeRecord getEmployeeById(String employeeId);
+    EmployeeRecord getEmployeeById(UUID employeeId);
 
     List<EmployeeRecord> getEmployeesByBusiness(UUID businessId);
 }
