@@ -1,5 +1,6 @@
 package CovidLoveit.Repositories.Interfaces;
 
+import CovidLoveit.Domain.InputModel.EmployeeRecordInputModel;
 import CovidLoveit.Domain.Models.EmployeeRecord;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
 import org.junit.jupiter.api.AfterEach;
@@ -33,22 +34,22 @@ class EmployeeRecordRepositoryTest {
         RegisteredBusiness business = new RegisteredBusiness("Food & Beverage", "We sell food and drinks");
         RegisteredBusiness businessRecord = businessTestRepository.save(business);
         EmployeeRecord employee = new EmployeeRecord(
-                "EID01",
                 "Rubin",
                 LocalDate.now(),
                 "Pfizer",
                 LocalDate.now(),
-                "Positive",
-                businessRecord
+                "Positive"
         );
+
         underTest.save(employee);
+        employee.setBusiness(businessRecord);
 
         // when
         List<EmployeeRecord> expected = underTest.findEmployeeRecordByBusiness(business);
 
         // then
         EmployeeRecord expectedEmployee = expected.get(0);
-        assertThat(expectedEmployee.getEmployeeId().equals(employee.getEmployeeId()) &&
+        assertThat(
               expectedEmployee.getEmployeeName().equals(employee.getEmployeeName()) &&
               expectedEmployee.getDateOfBirth().equals(employee.getDateOfBirth()) &&
               expectedEmployee.getVaccine().equals(employee.getVaccine()) &&
