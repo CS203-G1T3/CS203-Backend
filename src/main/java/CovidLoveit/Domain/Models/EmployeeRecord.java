@@ -30,7 +30,6 @@ public class EmployeeRecord {
         this.swabResult = swabResult;
     }
 
-
     @Id
     @GeneratedValue
     @Column(name = "EID", unique = true, nullable = false)
