@@ -1,6 +1,5 @@
 package CovidLoveit.Repositories.Interfaces;
 
-import CovidLoveit.Domain.InputModel.EmployeeRecordInputModel;
 import CovidLoveit.Domain.Models.EmployeeRecord;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
 import org.junit.jupiter.api.AfterEach;
