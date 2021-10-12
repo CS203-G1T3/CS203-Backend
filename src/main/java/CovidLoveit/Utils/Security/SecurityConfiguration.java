@@ -52,7 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/token/refresh/**").permitAll()
             .antMatchers("/**/client/add").permitAll()
             .antMatchers("/**/role").hasRole("ADMIN")
-            .antMatchers("/**/guideline/add/*", "/**/guideline/*").hasRole("ADMIN")
+            .antMatchers("/**/guideline/add/*", "/**/guideline/*").permitAll()
             .anyRequest().authenticated().and()
             .sessionManagement().sessionCreationPolicy(STATELESS).and()
             .addFilter(customAuthenticationFilter)
