@@ -4,6 +4,7 @@ import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
+import CovidLoveit.Exception.RoleException;
 import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.RoleRepository;
 import CovidLoveit.Service.Services.ClientServiceImpl;
@@ -71,31 +72,20 @@ public class ClientServiceTest {
 
         assertNotNull(savedClient);
         verify(clientRepository).findByEmail(client.getEmail());
-//        verify(clientRepository).save(savedClient);
-
     }
 
     @Test
-    @Disabled
-    void addClient_SameClientEmail_ReturnClientException() {
-        Client client = new Client("123456", "tester123@gmail.com");
-        Client newClient = new Client("123456", "tester123@gmail.com");
+    void addClient_ClientAlreadyExists_ReturnNull() {
+        Client client = new Client("123456", "handsomeLad@gmail.com");
 
-        when(clientRepository.findByEmail(newClient.getEmail())).thenReturn(Optional.of(newClient));
-        when(clientRepository.save(newClient)).thenReturn(newClient);
-
-        Client updatedClient = clientService.addClient(new ClientInputModel(newClient.getEmail(), newClient.getPassword()));
-
-        Throwable exception = assertThrows(ClientException.class, () -> clientRepository.findByEmail(newClient.getEmail()));
-        clientRepository.save(newClient);
-        assertThat(exception).isInstanceOf(ClientException.class)
-                .hasMessage(exception.getMessage());
-
-        verify(clientRepository).findByEmail(newClient.getEmail());
+        Optional<Client> savedClient = Optional.<Client>of(client);
+        when(this.clientRepository.findByEmail((String) any())).thenReturn(savedClient);
+        assertThrows(ClientException.class,
+                () -> this.clientService.addClient(new ClientInputModel("handsomeLad@gmail.com", "123456")));
+        verify(this.clientRepository).findByEmail((String) any());
     }
 
     @Test
-    @Disabled
     void updateClient_ClientEmail_ReturnSaveClient() {
         Collection<Role> roleCollection = new ArrayList<>();
         Client client = new Client(UUID.fromString("b4d3065c-ccfe-46bf-928d-ed177dee9fee"), "123456", roleCollection, "tester123@gmail.com");
@@ -107,28 +97,23 @@ public class ClientServiceTest {
 
         Client updatedClient = clientService.updateClient(client.getClientId(), new ClientInputModel(client2.getEmail(), client2.getPassword()));
 
-        assertNotNull(updatedClient);
+        assertEquals(updatedClient.getEmail(), client.getEmail());
         verify(clientRepository).findByEmail(client.getEmail());
 
     }
 
     @Test
-    @Disabled
-    void updateClient_ClientNotFound_ReturnNull() {
-//        Collection<Role> roleCollection = new ArrayList<>();
-        Client client = new Client( "123456", "tester123@gmail.com");
+    void updateClient_ClientNotFound_ReturnClientException() {
+        Collection<Role> roleCollection = new ArrayList<>();
+        Client client = new Client(UUID.fromString("b4d3065c-ccfe-46bf-928d-ed177dee9fee"), "123456", roleCollection, "tester123@gmail.com");
 
-        when(clientRepository.findById(client.getClientId())).thenReturn(Optional.of(client));
-        when(clientRepository.findByEmail(client.getEmail())).thenReturn(Optional.of(client));
-        when(clientRepository.save(any(Client.class))).thenReturn(client);
+        Optional<Client> savedClient = Optional.<Client>of(client);
+        when(clientRepository.findById(client.getClientId())).thenReturn(Optional.empty());
 
-        Client updatedClient = clientService.updateClient(client.getClientId(), new ClientInputModel(client.getEmail(), client.getPassword()));
-
-        assertNull(updatedClient);
+        assertThrows(ClientException.class, () ->
+                clientService.updateClient(client.getClientId(), new ClientInputModel("updatedEmail@gmail.com", "newpassword")));
 
         verify(clientRepository).findById(client.getClientId());
-        verify(clientRepository).findByEmail(client.getEmail());
-        verify(clientRepository).save(client);
 
     }
 
@@ -147,7 +132,67 @@ public class ClientServiceTest {
     }
 
     @Test
-//    @Disabled
+    void addRole_UnsuccessfullyAddRole_returnClientException() {
+        Role role = new Role("Tester");
+
+        when(roleRepository.findByRoleName(any(String.class))).thenReturn(Optional.of(role));
+
+        Role duplicatedRole = new Role("Tester");
+
+        assertThrows(RoleException.class,
+                () -> this.clientService.addRole(duplicatedRole));
+        verify(roleRepository).findByRoleName(role.getRoleName());
+
+    }
+
+    @Test
+    void addRoleToClient_SuccessfullyAddRole_ReturnNothing() {
+        Collection<Role> roleCollection = new ArrayList<>();
+        Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", roleCollection, "email@gmail.com");
+        Role role = new Role("tester");
+
+        when(clientRepository.findByEmail(any(String.class))).thenReturn(Optional.of(client));
+        when(roleRepository.findByRoleName(any(String.class))).thenReturn(Optional.of(role));
+
+        this.clientService.addRoleToClient(client.getEmail(), role.getRoleName());
+
+        assertNotNull(client.getRoles());
+
+        verify(clientRepository).findByEmail(any(String.class));
+        verify(roleRepository).findByRoleName(any(String.class));
+    }
+
+    @Test
+    void addRoleToClient_UnsuccessfullyAddRole_ReturnClientException() { //client does not exist
+        Collection<Role> roleCollection = new ArrayList<>();
+        Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", roleCollection, "email@gmail.com");
+        Role role = new Role("tester");
+
+        when(clientRepository.findByEmail(any(String.class))).thenReturn(Optional.empty());
+
+        assertThrows(ClientException.class, () -> {
+            this.clientService.addRoleToClient(client.getEmail(), role.getRoleName());
+        });
+
+        verify(clientRepository).findByEmail(client.getEmail());
+    }
+
+    @Test
+    void addRoleToClient_UnsuccessfullyRoleDoesNotExist_ReturnClientException() {
+        Collection<Role> roleCollection = new ArrayList<>();
+        Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", roleCollection, "email@gmail.com");
+        Role role = new Role("tester");
+
+        when(roleRepository.findByRoleName(any(String.class))).thenReturn(Optional.empty());
+
+        assertThrows(ClientException.class, () -> {
+            this.clientService.addRoleToClient(client.getEmail(), role.getRoleName());
+        });
+
+        verify(roleRepository).findByRoleName(any(String.class));
+    }
+
+    @Test
     void deleteClient_SuccessfullyDelete_ReturnNull() {
         Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", null, "email@gmail.com");
 
@@ -155,7 +200,22 @@ public class ClientServiceTest {
 
         clientService.deleteClient(client.getClientId());
 
-         verify(clientRepository).findById(client.getClientId());
+        assertTrue(clientService.getAllClients().isEmpty());
+
+        verify(clientRepository).findById(client.getClientId());
+    }
+
+    @Test
+    void deleteClient_Unsuccessfully_ReturnClientException() {
+        Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", null, "email@gmail.com");
+
+        when(clientRepository.findById(client.getClientId())).thenReturn(Optional.empty());
+
+        assertThrows(ClientException.class, () -> {
+            clientService.deleteClient(client.getClientId());
+        });
+
+        verify(clientRepository).findById(client.getClientId());
     }
 
     @Test
@@ -164,9 +224,22 @@ public class ClientServiceTest {
 
         when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.of(client));
 
-        Client gotClient = clientService.getClient(client.getClientId());
+        Client expectedClient = clientService.getClient(client.getClientId());
 
-        assertNotNull(gotClient);
+        assertNotNull(expectedClient);
+        verify(clientRepository).findById(client.getClientId());
+    }
+
+    @Test
+    void getClient_UnsuccessfullyRetrievedClient_ReturnClientException() {
+        Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", null, "email@gmail.com");
+
+        when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
+
+        assertThrows(ClientException.class, () -> {
+            clientService.getClient(client.getClientId());
+        });
+
         verify(clientRepository).findById(client.getClientId());
     }
 
@@ -183,6 +256,7 @@ public class ClientServiceTest {
 
     }
 
+
     @Test
     void getClientByEmail_Success_ReturnClient() {
         Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", null, "email@gmail.com");
@@ -193,6 +267,19 @@ public class ClientServiceTest {
 
         assertEquals(client.getEmail(), selectedClient.getEmail());
         verify(clientRepository).findByEmail(client.getEmail());
+    }
+
+    @Test
+    void getClientByEmail_UnsuccessfullyEmailNotFound_ReturnClientException() {
+        Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", null, "email@gmail.com");
+
+        when(clientRepository.findById(client.getClientId())).thenReturn(Optional.empty());
+
+        assertThrows(ClientException.class, () -> {
+           clientService.getClient(client.getClientId());
+        });
+
+        verify(clientRepository).findById(client.getClientId());
     }
 
 }
