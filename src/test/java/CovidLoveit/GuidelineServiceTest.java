@@ -2,9 +2,14 @@ package CovidLoveit;
 
 import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.InputModel.GuidelineInputModel;
+import CovidLoveit.Domain.InputModel.IndustryInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Domain.Models.Industry;
+import CovidLoveit.Domain.Models.Role;
+import CovidLoveit.Exception.ClientException;
+import CovidLoveit.Exception.GuidelineException;
+import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
@@ -20,29 +25,35 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.swing.text.html.Option;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DataJpaTest
 public class GuidelineServiceTest {
 
-    @Mock
+    @Autowired
     private ClientRepository clientRepository;
 
-    @Mock
+    @Autowired
     private IndustryRepository industryRepository;
 
     @Mock
     private AutoCloseable autoCloseable;
 
-    @Mock
+    @Autowired
     private GuidelineRepository guidelineRepository;
 
     @Mock
@@ -52,22 +63,7 @@ public class GuidelineServiceTest {
     private GuidelineServiceImpl guidelineService;
 
     @InjectMocks
-    private GuidelineInputModel mockGuidelineInputModel;
-
-    @InjectMocks
-    private Client mockClient;
-
-    @InjectMocks
-    private Guideline mockGuideline;
-
-    @InjectMocks
-    private Industry mockIndustry;
-
-    @InjectMocks
     private ClientServiceImpl clientService;
-
-    @InjectMocks
-    private ClientInputModel mockClientInputModel;
 
     @InjectMocks
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -85,39 +81,297 @@ public class GuidelineServiceTest {
     }
 
     @Test
+//    @Disabled
     void addGuideline_SuccessfullyAddedGuideline_ReturnGuideline() {
-//        mockClientInputModel.setPassword("123456");
-//        mockClient = clientService.addClient(mockClientInputModel);
-        Client client = new Client(UUID.fromString("b4d3065c-ccfe-46bf-928d-ed177dee9fee"), "123456", null, "tester123@gmail.com");
-        when(clientRepository.save(any(Client.class))).thenReturn(client);
-        clientRepository.save(client);
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role("ADMIN"));
+        Client client = new Client("123456",
+                null, "tester123@gmail.com");
+        client.setRoles(roles);
+        Industry industry = new Industry( "F&B",
+                "Hawker", "Chicken Rice Stall");
 
-        when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        when(industryRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        when(guidelineRepository.save(any(Guideline.class))).thenReturn(mockGuideline);
+        Client returnedClient = clientRepository.save(client);
+        // This will return your industry object from the DB
+        Industry returnType = industryRepository.save(new Industry());
+        GuidelineInputModel guidelineInputModel = new GuidelineInputModel(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                returnType.getIndustryId()
+        );
 
-//        Client savedClient = clientService.addClient(new ClientInputModel(client.getEmail(), client.getPassword()));
-        Guideline savedGuideline = guidelineService.addGuideline(client.getClientId().toString(), mockGuidelineInputModel);
+        //when
+        Guideline returnedGuideline = guidelineService.addGuideline(returnedClient.getClientId().toString(), guidelineInputModel);
 
-        assertNotNull(savedGuideline);
-        verify(clientRepository).findById(client.getClientId());
-        verify(industryRepository).findById(mockIndustry.getIndustryId());
-        verify(guidelineRepository).save(mockGuideline);
+        //then
+        assertNotNull(returnedGuideline);
+
     }
 
     @Test
-    @Disabled
-    void deleteGuideline_SuccessfullyDeletedGuideline_void() {
-        //Client client = new Client(UUID.fromString("1df791bb-fd17-4c85-a80d-75463524b69d"),  "123456", null, "email@gmail.com");
+    void addGuideline_UnsuccessfullyClientNotFound_ReturnClientException() {
+        Industry returnType = industryRepository.save(new Industry());
+        GuidelineInputModel guidelineInputModel = new GuidelineInputModel(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                returnType.getIndustryId()
+        );
+        String clientId = UUID.randomUUID().toString();
+//        when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
+
+        Client client = new Client();
+        Client savedClient = clientRepository.save(client);
+//        when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
+        String testUUID = UUID.randomUUID().toString();
+//        System.out.println(testUUID);
+        assertThrows(ClientException.class, () -> {
+           Guideline savedGuideline = guidelineService.addGuideline(testUUID, guidelineInputModel);
+        });
+    }
+
+    @Test
+    void addGuideline_UnsuccessfulIndustryNotFound_ReturnIndustryException() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role("ADMIN"));
+
+        Client client = new Client("123456",
+                null, "tester123@gmail.com");
+        client.setRoles(roles);
+
+        Industry industry = new Industry( "F&B",
+                "Hawker", "Chicken Rice Stall");
 
 
-        when(guidelineRepository.findById(any(UUID.class))).thenReturn(Optional.of(mockGuideline));
-        when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.of(mockClient));
+        Client returnedClient = clientRepository.save(client);
+        GuidelineInputModel guidelineInputModel = new GuidelineInputModel(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                UUID.randomUUID()
+        );
 
-        guidelineRepository.delete(mockGuideline);
 
-        verify(guidelineRepository).findById(mockGuideline.getGuidelineId());
-        verify(clientRepository).findById(mockClient.getClientId());
+        assertThrows(IndustryException.class, () -> {
+           Guideline savedGuideline = guidelineService.addGuideline(returnedClient.getClientId().toString(), guidelineInputModel);
+        });
 
+    }
+
+    @Test
+    void updateGuideline_Successfully_ReturnGuideline() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role("ADMIN"));
+
+        Client client = new Client("123456",
+                null, "tester123@gmail.com");
+        client.setRoles(roles);
+
+        Industry industry = new Industry( "F&B",
+                "Hawker", "Chicken Rice Stall");
+        IndustryInputModel industryInputModel = new IndustryInputModel();
+
+        Guideline guideline = new Guideline(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                industry
+        );
+        GuidelineInputModel guidelineInputModel = new GuidelineInputModel(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                UUID.randomUUID()
+        );
+
+        Guideline savedGuideline = guidelineRepository.save(guideline);
+        Industry savedIndustry = industryRepository.save(industry);
+        Client savedClient = clientRepository.save(client);
+        guidelineInputModel.setGuidelineId(savedGuideline.getGuidelineId());
+        guidelineInputModel.setIndustryId(savedIndustry.getIndustryId());
+        industryInputModel.setIndustryId(savedIndustry.getIndustryId());
+
+        //when
+        Guideline updatedGuideline = guidelineService.updateGuideline(savedClient.getClientId().toString(),
+                guidelineInputModel);
+
+        //then
+        assertEquals(updatedGuideline.getGuidelineId(), savedGuideline.getGuidelineId());
+
+
+    }
+
+    @Test
+    void updateGuideline_UnsuccessfullyGuidelineNotFound_ReturnGuidelineException() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role("ADMIN"));
+
+        Client client = new Client("123456",
+                null, "tester123@gmail.com");
+        client.setRoles(roles);
+        Client savedClient = clientRepository.save(client);
+
+        GuidelineInputModel guidelineInputModel = new GuidelineInputModel(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                UUID.randomUUID()
+        );
+        guidelineInputModel.setGuidelineId(UUID.randomUUID());
+
+
+        assertThrows(GuidelineException.class, () -> {
+           Guideline updatedGuideline = guidelineService.updateGuideline(savedClient.getClientId().toString(), guidelineInputModel);
+        });
+
+    }
+
+    @Test
+    void updateGuideline_UnsuccessfullyIndustryNotFound_ReturnIndustryException() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role("ADMIN"));
+
+        Client client = new Client("123456",
+                null, "tester123@gmail.com");
+        client.setRoles(roles);
+        Client savedClient = clientRepository.save(client);
+
+        Industry industry = new Industry();
+
+        GuidelineInputModel guidelineInputModel = new GuidelineInputModel(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                UUID.randomUUID()
+        );
+        Guideline guideline = new Guideline(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                industry
+        );
+
+        Guideline savedGuideline = guidelineRepository.save(guideline);
+        guidelineInputModel.setGuidelineId(savedGuideline.getGuidelineId());
+
+        assertThrows(IndustryException.class, () -> {
+           Guideline updatedGuideline = guidelineService.updateGuideline(savedClient.getClientId().toString(), guidelineInputModel);
+        });
+    }
+
+    @Test
+    void deleteGuideline_Successfully_ReturnNull() {
+        Industry industry = new Industry();
+
+        Guideline guideline = new Guideline(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                industry
+        );
+
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role("ADMIN"));
+        Client client = new Client("123456",
+                null, "tester123@gmail.com");
+        client.setRoles(roles);
+
+        Client savedClient = clientRepository.save(client);
+        Guideline savedGuideline = guidelineRepository.save(guideline);
+
+        guidelineService.deleteGuideline(savedClient.getClientId().toString(), savedGuideline.getGuidelineId().toString());
+
+        assertTrue(guidelineRepository.findById(savedGuideline.getGuidelineId()).isEmpty());
     }
 }

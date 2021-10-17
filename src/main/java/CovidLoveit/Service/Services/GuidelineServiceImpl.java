@@ -57,7 +57,7 @@ public class GuidelineServiceImpl implements GuidelineService {
         var industry = industryRepository.findById(industryId);
         industry.orElseThrow(() -> {
             // throw new IndustryException(String.format("Industry with ID {%s} not found", industryId.toString()));
-            throw new IndustryException("Industry with ID {%s} not found");
+            throw new IndustryException(String.format("Industry with ID {%s} not found", industryId));
         });
 
         boolean isAdmin = false;

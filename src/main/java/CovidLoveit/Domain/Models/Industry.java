@@ -40,6 +40,13 @@ public class Industry {
         this.industryDesc = industryDesc;
     }
 
+    public Industry(UUID industryId, String industryName, String industrySubtype, String industryDesc) {
+        this.industryId = industryId;
+        this.industryName = industryName;
+        this.industrySubtype = industrySubtype;
+        this.industryDesc = industryDesc;
+    }
+
     public UUID getIndustryId() {
         return industryId;
     }

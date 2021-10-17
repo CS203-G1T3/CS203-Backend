@@ -250,7 +250,7 @@ public class GuidelineInputModel {
         return industryId;
     }
 
-    public void setIndustrId(UUID industryId) {
+    public void setIndustryId(UUID industryId) {
         this.industryId = industryId;
     }
 }
