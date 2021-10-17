@@ -3,7 +3,6 @@ package CovidLoveit.Service.Services;
 import CovidLoveit.Domain.InputModel.EmployeeRecordInputModel;
 import CovidLoveit.Domain.Models.EmployeeRecord;
 import CovidLoveit.Exception.EmployeeRecordException;
-import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Exception.RegisteredBusinessException;
 import CovidLoveit.Repositories.Interfaces.EmployeeRecordRepository;
 import CovidLoveit.Repositories.Interfaces.RegisteredBusinessRepository;

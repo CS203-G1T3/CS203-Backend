@@ -1,6 +1,5 @@
 package CovidLoveit.Domain.DataTransferObjects;
 
-import CovidLoveit.Domain.Models.Industry;
 
 import java.util.Date;
 import java.util.UUID;
