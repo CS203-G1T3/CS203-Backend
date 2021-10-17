@@ -1,9 +1,7 @@
 package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.InputModel.GuidelineInputModel;
-import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Guideline;
-import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Exception.GuidelineException;
@@ -11,9 +9,7 @@ import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
-import CovidLoveit.Service.Services.Interfaces.ClientService;
 import CovidLoveit.Service.Services.Interfaces.GuidelineService;
-import CovidLoveit.Service.Services.Interfaces.IndustryService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
