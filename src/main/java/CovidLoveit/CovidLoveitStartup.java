@@ -1,9 +1,6 @@
 package CovidLoveit;
 
-import CovidLoveit.Domain.InputModel.ClientInputModel;
-import CovidLoveit.Domain.InputModel.EmployeeRecordInputModel;
-import CovidLoveit.Domain.InputModel.GuidelineInputModel;
-import CovidLoveit.Domain.InputModel.IndustryInputModel;
+import CovidLoveit.Domain.InputModel.*;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Guideline;
 import CovidLoveit.Domain.Models.Industry;
@@ -54,7 +51,7 @@ public class CovidLoveitStartup {
             var industry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Food & Beverage", "Hawker", "SFA coffee shop / eating house / canteen license"));
             var anotherIndustry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Entertainment", "Fitness First", "Bro come workout and you wont regret."));
 
-            var business = businessService.addBusiness("Yeow Leong Chicken Rice", "welcome! let's Chicken rice!", industry.getIndustryId(), user.getClientId());
+            var business = businessService.addBusiness(new RegisteredBusinessInputModel("Yeow Leong Chicken Rice", "welcome! let's Chicken rice!", industry.getIndustryId(), user.getClientId()));
 
             guidelineService.addGuideline(adminUser.getClientId().toString(), new GuidelineInputModel(
                     true,
