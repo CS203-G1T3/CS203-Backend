@@ -35,7 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -373,5 +375,199 @@ public class GuidelineServiceTest {
         guidelineService.deleteGuideline(savedClient.getClientId().toString(), savedGuideline.getGuidelineId().toString());
 
         assertTrue(guidelineRepository.findById(savedGuideline.getGuidelineId()).isEmpty());
+    }
+
+    @Test
+    void deleteGuideline_UnsuccessfullyClientNotFound_ReturnClientException() {
+        Industry industry = new Industry();
+
+        Guideline guideline = new Guideline(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                industry
+        );
+
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role("ADMIN"));
+        Client client = new Client("123456",
+                null, "tester123@gmail.com");
+        client.setRoles(roles);
+
+        Guideline savedGuideline = guidelineRepository.save(guideline);
+
+        assertThrows(ClientException.class, () -> {
+           guidelineService.deleteGuideline(UUID.randomUUID().toString(), savedGuideline.getGuidelineId().toString());
+        });
+    }
+
+    @Test
+    void deleteGuideline_UnsuccessfullyGuidelineNotFound_ReturnGuidelineException() {
+        Industry industry = new Industry();
+
+        Guideline guideline = new Guideline(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                industry
+        );
+
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role("ADMIN"));
+        Client client = new Client("123456",
+                null, "tester123@gmail.com");
+        client.setRoles(roles);
+
+        assertThrows(GuidelineException.class, () -> {
+            guidelineService.deleteGuideline(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        });
+    }
+
+    @Test
+    void getGuideline_Successfully_ReturnGuideline() {
+        Industry industry = new Industry();
+
+        Guideline guideline = new Guideline(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                industry
+        );
+
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role("ADMIN"));
+        Client client = new Client("123456",
+                null, "tester123@gmail.com");
+        client.setRoles(roles);
+
+        Guideline savedGuideline = guidelineRepository.save(guideline);
+        Optional<Guideline> toReturn = guidelineRepository.findById(savedGuideline.getGuidelineId());
+
+        assertNotNull(toReturn);
+    }
+
+    @Test
+    void getGuideline_UnsuccessfullyGuidelineNotFound_ReturnGuidelineException() {
+        Industry industry = new Industry();
+
+        Guideline guideline = new Guideline(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                industry
+        );
+
+        assertThrows(GuidelineException.class, () -> {
+           Guideline returnedGuideline = guidelineService.getGuideline(UUID.randomUUID().toString());
+        });
+    }
+
+    @Test
+    void shouldReturnTheLatestGuidelineRecordByIndustry() throws InterruptedException {
+        Industry industry = new Industry("Entertainment", "Gym", "Fit and Lit");
+        Industry industryRecord = industryRepository.save(industry);
+        Guideline oldGuideline = new Guideline(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                industryRecord
+        );
+        Guideline newGuideline = new Guideline(
+                true,
+                "Can operate",
+                5,
+                "Maximum capacity 5 pax",
+                500000,
+                500001,
+                "Tested all negatives",
+                "Call me maybe",
+                "Trace together as one",
+                10,
+                "Only maximum 10 staff allowed",
+                "Please maintain a safe distance of 100m apart",
+                "www.tiktok.com",
+                industryRecord
+        );
+        guidelineRepository.save(oldGuideline);
+        TimeUnit.SECONDS.sleep(10);
+        Guideline actual = guidelineRepository.save(newGuideline);
+
+        Guideline expected = guidelineService.getLatestGuidelineByIndustry(industryRecord.getIndustryId().toString());
+
+        assertThat(expected.getGuidelineId().equals(actual.getGuidelineId()));
+    }
+
+    @Test
+    void getLatestGuidelineByIndustry_UnsuccessfulIndustryNotFound_ReturnIndustryException() {
+        assertThrows(IndustryException.class, () -> {
+           Guideline expectedGuideline = guidelineService.getLatestGuidelineByIndustry(UUID.randomUUID().toString());
+        });
+    }
+
+    @Test
+    void getAllGuidelines_Successful_ReturnListGuideline() {
+        Guideline guideline = new Guideline();
+        Guideline savedGuideline = guidelineRepository.save(guideline);
+
+        List<Guideline> returnedList = guidelineService.getAllGuidelines();
+
+        assertEquals(returnedList.get(0).getGuidelineId(), savedGuideline.getGuidelineId());
+    }
+
+    @Test
+    void getAllGuidelines_UnsuccessfulNoSavedGuidelines_ReturnEmptyList() {
+        List<Guideline> returnedList = guidelineService.getAllGuidelines();
+
+        assertTrue(returnedList.isEmpty());
     }
 }
