@@ -1,5 +1,6 @@
 package CovidLoveit.Service.Services;
 
+import CovidLoveit.Domain.InputModel.RegisteredBusinessInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
@@ -37,11 +38,11 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
     }
 
     @Override
-    public RegisteredBusiness addBusiness(String name, String description, UUID industryId, UUID clientId){
-        var business = new RegisteredBusiness(name, description);
+    public RegisteredBusiness addBusiness(RegisteredBusinessInputModel inputModel){
+        var business = new RegisteredBusiness(inputModel.getBusinessName(), inputModel.getBusinessDesc());
         
         //check that client and industry exist in db
-        Optional<Client> clientOptional = clientRepository.findById(clientId);
+        Optional<Client> clientOptional = clientRepository.findById(inputModel.getClientId());
         if (clientOptional.isPresent()) {
             Client client = clientOptional.get();
 
@@ -51,17 +52,17 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
             
             business.setClient(client);
         } else {
-            logger.warn(String.format("Client {%s} does not exist in DB.", clientId));
-            throw new ClientException(String.format("Client with ID {%s} not found.", clientId));
+            logger.warn(String.format("Client {%s} does not exist in DB.", inputModel.getClientId()));
+            throw new ClientException(String.format("Client with ID {%s} not found.", inputModel.getClientId()));
         }
 
-        Optional<Industry> industryOptional = industryRepository.findById(industryId);
+        Optional<Industry> industryOptional = industryRepository.findById(inputModel.getIndustryId());
         if (industryOptional.isPresent()) {
             Industry industry = industryOptional.get();
             business.setIndustry(industry);
         } else {
-            logger.warn(String.format("Industry {%s} does not exist in DB.", industryId));
-            throw new IndustryException(String.format("Industry with ID {%s} not found.", industryId));
+            logger.warn(String.format("Industry {%s} does not exist in DB.", inputModel.getIndustryId()));
+            throw new IndustryException(String.format("Industry with ID {%s} not found.", inputModel.getIndustryId()));
         }
         
         var savedBusiness = registeredBusinessRepository.save(business);
@@ -71,7 +72,7 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
     }
 
     @Override
-    public RegisteredBusiness updateBusiness(UUID businessId, String name, String description, UUID industryId, UUID clientId){
+    public RegisteredBusiness updateBusiness(UUID businessId, RegisteredBusinessInputModel inputModel){
         Optional<RegisteredBusiness> businessOptional = registeredBusinessRepository.findById(businessId);
 
         //statement will only be true of Optional object businessRecord was created with a non-null value
@@ -81,30 +82,30 @@ public class RegisteredBusinessServiceImpl implements RegisteredBusinessService 
         });
 
         var businessRecord = businessOptional.get();
-        businessRecord.setBusinessName(name);
-        businessRecord.setBusinessDesc(description);
+        businessRecord.setBusinessName(inputModel.getBusinessName());
+        businessRecord.setBusinessDesc(inputModel.getBusinessDesc());
 
         //check that client and industry exist in db
-        Optional<Client> clientOptional = clientRepository.findById(clientId);
+        Optional<Client> clientOptional = clientRepository.findById(inputModel.getClientId());
         if (clientOptional.isPresent()) {
             Client client = clientOptional.get();
             businessRecord.setClient(client);
         } else {
-            logger.warn(String.format("Client {%s} does not exist in DB.", clientId));
-            throw new ClientException(String.format("Client with ID {%s} not found.", clientId));
+            logger.warn(String.format("Client {%s} does not exist in DB.", inputModel.getClientId()));
+            throw new ClientException(String.format("Client with ID {%s} not found.", inputModel.getClientId()));
         }
 
-        Optional<Industry> industryOptional = industryRepository.findById(industryId);
+        Optional<Industry> industryOptional = industryRepository.findById(inputModel.getIndustryId());
         if (industryOptional.isPresent()) {
             Industry industry = industryOptional.get();
             businessRecord.setIndustry(industry);
         } else {
-            logger.warn(String.format("Industry {%s} does not exist in DB.", industryId));
-            throw new IndustryException(String.format("Industry with ID {%s} not found.", industryId));
+            logger.warn(String.format("Industry {%s} does not exist in DB.", inputModel.getIndustryId()));
+            throw new IndustryException(String.format("Industry with ID {%s} not found.", inputModel.getIndustryId()));
         }
 
         registeredBusinessRepository.save(businessRecord);
-        logger.info(String.format("Successfully updated business with ID {%s}", businessId));
+        logger.info(String.format("Successfully updated business with ID {%s}", inputModel.getBusinessId()));
         return businessRecord;
 
     }
