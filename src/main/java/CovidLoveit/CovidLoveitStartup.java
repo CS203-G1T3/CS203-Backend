@@ -13,5 +13,4 @@ public class CovidLoveitStartup {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(CovidLoveitStartup.class, args);
     }
-
 }
