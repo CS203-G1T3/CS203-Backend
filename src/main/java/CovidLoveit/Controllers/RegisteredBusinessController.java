@@ -51,7 +51,7 @@ public class RegisteredBusinessController {
             throw new RegisteredBusinessException(error.toString());
         }
 
-        return ResponseEntity.ok(convertToDTO(registeredBusinessService.addBusiness(inputModel.getBusinessName(), inputModel.getBusinessDesc(), inputModel.getIndustryId(), inputModel.getClientId())));
+        return ResponseEntity.ok(convertToDTO(registeredBusinessService.addBusiness(inputModel)));
     }
 
     @PutMapping("/registered-business/{businessId}")
@@ -68,9 +68,7 @@ public class RegisteredBusinessController {
             throw new RegisteredBusinessException(error.toString());
         }
 
-        return ResponseEntity.ok(convertToDTO(registeredBusinessService.updateBusiness(UUID.fromString(businessId),
-                inputModel.getBusinessName(), inputModel.getBusinessDesc(), inputModel.getBusinessId(),
-                inputModel.getClientId())));
+        return ResponseEntity.ok(convertToDTO(registeredBusinessService.updateBusiness(UUID.fromString(businessId), inputModel)));
     }
 
     @DeleteMapping("/registered-business/{businessId}")
