@@ -1,12 +1,16 @@
 package CovidLoveit.Utils.Filter;
 
 import CovidLoveit.Domain.Models.CustomUserDetails;
+import CovidLoveit.Utils.Configuration.PropertiesUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,7 +52,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 
         // TODO: Change the secret key to application.properties file. Figure out how
-        Algorithm algorithm = Algorithm.HMAC256("abcdefghi".getBytes());
+        Algorithm algorithm = Algorithm.HMAC256(PropertiesUtil.getSecret().getBytes());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
                 // Access Token lifetime set to 10 minutes
