@@ -1,6 +1,5 @@
-package CovidLoveit;
+package CovidLoveit.Service.Services;
 
-import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.InputModel.GuidelineInputModel;
 import CovidLoveit.Domain.InputModel.IndustryInputModel;
 import CovidLoveit.Domain.Models.Client;
@@ -14,11 +13,8 @@ import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Repositories.Interfaces.RoleRepository;
-import CovidLoveit.Service.Services.ClientServiceImpl;
-import CovidLoveit.Service.Services.GuidelineServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,10 +23,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,8 +33,6 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DataJpaTest
@@ -141,13 +133,11 @@ public class GuidelineServiceTest {
                 returnType.getIndustryId()
         );
         String clientId = UUID.randomUUID().toString();
-//        when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
 
         Client client = new Client();
         Client savedClient = clientRepository.save(client);
-//        when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         String testUUID = UUID.randomUUID().toString();
-//        System.out.println(testUUID);
+
         assertThrows(ClientException.class, () -> {
            Guideline savedGuideline = guidelineService.addGuideline(testUUID, guidelineInputModel);
         });
