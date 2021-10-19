@@ -461,7 +461,7 @@ public class GuidelineServiceTest {
         client.setRoles(roles);
 
         Guideline savedGuideline = guidelineRepository.save(guideline);
-        Optional<Guideline> toReturn = guidelineRepository.findById(savedGuideline.getGuidelineId());
+        Guideline toReturn = guidelineService.getGuideline(savedGuideline.getGuidelineId().toString());
 
         assertNotNull(toReturn);
     }
