@@ -88,8 +88,34 @@ public class Guideline {
         this.industry = industry;
     }
 
+    public Guideline(UUID guidelineId, boolean canOperateOnSite, String canOperateOnSiteDetails,
+                     int groupSize, String groupSizeDetails, int covidTestingVaccinated, int covidTestingUnvaccinated,
+                     String covidTestingDetails, String contactTracing, String contactTracingDetails,
+                     int operatingCapacity, String operatingCapacityDetails, String operationGuidelines,
+                     String referenceLink, Industry industry) {
+        this.guidelineId = guidelineId;
+        this.canOpOnSite = canOperateOnSite;
+        this.canOpOnSiteDetails = canOperateOnSiteDetails;
+        this.groupSize = groupSize;
+        this.groupSizeDetails = groupSizeDetails;
+        this.covidTestingVaccinated = covidTestingVaccinated;
+        this.covidTestingUnvaccinated = covidTestingUnvaccinated;
+        this.covidTestingDetails = covidTestingDetails;
+        this.contactTracing = contactTracing;
+        this.contactTracingDetails = contactTracingDetails;
+        this.opCapacity = operatingCapacity;
+        this.opCapacityDetails = operatingCapacityDetails;
+        this.opGuidelines = operationGuidelines;
+        this.referenceLink = referenceLink;
+        this.industry = industry;
+    }
+
     public UUID getGuidelineId() {
         return guidelineId;
+    }
+
+    public void setGuidelineId(UUID guidelineId) {
+        this.guidelineId = guidelineId;
     }
 
     @JsonProperty("isCanOpOnSite")
