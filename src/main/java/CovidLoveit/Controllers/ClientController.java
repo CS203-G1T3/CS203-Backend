@@ -53,8 +53,7 @@ public class ClientController {
             throw new ClientException(error.toString());
         }
 
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/client/add").toUriString());
-
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/client").toUriString());
         return ResponseEntity.created(uri).body(convertToClientDTO(clientService.addClient(inputModel)));
     }
 
@@ -72,7 +71,7 @@ public class ClientController {
             throw new RoleException(error.toString());
         }
 
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/role/add").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/role").toUriString());
         var role = new Role(inputModel.getRoleName());
 
         return ResponseEntity.created(uri).body(convertToRoleDTO(clientService.addRole(role)));

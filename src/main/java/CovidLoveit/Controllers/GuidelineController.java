@@ -47,7 +47,7 @@ public class GuidelineController {
             throw new GuidelineException(error.toString());
         }
 
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/guideline/add").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/guideline").toUriString());
         return ResponseEntity.created(uri).body(convertToDTO(guidelineService.addGuideline(adminId, inputModel)));
     }
 
