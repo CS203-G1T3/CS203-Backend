@@ -12,6 +12,7 @@ public class IndustryDTO {
     private String industryDesc;
     private List<GuidelineDTO> guidelines;
     private List<RegisteredBusinessDTO> registeredBusinesses;
+    private List<GrantDTO> grants;
 
     public UUID getIndustryId() {
         return industryId;
@@ -57,6 +58,14 @@ public class IndustryDTO {
 
     public void setRegisteredBusinesses(List<RegisteredBusinessDTO> registeredBusinesses) {
         this.registeredBusinesses = registeredBusinesses;
+    }
+
+    public List<GrantDTO> getGrants() {
+        return grants;
+    }
+
+    public void setGrants(List<GrantDTO> grants) {
+        this.grants = grants;
     }
 }
 
