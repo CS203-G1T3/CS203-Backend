@@ -38,8 +38,12 @@ public class Grant {
     @Column(name = "grantLink")
     private String grantLink;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "industryId")
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "covid_grants_industries",
+            joinColumns = { @JoinColumn(name = "grant_id") },
+            inverseJoinColumns = { @JoinColumn(name = "industry_id") }
+    )
     private List<Industry> industries = new ArrayList<>();
 
     public Grant() {
