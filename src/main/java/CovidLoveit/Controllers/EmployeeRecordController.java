@@ -33,7 +33,7 @@ public class EmployeeRecordController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/employeeRecord/add")
+    @PostMapping("/employeeRecord")
     public ResponseEntity<EmployeeRecordDTO> addEmployeeRecord(@RequestBody EmployeeRecordInputModel inputModel) {
         Set<ConstraintViolation<EmployeeRecordInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
@@ -86,7 +86,7 @@ public class EmployeeRecordController {
         return ResponseEntity.ok(convertToEmployeeRecordDTO(employee));
     }
 
-    @GetMapping("employeeRecord/all/{businessId}")
+    @GetMapping("employeeRecords/{businessId}")
     public ResponseEntity<List<EmployeeRecordDTO>> getEmployeesByBusiness(@PathVariable String businessId) {
         var employees = employeeRecordService.getEmployeesByBusiness(UUID.fromString(businessId));
 

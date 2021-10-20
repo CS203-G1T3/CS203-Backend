@@ -33,8 +33,8 @@ public class GuidelineController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/guideline/add/{clientId}")
-    public ResponseEntity<GuidelineDTO> addGuideline(@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel) {
+    @PostMapping("/guideline/{adminId}")
+    public ResponseEntity<GuidelineDTO> addGuideline(@PathVariable String adminId, @RequestBody GuidelineInputModel inputModel) {
         Set<ConstraintViolation<GuidelineInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -48,11 +48,11 @@ public class GuidelineController {
         }
 
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/guideline/add").toUriString());
-        return ResponseEntity.created(uri).body(convertToDTO(guidelineService.addGuideline(clientId, inputModel)));
+        return ResponseEntity.created(uri).body(convertToDTO(guidelineService.addGuideline(adminId, inputModel)));
     }
 
-    @PutMapping("/guideline/{clientId}")
-    public ResponseEntity<GuidelineDTO> updateGuideline (@PathVariable String clientId, @RequestBody GuidelineInputModel inputModel){
+    @PutMapping("/guideline/{adminId}")
+    public ResponseEntity<GuidelineDTO> updateGuideline (@PathVariable String adminId, @RequestBody GuidelineInputModel inputModel){
         Set<ConstraintViolation<GuidelineInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -66,12 +66,12 @@ public class GuidelineController {
         }
 
 
-        return ResponseEntity.ok(convertToDTO(guidelineService.updateGuideline(clientId, inputModel)));
+        return ResponseEntity.ok(convertToDTO(guidelineService.updateGuideline(adminId, inputModel)));
     }
 
-    @DeleteMapping("guideline/{clientId}/{guidelineId}")
-    public ResponseEntity<?> deleteGuideline(@PathVariable String clientId, @PathVariable String guidelineId) {
-        guidelineService.deleteGuideline(clientId, guidelineId);
+    @DeleteMapping("guideline/{adminId}/{guidelineId}")
+    public ResponseEntity<?> deleteGuideline(@PathVariable String adminId, @PathVariable String guidelineId) {
+        guidelineService.deleteGuideline(adminId, guidelineId);
         return ResponseEntity.ok().build();
     }
 
@@ -92,7 +92,7 @@ public class GuidelineController {
         return ResponseEntity.ok(guidelineDTOs);
     }
 
-    @GetMapping("guideline/byIndustry/{industryId}")
+    @GetMapping("guideline/Industry/{industryId}")
     public ResponseEntity<GuidelineDTO> getLatestGuidelineByIndustry(@PathVariable String industryId) {
         var guideline = guidelineService.getLatestGuidelineByIndustry(industryId);
         return ResponseEntity.ok(convertToDTO(guideline));

@@ -37,7 +37,7 @@ public class RegisteredBusinessController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/registered-business/add")
+    @PostMapping("/registered-business")
     public ResponseEntity<RegisteredBusinessDTO> addRegisteredBusiness(@RequestBody RegisteredBusinessInputModel inputModel) {
         Set<ConstraintViolation<RegisteredBusinessInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();

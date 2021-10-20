@@ -34,8 +34,8 @@ public class IndustryController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/industry/add/{clientId}")
-    public ResponseEntity<IndustryDTO> addIndustry(@PathVariable String clientId, @RequestBody IndustryInputModel inputModel){
+    @PostMapping("/industry/{adminId}")
+    public ResponseEntity<IndustryDTO> addIndustry(@PathVariable String adminId, @RequestBody IndustryInputModel inputModel){
         Set<ConstraintViolation<IndustryInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -49,11 +49,11 @@ public class IndustryController {
         }
 
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/industry/add").toUriString());
-        return ResponseEntity.created(uri).body(convertToDTO(industryService.addIndustry(clientId, inputModel)));
+        return ResponseEntity.created(uri).body(convertToDTO(industryService.addIndustry(adminId, inputModel)));
     }
 
-    @PutMapping("/industry/{clientId}")
-    public ResponseEntity<IndustryDTO> updateIndustry(@PathVariable String clientId, @RequestBody IndustryInputModel inputModel){
+    @PutMapping("/industry/{adminId}")
+    public ResponseEntity<IndustryDTO> updateIndustry(@PathVariable String adminId, @RequestBody IndustryInputModel inputModel){
         Set<ConstraintViolation<IndustryInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
 
@@ -66,12 +66,12 @@ public class IndustryController {
             throw new IndustryException(error.toString());
         }
 
-        return ResponseEntity.ok(convertToDTO(industryService.updateIndustry(clientId, inputModel)));
+        return ResponseEntity.ok(convertToDTO(industryService.updateIndustry(adminId, inputModel)));
     }
 
-    @DeleteMapping("/industry/{clientId}/{industryId}")
-    public ResponseEntity<?> deleteIndustry(@PathVariable String clientId, @PathVariable String industryId){
-        industryService.deleteIndustry(clientId, UUID.fromString(industryId));
+    @DeleteMapping("/industry/{adminId}/{industryId}")
+    public ResponseEntity<?> deleteIndustry(@PathVariable String adminId, @PathVariable String industryId){
+        industryService.deleteIndustry(adminId, UUID.fromString(industryId));
         return ResponseEntity.ok().build();
     }
 

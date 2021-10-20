@@ -39,7 +39,7 @@ public class ClientController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/client/add")
+    @PostMapping("/client")
     public ResponseEntity<ClientDTO> addClient(@RequestBody ClientInputModel inputModel){
         Set<ConstraintViolation<ClientInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
@@ -58,7 +58,7 @@ public class ClientController {
         return ResponseEntity.created(uri).body(convertToClientDTO(clientService.addClient(inputModel)));
     }
 
-    @PostMapping("/role/add")
+    @PostMapping("/role")
     public ResponseEntity<RoleDTO> addRole(@RequestBody RoleInputModel inputModel) {
         Set<ConstraintViolation<RoleInputModel>> violations = inputModel.validate();
         StringBuilder error = new StringBuilder();
@@ -101,7 +101,7 @@ public class ClientController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/role/{roleName}/updateClient/{email}")
+    @PutMapping("/role/{roleName}/{email}")
     public ResponseEntity<?> addRoleToClient(@PathVariable String email, @PathVariable String roleName) {
         clientService.addRoleToClient(email, roleName);
         return ResponseEntity.ok().build();
@@ -114,7 +114,7 @@ public class ClientController {
         return ResponseEntity.ok(convertToClientDTO(client));
     }
 
-    @GetMapping("/client/all")
+    @GetMapping("/clients")
     public ResponseEntity<List<ClientDTO>> getAllClients() {
         List<Client> clients = clientService.getAllClients();
 
