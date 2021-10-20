@@ -3,6 +3,7 @@ package CovidLoveit.Controllers.Authentication;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Service.Services.Interfaces.ClientService;
+import CovidLoveit.Utils.Configuration.PropertiesUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -47,7 +48,7 @@ public class AuthController {
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try{
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("abcdefghi".getBytes());
+                Algorithm algorithm = Algorithm.HMAC256(PropertiesUtil.getSecret().getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String email = decodedJWT.getSubject();
