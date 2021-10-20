@@ -75,7 +75,7 @@ public class IndustryController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/industry/id/{industryId}")
+    @GetMapping("/industry/{industryId}")
     public ResponseEntity<IndustryDTO> getIndustry(@PathVariable String industryId) {
         Optional<Industry> industry = industryService.getIndustry(UUID.fromString(industryId));
 

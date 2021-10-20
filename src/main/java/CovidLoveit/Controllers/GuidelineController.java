@@ -92,7 +92,7 @@ public class GuidelineController {
         return ResponseEntity.ok(guidelineDTOs);
     }
 
-    @GetMapping("guideline/Industry/{industryId}")
+    @GetMapping("guideline/industry/{industryId}")
     public ResponseEntity<GuidelineDTO> getLatestGuidelineByIndustry(@PathVariable String industryId) {
         var guideline = guidelineService.getLatestGuidelineByIndustry(industryId);
         return ResponseEntity.ok(convertToDTO(guideline));
