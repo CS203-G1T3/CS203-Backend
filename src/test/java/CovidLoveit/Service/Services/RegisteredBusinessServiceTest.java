@@ -115,13 +115,13 @@ public class RegisteredBusinessServiceTest {
     @Test
     void addBusiness_ClientHasExistingBusiness_ThrowClientException(){
         Client client = new Client("123456", "tester@gmail.com");
+        client.setRegisteredBusiness(new RegisteredBusiness());
         Client savedClient = clientRepository.save(client);
         Industry industry = new Industry("industryName", "industrySubtype", "industryDesc");
         Industry savedIndustry = industryRepository.save(industry);
 
         RegisteredBusiness business = new RegisteredBusiness("BusinessName", "BusinessDesc");
         RegisteredBusinessInputModel businessInputModel = new RegisteredBusinessInputModel(business.getBusinessName(), business.getBusinessDesc(), savedIndustry.getIndustryId(), savedClient.getClientId());
-        businessService.addBusiness(businessInputModel);
         assertThrows(ClientException.class, () -> {
         businessService.addBusiness(businessInputModel);
         });
