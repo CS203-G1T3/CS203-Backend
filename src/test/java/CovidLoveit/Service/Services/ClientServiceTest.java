@@ -29,17 +29,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 public class ClientServiceTest {
 
-    @Autowired private ClientRepository clientRepository;
+    @Autowired
+    private ClientRepository clientRepository;
     private ClientServiceImpl clientService;
 
-    @Autowired private RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Mock
     private AutoCloseable autoCloseable;
 
     @InjectMocks
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private ClientException clientException;
 
     @BeforeEach
     void setUp() {

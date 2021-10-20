@@ -27,7 +27,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -44,22 +43,16 @@ public class GuidelineServiceTest {
     @Autowired
     private IndustryRepository industryRepository;
 
-    @Mock
-    private AutoCloseable autoCloseable;
-
     @Autowired
     private GuidelineRepository guidelineRepository;
+    private AutoCloseable autoCloseable;
 
     @Mock
     private RoleRepository roleRepository;
 
     @InjectMocks
     private GuidelineServiceImpl guidelineService;
-
-    @InjectMocks
     private ClientServiceImpl clientService;
-
-    @InjectMocks
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @BeforeEach
