@@ -29,6 +29,9 @@ public class Industry {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "industry")
     private List<RegisteredBusiness> registeredBusinesses = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "industries")
+    private List<Grant> grants = new ArrayList<>();
+
     public Industry() {
     }
 
