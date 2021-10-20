@@ -1,6 +1,5 @@
 package CovidLoveit.Domain.DataTransferObjects;
 
-import CovidLoveit.Domain.Models.Industry;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +15,7 @@ public class GrantDTO {
     private String applicationProcess;
     private String benefits;
     private String grantLink;
-    private List<Industry> industries;
+    private List<IndustryDTO> industries;
 
     public UUID getGrantId() {
         return grantId;
@@ -90,11 +89,11 @@ public class GrantDTO {
         this.grantLink = grantLink;
     }
 
-    public List<Industry> getIndustries() {
+    public List<IndustryDTO> getIndustries() {
         return industries;
     }
 
-    public void setIndustries(List<Industry> industries) {
+    public void setIndustries(List<IndustryDTO> industries) {
         this.industries = industries;
     }
 }
