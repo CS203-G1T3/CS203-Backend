@@ -7,4 +7,4 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL92Dialec
 spring.jpa.properties.hibernate.format_sql=true
 
 # HMAC256 algorithm's signature secret
-auth0_secret_key=959579c6-0505-40d4-8918-f44f16fbd502
+auth0_secret_key={secret key}
