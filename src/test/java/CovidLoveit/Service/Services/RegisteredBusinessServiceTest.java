@@ -20,8 +20,6 @@ import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Repositories.Interfaces.RegisteredBusinessRepository;
 import CovidLoveit.Repositories.Interfaces.RoleRepository;
-import CovidLoveit.Service.Services.ClientServiceImpl;
-import CovidLoveit.Service.Services.IndustryServiceImpl;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,17 +57,9 @@ public class RegisteredBusinessServiceTest {
     @InjectMocks
     private RegisteredBusinessServiceImpl businessService;
 
-    @InjectMocks
-    private IndustryServiceImpl industryService;
-
-    @InjectMocks
-    private ClientServiceImpl clientService;
-
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        clientService = new ClientServiceImpl(clientRepository, roleRepository, bCryptPasswordEncoder);
-        industryService = new IndustryServiceImpl(industryRepository, clientRepository);
         businessService = new RegisteredBusinessServiceImpl(businessRepository, clientRepository, industryRepository);
     }
 
