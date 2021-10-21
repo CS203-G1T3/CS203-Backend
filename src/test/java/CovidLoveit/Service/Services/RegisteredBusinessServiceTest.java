@@ -2,25 +2,17 @@ package CovidLoveit.Service.Services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import CovidLoveit.Domain.InputModel.ClientInputModel;
-import CovidLoveit.Domain.InputModel.IndustryInputModel;
 import CovidLoveit.Domain.InputModel.RegisteredBusinessInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
-import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Exception.RegisteredBusinessException;
@@ -39,7 +31,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -88,7 +79,7 @@ public class RegisteredBusinessServiceTest {
     }
 
     @Test
-    void addBusiness_NewBusiness_ReturnBusiness(){
+    void addBusiness_SuccessfullyAddedBusiness_ReturnBusiness(){
         Client client = new Client("123456", "tester@gmail.com");
         Client savedClient = clientRepository.save(client);
         Industry industry = new Industry("industryName", "industrySubtype", "industryDesc");
@@ -113,7 +104,7 @@ public class RegisteredBusinessServiceTest {
     }
 
     @Test
-    void addBusiness_ClientHasExistingBusiness_ThrowClientException(){
+    void addBusiness_ClientAlreadyHasBusiness_ThrowClientException(){
         Client client = new Client("123456", "tester@gmail.com");
         client.setRegisteredBusiness(new RegisteredBusiness());
         Client savedClient = clientRepository.save(client);
@@ -140,7 +131,7 @@ public class RegisteredBusinessServiceTest {
     }
 
     @Test
-    void updateBusiness_ExistingBusiness_ReturnSavedBusiness(){
+    void updateBusiness_SuccessfullyUpdatedBusiness_ReturnUpdatedBusiness(){
         Client client = new Client("123456", "tester@gmail.com");
         Client savedClient = clientRepository.save(client);
         Industry industry = new Industry("industryName", "industrySubtype", "industryDesc");
@@ -195,7 +186,7 @@ public class RegisteredBusinessServiceTest {
     }
 
     @Test
-    void deleteBusiness_SuccessfullyDelete_ReturnNull(){
+    void deleteBusiness_SuccessfullyDeletedBusiness_Return(){
         RegisteredBusiness business = new RegisteredBusiness("BusinessName", "BusinessDesc");
         RegisteredBusiness savedBusiness = businessRepository.save(business);
         businessService.deleteBusiness(savedBusiness.getBusinessId());
@@ -211,11 +202,6 @@ public class RegisteredBusinessServiceTest {
 
     @Test
     void getBusiness_SuccessfullyRetrievedBusiness_ReturnBusiness(){
-        Client client = new Client("123456", "tester@gmail.com");
-        Client savedClient = clientRepository.save(client);
-        Industry industry = new Industry("industryName", "industrySubtype", "industryDesc");
-        Industry savedIndustry = industryRepository.save(industry);
-
         RegisteredBusiness business = new RegisteredBusiness("BusinessName", "BusinessDesc");
         RegisteredBusiness savedBusiness = businessRepository.save(business);
         Optional<RegisteredBusiness> toReturn = businessService.getBusiness(savedBusiness.getBusinessId());
@@ -224,11 +210,6 @@ public class RegisteredBusinessServiceTest {
 
     @Test
     void getAllRegisteredBusinesses_SuccessfullyRetrievedBusinesses_ReturnBusinesses(){
-        Client client = new Client("123456", "tester@gmail.com");
-        Client savedClient = clientRepository.save(client);
-        Industry industry = new Industry("industryName", "industrySubtype", "industryDesc");
-        Industry savedIndustry = industryRepository.save(industry);
-
         RegisteredBusiness business = new RegisteredBusiness("BusinessName", "BusinessDesc");
         RegisteredBusiness savedBusiness = businessRepository.save(business);
 

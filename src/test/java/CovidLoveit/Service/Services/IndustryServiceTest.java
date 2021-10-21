@@ -2,19 +2,14 @@ package CovidLoveit.Service.Services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.InputModel.IndustryInputModel;
 import CovidLoveit.Domain.Models.Client;
 import CovidLoveit.Domain.Models.Industry;
@@ -35,7 +30,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -61,23 +55,23 @@ public class IndustryServiceTest {
     @InjectMocks
     private IndustryServiceImpl industryService;
 
-     @InjectMocks
-     private ClientServiceImpl clientService;
+    @InjectMocks
+    private ClientServiceImpl clientService;
 
-     @BeforeEach
-     void setUp() {
-         autoCloseable = MockitoAnnotations.openMocks(this);
-         clientService = new ClientServiceImpl(clientRepository, roleRepository, bCryptPasswordEncoder);
-         industryService = new IndustryServiceImpl(industryRepository, clientRepository);
-     }
+    @BeforeEach
+    void setUp() {
+        autoCloseable = MockitoAnnotations.openMocks(this);
+        clientService = new ClientServiceImpl(clientRepository, roleRepository, bCryptPasswordEncoder);
+        industryService = new IndustryServiceImpl(industryRepository, clientRepository);
+    }
 
-     @AfterEach
-     void tearDown() throws Exception {
-         autoCloseable.close();
-     }
+    @AfterEach
+    void tearDown() throws Exception {
+        autoCloseable.close();
+    }
 
     @Test
-    void addIndustry_NewIndustry_ReturnIndustry(){
+    void addIndustry_SuccessfullyAddedIndustry_ReturnIndustry(){
         List<Role> roles = new ArrayList<>();
         roles.add(new Role("ADMIN"));
         Client client = new Client("123456", roles, "tester@gmail.com");
@@ -99,7 +93,7 @@ public class IndustryServiceTest {
     }
 
     @Test
-    void updateIndustry_ExistingIndustry_ReturnSavedIndustry(){
+    void updateIndustry_SuccessfullyUpdatedIndustry_ReturnUpdatedIndustry(){
         List<Role> roles = new ArrayList<>();
         roles.add(new Role("ADMIN"));
         Client client = new Client("123456", roles, "tester@gmail.com");
@@ -141,7 +135,7 @@ public class IndustryServiceTest {
     }
 
     @Test
-    void deleteIndustry_SuccessfullyDelete_Return(){
+    void deleteIndustry_SuccessfullyDeletedIndustry_Return(){
         List<Role> roles = new ArrayList<>();
         roles.add(new Role("ADMIN"));
         Client client = new Client("123456", roles, "tester@gmail.com");
