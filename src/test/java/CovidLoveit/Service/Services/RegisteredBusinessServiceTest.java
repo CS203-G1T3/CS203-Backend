@@ -19,7 +19,6 @@ import CovidLoveit.Exception.RegisteredBusinessException;
 import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Repositories.Interfaces.RegisteredBusinessRepository;
-import CovidLoveit.Repositories.Interfaces.RoleRepository;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +30,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 @DataJpaTest
@@ -46,13 +44,7 @@ public class RegisteredBusinessServiceTest {
     private ClientRepository clientRepository;
 
     @Mock
-    private RoleRepository roleRepository;
-
-    @Mock
     private AutoCloseable autoCloseable;
-    
-    @Mock
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @InjectMocks
     private RegisteredBusinessServiceImpl businessService;
