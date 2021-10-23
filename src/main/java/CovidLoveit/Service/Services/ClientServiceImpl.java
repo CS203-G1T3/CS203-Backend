@@ -2,6 +2,7 @@ package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.Models.Client;
+import CovidLoveit.Domain.Models.Email;
 import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Exception.RoleException;
@@ -27,6 +28,9 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private EmailServiceImpl emailService;
 
     // Injecting the required dependencies here
     @Autowired
@@ -62,6 +66,7 @@ public class ClientServiceImpl implements ClientService {
 
         var client = new Client(inputModel.getPassword(), clientRoles, inputModel.getEmail());
         var savedClient = clientRepository.save(client);
+        emailService.newClientCreationEmail(savedClient.getEmail());
 
         logger.info(String.format("Successfully added client {%s}", savedClient.getClientId()));
         return savedClient;
@@ -172,6 +177,15 @@ public class ClientServiceImpl implements ClientService {
             logger.warn(String.format("Client with email address {%s} does not exist in database.", email));
             throw new ClientException(String.format("Client with email address {%s} does not exist in database.", email));
         });
+
+        Email emailToSend = new Email();
+
+        emailToSend.setEmailSubject("Email Testing");
+        emailToSend.setEmailFrom("TRAIL");
+
+        emailToSend.setEmailContent("Dear " + email);
+        emailToSend.setEmailTo("webtestercs102@gmail.com");
+        emailService.sendEmail(emailToSend);
 
         return client.get();
     }
