@@ -2,6 +2,8 @@ package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.InputModel.GuidelineInputModel;
 import CovidLoveit.Domain.Models.Guideline;
+import CovidLoveit.Domain.Models.Industry;
+import CovidLoveit.Domain.Models.RegisteredBusiness;
 import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Exception.GuidelineException;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,6 +41,9 @@ public class GuidelineServiceImpl implements GuidelineService {
         this.clientRepository = clientRepository;
         this.industryRepository = industryRepository;
     }
+
+    @Autowired
+    EmailServiceImpl emailService;
 
     @Override
     public Guideline addGuideline(String clientId, GuidelineInputModel inputModel)
@@ -73,6 +79,12 @@ public class GuidelineServiceImpl implements GuidelineService {
                     inputModel.getOpCapacityDetails(), inputModel.getOpGuidelines(), inputModel.getReferenceLink(), industry.get());
 
             var savedGuideline = guidelineRepository.save(guideline);
+
+            List<RegisteredBusiness> registeredBusinessList = industry.get().getRegisteredBusinesses();
+            for (RegisteredBusiness business : registeredBusinessList) {
+                emailService.newGuidelineCreationEmail(business.getClient().getEmail(), inputModel);
+            }
+
 
             logger.info(String.format("Successfully added guideline {%s}", savedGuideline.getGuidelineId().toString()));
             return savedGuideline;
@@ -131,6 +143,12 @@ public class GuidelineServiceImpl implements GuidelineService {
             guidelineRecord.setIndustry(industry.get());
 
             guidelineRepository.save(guidelineRecord);
+
+            List<RegisteredBusiness> registeredBusinessList = industry.get().getRegisteredBusinesses();
+            for (RegisteredBusiness business : registeredBusinessList) {
+                emailService.updateGuidelineNotificationEmail(business.getClient().getEmail(), inputModel);
+            }
+
             logger.info(String.format("Successfully updated Guideline {%s}", inputModel.getGuidelineId().toString()));
             return guidelineRecord;
 

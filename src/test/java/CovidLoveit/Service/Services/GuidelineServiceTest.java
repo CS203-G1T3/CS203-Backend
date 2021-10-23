@@ -95,7 +95,7 @@ public class GuidelineServiceTest {
                 "Only maximum 10 staff allowed",
                 "Please maintain a safe distance of 100m apart",
                 "www.tiktok.com",
-                returnType.getIndustryId()
+                returnType.getIndustryId().toString()
         );
 
         //when
@@ -123,7 +123,7 @@ public class GuidelineServiceTest {
                 "Only maximum 10 staff allowed",
                 "Please maintain a safe distance of 100m apart",
                 "www.tiktok.com",
-                returnType.getIndustryId()
+                returnType.getIndustryId().toString()
         );
         String clientId = UUID.randomUUID().toString();
 
@@ -164,7 +164,7 @@ public class GuidelineServiceTest {
                 "Only maximum 10 staff allowed",
                 "Please maintain a safe distance of 100m apart",
                 "www.tiktok.com",
-                UUID.randomUUID()
+                UUID.randomUUID().toString()
         );
 
 
@@ -217,7 +217,7 @@ public class GuidelineServiceTest {
                 "Only maximum 10 staff allowed",
                 "Please maintain a safe distance of 100m apart",
                 "www.tiktok.com",
-                UUID.randomUUID()
+                UUID.randomUUID().toString()
         );
 
         Guideline savedGuideline = guidelineRepository.save(guideline);
@@ -261,7 +261,7 @@ public class GuidelineServiceTest {
                 "Only maximum 10 staff allowed",
                 "Please maintain a safe distance of 100m apart",
                 "www.tiktok.com",
-                UUID.randomUUID()
+                UUID.randomUUID().toString()
         );
         guidelineInputModel.setGuidelineId(UUID.randomUUID());
 
@@ -298,7 +298,7 @@ public class GuidelineServiceTest {
                 "Only maximum 10 staff allowed",
                 "Please maintain a safe distance of 100m apart",
                 "www.tiktok.com",
-                UUID.randomUUID()
+                UUID.randomUUID().toString()
         );
         Guideline guideline = new Guideline(
                 true,
