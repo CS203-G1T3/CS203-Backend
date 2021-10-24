@@ -47,7 +47,7 @@ public class EmailServiceImpl {
         emailToSend.setEmailSubject("Client Account Creation");
         emailToSend.setEmailFrom("TRAIL");
 
-        String message = "Dear " + email + "," + "\n\n Your Account has been successfully created.";
+        String message = "Dear " + email + "," + "<p>" + "Your Account has been successfully created." + "</p>";
         emailToSend.setEmailContent(message);
         emailToSend.setEmailTo(email);
         sendEmail(emailToSend);
@@ -60,20 +60,20 @@ public class EmailServiceImpl {
         emailToSend.setEmailFrom("TRAIL");
 
         StringBuilder message = new StringBuilder("Dear " + email + "," +
-                "\n\n The newly added guideline for your establishment: ");
+                "<p>" + "The newly added guideline for your establishment: " + "</p>");
 
-        message.append("\nOperation Guidelines: " + guidelineInputModel.getOpGuidelines() + "\n");
-        message.append("\nCan Operate on site?: " + guidelineInputModel.getCanOpOnSiteDetails());
-        message.append("\nOperation on site details: " + guidelineInputModel.getCanOpOnSiteDetails());
-        message.append("\nContact tracing requirement: " + guidelineInputModel.getContactTracing());
-        message.append("\nContact tracing details: " + guidelineInputModel.getContactTracingDetails());
-        message.append("\nAllowed group size: " + guidelineInputModel.getGroupSize());
-        message.append("\nGroup size details: " + guidelineInputModel.getGroupSizeDetails());
-        message.append("\nOperating capacity: " + guidelineInputModel.getOpCapacity());
-        message.append("\nOperating capacity details: " + guidelineInputModel.getOpCapacityDetails());
-        message.append("\nCovid testing details: " + guidelineInputModel.getCovidTestingDetails());
-        message.append("\nVaccinated: " + guidelineInputModel.getCovidTestingVaccinated());
-        message.append("\nUnvaccinated: " + guidelineInputModel.getCovidTestingUnvaccinated());
+        message.append("<p>" + "<b>" + "Operation Guidelines: " + "</b>" + guidelineInputModel.getOpGuidelines()  + "</p>");
+        message.append("<p>" + "<b>" + "Can Operate on site?: "  + "</b>" + "<span style='color:#FF0000'>" + guidelineInputModel.isCanOpOnSite() + "</span" + "</p>");
+        message.append("<p>" + "<b>" + "Operation on site details: "  + "</b>"  + guidelineInputModel.getCanOpOnSiteDetails() + "</p>");
+        message.append("<p>" + "<b>" + "Contact tracing requirement: "  + "</b>"  + guidelineInputModel.getContactTracing() + "</p>");
+        message.append("<p>" + "<b>" + "Contact tracing details: "  + "</b>"  + guidelineInputModel.getContactTracingDetails() + "</p>");
+        message.append("<p>" + "<b>" + "Allowed group size: "  + "</b>"  + guidelineInputModel.getGroupSize() + "</p>");
+        message.append("<p>" + "<b>" + "Group size details: "  + "</b>"  + guidelineInputModel.getGroupSizeDetails() + "</p>");
+        message.append("<p>" + "<b>" + "Operating capacity: "  + "</b>"  + "<span style='color:#FF0000'>" + guidelineInputModel.getOpCapacity() + "</span>" + "</p>");
+        message.append("<p>" + "<b>" + "Operating capacity details: "  + "</b>"  + guidelineInputModel.getOpCapacityDetails() + "</p>");
+        message.append("<p>" + "<b>" + "Covid testing details: "  + "</b>"  + guidelineInputModel.getCovidTestingDetails() + "</p>");
+        message.append("<p>" + "<b>" + "Vaccinated: "  + "</b>"  + guidelineInputModel.getCovidTestingVaccinated() + "</p>");
+        message.append("<p>" + "<b>" + "Unvaccinated: "  + "</b>"  + guidelineInputModel.getCovidTestingUnvaccinated() + "</p>");
 
         String formedMessage = message.toString();
         emailToSend.setEmailContent(formedMessage);
@@ -87,21 +87,22 @@ public class EmailServiceImpl {
         emailToSend.setEmailSubject("Updated Guideline Notification");
         emailToSend.setEmailFrom("TRAIL");
 
-        StringBuilder message = new StringBuilder("Dear " + email + "," +
-                "\n\n There is an updated guideline for your establishment: ");
 
-        message.append("\nOperation Guidelines: " + guidelineInputModel.getOpGuidelines() + "\n");
-        message.append("\nCan Operate on site?: " + guidelineInputModel.getCanOpOnSiteDetails());
-        message.append("\nOperation on site details: " + guidelineInputModel.getCanOpOnSiteDetails());
-        message.append("\nContact tracing requirement: " + guidelineInputModel.getContactTracing());
-        message.append("\nContact tracing details: " + guidelineInputModel.getContactTracingDetails());
-        message.append("\nAllowed group size: " + guidelineInputModel.getGroupSize());
-        message.append("\nGroup size details: " + guidelineInputModel.getGroupSizeDetails());
-        message.append("\nOperating capacity: " + guidelineInputModel.getOpCapacity());
-        message.append("\nOperating capacity details: " + guidelineInputModel.getOpCapacityDetails());
-        message.append("\nCovid testing details: " + guidelineInputModel.getCovidTestingDetails());
-        message.append("\nVaccinated: " + guidelineInputModel.getCovidTestingVaccinated());
-        message.append("\nUnvaccinated: " + guidelineInputModel.getCovidTestingUnvaccinated());
+        StringBuilder message = new StringBuilder("Dear " + email + "," +
+                "<p>" + "Updated guideline for your establishment: " + "</p>");
+
+        message.append("<p>" + "<b>" + "Operation Guidelines: " + "</b>" + guidelineInputModel.getOpGuidelines()  + "</p>");
+        message.append("<p>" + "<b>" + "Can Operate on site?: "  + "</b>" + "<span style='color:#FF0000'>" + guidelineInputModel.isCanOpOnSite() + "</span>" + "</p>");
+        message.append("<p>" + "<b>" + "Operation on site details: "  + "</b>"  + guidelineInputModel.getCanOpOnSiteDetails() + "</p>");
+        message.append("<p>" + "<b>" + "Contact tracing requirement: "  + "</b>"  + guidelineInputModel.getContactTracing() + "</p>");
+        message.append("<p>" + "<b>" + "Contact tracing details: "  + "</b>"  + guidelineInputModel.getContactTracingDetails() + "</p>");
+        message.append("<p>" + "<b>" + "Allowed group size: "  + "</b>"  + guidelineInputModel.getGroupSize() + "</p>");
+        message.append("<p>" + "<b>" + "Group size details: "  + "</b>"  + guidelineInputModel.getGroupSizeDetails() + "</p>");
+        message.append("<p>" + "<b>" + "Operating capacity: "  + "</b>"  + "<span style='color:#FF0000'>" + guidelineInputModel.getOpCapacity() + "</span>" + "</p>");
+        message.append("<p>" + "<b>" + "Operating capacity details: "  + "</b>"  + guidelineInputModel.getOpCapacityDetails() + "</p>");
+        message.append("<p>" + "<b>" + "Covid testing details: "  + "</b>"  + guidelineInputModel.getCovidTestingDetails() + "</p>");
+        message.append("<p>" + "<b>" + "Vaccinated: "  + "</b>"  + guidelineInputModel.getCovidTestingVaccinated() + "</p>");
+        message.append("<p>" + "<b>" + "Unvaccinated: "  + "</b>"  + guidelineInputModel.getCovidTestingUnvaccinated() + "</p>");
 
         String formedMessage = message.toString();
         emailToSend.setEmailContent(formedMessage);
