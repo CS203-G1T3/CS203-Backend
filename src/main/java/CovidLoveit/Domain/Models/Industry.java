@@ -32,9 +32,6 @@ public class Industry {
     @ManyToMany(mappedBy = "industries")
     private List<Grant> grants = new ArrayList<>();
 
-    public Industry() {
-    }
-
     public Industry(String industryName, String industrySubtype, String industryDesc) {
         this.industryName = industryName;
         this.industrySubtype = industrySubtype;
@@ -46,6 +43,9 @@ public class Industry {
         this.industryName = industryName;
         this.industrySubtype = industrySubtype;
         this.industryDesc = industryDesc;
+    }
+
+    public Industry() {
     }
 
     public UUID getIndustryId() {
@@ -90,5 +90,13 @@ public class Industry {
 
     public void setRegisteredBusinesses(List<RegisteredBusiness> registeredBusinesses) {
         this.registeredBusinesses = registeredBusinesses;
+    }
+
+    public List<Grant> getGrants() {
+        return grants;
+    }
+
+    public void setGrants(List<Grant> grants) {
+        this.grants = grants;
     }
 }
