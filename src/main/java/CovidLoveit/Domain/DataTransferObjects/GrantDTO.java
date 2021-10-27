@@ -15,7 +15,7 @@ public class GrantDTO {
     private String applicationProcess;
     private String benefits;
     private String grantLink;
-    private List<IndustryDTO> industries;
+    private List<UUID> industryId;
 
     public UUID getGrantId() {
         return grantId;
@@ -89,11 +89,11 @@ public class GrantDTO {
         this.grantLink = grantLink;
     }
 
-    public List<IndustryDTO> getIndustries() {
-        return industries;
+    public List<UUID> getIndustryId() {
+        return industryId;
     }
 
-    public void setIndustries(List<IndustryDTO> industries) {
-        this.industries = industries;
+    public void setIndustryId(List<UUID> industries) {
+        this.industryId = industries;
     }
 }
