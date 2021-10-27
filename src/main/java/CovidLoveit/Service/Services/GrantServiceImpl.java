@@ -40,6 +40,12 @@ public class GrantServiceImpl implements GrantService {
 
     @Override
     public Grant addGrant(String adminId, GrantInputModel inputModel) {
+        var grantOptional = grantRepository.findGrantByGrantName(inputModel.getGrantName());
+        if(grantOptional.isPresent()) {
+            logger.warn("Grant already exists in DB.");
+            throw new GrantException(String.format("Grant with name {%s} already exists in DB.", inputModel.getGrantName()));
+        }
+
         var sessionUser = clientRepository.findById(UUID.fromString(adminId));
         sessionUser.orElseThrow(() -> {
             logger.warn(String.format("Client with ID {%s} not found", adminId));
@@ -61,7 +67,7 @@ public class GrantServiceImpl implements GrantService {
                     inputModel.getBenefits(), inputModel.getGrantLink());
             var savedGrant = grantRepository.save(grant);
 
-            logger.info(String.format("Successfully added industry {%s}", savedGrant.getGrantId()));
+            logger.info(String.format("Successfully added grant {%s}", savedGrant.getGrantId()));
             return savedGrant;
 
         } else {
