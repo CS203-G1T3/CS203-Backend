@@ -3,6 +3,7 @@ package CovidLoveit.Controllers;
 import CovidLoveit.Domain.DataTransferObjects.GrantDTO;
 import CovidLoveit.Domain.InputModel.GrantInputModel;
 import CovidLoveit.Domain.Models.Grant;
+import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Exception.GrantException;
 import CovidLoveit.Service.Services.Interfaces.GrantService;
 import org.modelmapper.ModelMapper;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.ConstraintViolation;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -112,6 +115,13 @@ public class GrantController {
     }
 
     private GrantDTO convertToDTO(Grant grant) {
-        return modelMapper.map(grant, GrantDTO.class);
+        List<UUID> industryIds = new ArrayList<>();
+        GrantDTO grantDTO = modelMapper.map(grant, GrantDTO.class);
+        for(Industry industry : grant.getIndustries()) {
+            industryIds.add(industry.getIndustryId());
+        }
+        grantDTO.setIndustryId(industryIds);
+
+        return grantDTO;
     }
 }
