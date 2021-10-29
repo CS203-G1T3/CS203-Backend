@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -39,6 +40,7 @@ public class ClientController {
         this.modelMapper = modelMapper;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/client")
     public ResponseEntity<ClientDTO> addClient(@RequestBody ClientInputModel inputModel){
         Set<ConstraintViolation<ClientInputModel>> violations = inputModel.validate();
@@ -57,6 +59,7 @@ public class ClientController {
         return ResponseEntity.created(uri).body(convertToClientDTO(clientService.addClient(inputModel)));
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/role")
     public ResponseEntity<RoleDTO> addRole(@RequestBody RoleInputModel inputModel) {
         Set<ConstraintViolation<RoleInputModel>> violations = inputModel.validate();
