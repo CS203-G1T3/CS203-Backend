@@ -47,11 +47,7 @@ public class EmployeeRecordController {
             throw new EmployeeRecordException(error.toString());
         }
 
-        URI uri = URI.create(ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/api/v1/employeeRecord/add")
-                .toUriString());
-
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/employeeRecord").toUriString());
         return ResponseEntity.created(uri).body(convertToEmployeeRecordDTO(employeeRecordService.addEmployee(inputModel)));
     }
 
@@ -70,7 +66,6 @@ public class EmployeeRecordController {
         }
 
         var employee = employeeRecordService.updateEmployee(inputModel);
-
         return ResponseEntity.ok(convertToEmployeeRecordDTO(employee));
     }
 

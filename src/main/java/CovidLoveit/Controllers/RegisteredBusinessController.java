@@ -1,5 +1,6 @@
 package CovidLoveit.Controllers;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,6 +22,7 @@ import CovidLoveit.Domain.InputModel.RegisteredBusinessInputModel;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
 import CovidLoveit.Exception.RegisteredBusinessException;
 import CovidLoveit.Service.Services.Interfaces.RegisteredBusinessService;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("api/v1")
@@ -50,8 +52,8 @@ public class RegisteredBusinessController {
             });
             throw new RegisteredBusinessException(error.toString());
         }
-
-        return ResponseEntity.ok(convertToDTO(registeredBusinessService.addBusiness(inputModel)));
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/registered-business").toUriString());
+        return ResponseEntity.created(uri).body(convertToDTO(registeredBusinessService.addBusiness(inputModel)));
     }
 
     @PutMapping("/registered-business/{businessId}")

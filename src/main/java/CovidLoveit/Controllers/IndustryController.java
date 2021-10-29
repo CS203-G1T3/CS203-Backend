@@ -48,7 +48,7 @@ public class IndustryController {
             throw new IndustryException(error.toString());
         }
 
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/industry/add").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/industry").toUriString());
         return ResponseEntity.created(uri).body(convertToDTO(industryService.addIndustry(adminId, inputModel)));
     }
 
