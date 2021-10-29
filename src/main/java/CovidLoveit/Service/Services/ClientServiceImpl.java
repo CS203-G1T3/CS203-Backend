@@ -174,7 +174,6 @@ public class ClientServiceImpl implements ClientService {
             logger.warn(String.format("Client with email address {%s} does not exist in database.", email));
             throw new ClientException(String.format("Client with email address {%s} does not exist in database.", email));
         });
-
         return client.get();
     }
 
