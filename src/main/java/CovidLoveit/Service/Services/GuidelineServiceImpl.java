@@ -2,7 +2,6 @@ package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.InputModel.GuidelineInputModel;
 import CovidLoveit.Domain.Models.Guideline;
-import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
 import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
@@ -12,14 +11,12 @@ import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Service.Services.Interfaces.GuidelineService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,18 +29,17 @@ public class GuidelineServiceImpl implements GuidelineService {
     private GuidelineRepository guidelineRepository;
     private IndustryRepository industryRepository;
     private ClientRepository clientRepository;
+    private EmailServiceImpl emailService;
 
     @Autowired
     public GuidelineServiceImpl(GuidelineRepository guidelineRepository, ClientRepository clientRepository,
-                                IndustryRepository industryRepository)
+                                IndustryRepository industryRepository, EmailServiceImpl emailService)
     {
         this.guidelineRepository = guidelineRepository;
         this.clientRepository = clientRepository;
         this.industryRepository = industryRepository;
+        this.emailService = emailService;
     }
-
-    @Autowired
-    EmailServiceImpl emailService;
 
     @Override
     public Guideline addGuideline(String clientId, GuidelineInputModel inputModel)
@@ -82,7 +78,7 @@ public class GuidelineServiceImpl implements GuidelineService {
 
             List<RegisteredBusiness> registeredBusinessList = industry.get().getRegisteredBusinesses();
             for (RegisteredBusiness business : registeredBusinessList) {
-                emailService.newGuidelineCreationEmail(business.getClient().getEmail(), inputModel);
+                emailService.guidelineEmail(business.getClient().getEmail(), inputModel);
             }
 
 
@@ -96,10 +92,10 @@ public class GuidelineServiceImpl implements GuidelineService {
 
     @Override
     public Guideline updateGuideline(String clientId, GuidelineInputModel inputModel) {
-        Optional<Guideline> guidelineOptional = guidelineRepository.findById(inputModel.getGuidelineId());
+        Optional<Guideline> guidelineOptional = guidelineRepository.findById(UUID.fromString(inputModel.getGuidelineId()));
         guidelineOptional.orElseThrow(() -> {
-            logger.warn(String.format("Guideline with Id {%s} does not exist in DB.", inputModel.getGuidelineId().toString()));
-            throw new GuidelineException(String.format("Guideline ID {%s} is not found.", inputModel.getGuidelineId().toString()));
+            logger.warn(String.format("Guideline with Id {%s} does not exist in DB.", inputModel.getGuidelineId()));
+            throw new GuidelineException(String.format("Guideline ID {%s} is not found.", inputModel.getGuidelineId()));
         });
 
         // check industry exists
@@ -146,10 +142,10 @@ public class GuidelineServiceImpl implements GuidelineService {
 
             List<RegisteredBusiness> registeredBusinessList = industry.get().getRegisteredBusinesses();
             for (RegisteredBusiness business : registeredBusinessList) {
-                emailService.updateGuidelineNotificationEmail(business.getClient().getEmail(), inputModel);
+                emailService.guidelineEmail(business.getClient().getEmail(), inputModel);
             }
 
-            logger.info(String.format("Successfully updated Guideline {%s}", inputModel.getGuidelineId().toString()));
+            logger.info(String.format("Successfully updated Guideline {%s}", inputModel.getGuidelineId()));
             return guidelineRecord;
 
         } else {
@@ -205,8 +201,8 @@ public class GuidelineServiceImpl implements GuidelineService {
     public Guideline getLatestGuidelineByIndustry(String industryId){
         var industry = industryRepository.findById(UUID.fromString(industryId));
         industry.orElseThrow(() -> {
-            logger.warn(String.format("Industry with ID {%s} not found", industryId.toString()));
-            throw new IndustryException(String.format("Industry with ID {%s} not found", industryId.toString()));
+            logger.warn(String.format("Industry with ID {%s} not found", industryId));
+            throw new IndustryException(String.format("Industry with ID {%s} not found", industryId));
         });
 
         return guidelineRepository.findLatestGuidelineByIndustry(industry.get());

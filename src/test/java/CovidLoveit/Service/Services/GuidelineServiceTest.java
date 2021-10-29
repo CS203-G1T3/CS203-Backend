@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 @DataJpaTest
@@ -54,12 +55,13 @@ public class GuidelineServiceTest {
     private GuidelineServiceImpl guidelineService;
     private ClientServiceImpl clientService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private EmailServiceImpl emailService;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        guidelineService = new GuidelineServiceImpl(guidelineRepository, clientRepository, industryRepository);
-        clientService = new ClientServiceImpl(clientRepository, roleRepository, bCryptPasswordEncoder);
+        guidelineService = new GuidelineServiceImpl(guidelineRepository, clientRepository, industryRepository, emailService);
+        clientService = new ClientServiceImpl(clientRepository, roleRepository, bCryptPasswordEncoder,emailService);
     }
 
     @AfterEach
@@ -223,7 +225,7 @@ public class GuidelineServiceTest {
         Guideline savedGuideline = guidelineRepository.save(guideline);
         Industry savedIndustry = industryRepository.save(industry);
         Client savedClient = clientRepository.save(client);
-        guidelineInputModel.setGuidelineId(savedGuideline.getGuidelineId());
+        guidelineInputModel.setGuidelineId(savedGuideline.getGuidelineId().toString());
         guidelineInputModel.setIndustryId(savedIndustry.getIndustryId());
         industryInputModel.setIndustryId(savedIndustry.getIndustryId());
 
@@ -263,7 +265,7 @@ public class GuidelineServiceTest {
                 "www.tiktok.com",
                 UUID.randomUUID().toString()
         );
-        guidelineInputModel.setGuidelineId(UUID.randomUUID());
+        guidelineInputModel.setGuidelineId(any(String.class));
 
 
         assertThrows(GuidelineException.class, () -> {
@@ -318,7 +320,7 @@ public class GuidelineServiceTest {
         );
 
         Guideline savedGuideline = guidelineRepository.save(guideline);
-        guidelineInputModel.setGuidelineId(savedGuideline.getGuidelineId());
+        guidelineInputModel.setGuidelineId(savedGuideline.getGuidelineId().toString());
 
         assertThrows(IndustryException.class, () -> {
            Guideline updatedGuideline = guidelineService.updateGuideline(savedClient.getClientId().toString(), guidelineInputModel);

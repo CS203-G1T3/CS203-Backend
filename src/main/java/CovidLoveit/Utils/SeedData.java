@@ -19,13 +19,13 @@ public class SeedData {
             clientService.addRole(new Role("ADMIN"));
             clientService.addRole(new Role("USER"));
 
-            var adminUser = clientService.addClient(new ClientInputModel("linsyhen99@gmail.com", "123456"));
+            var adminUser = clientService.addClient(new ClientInputModel("rahmat329@gmail.com", "123456"));
             var adminUserTest = clientService.addClient(new ClientInputModel("webtestercs102@gmail.com", "123456"));
-            var user = clientService.addClient(new ClientInputModel("ruwansadris.2020@smu.edu.sg", "123456"));
+            var user = clientService.addClient(new ClientInputModel("mohamadry.2020@smu.edu.sg", "123456"));
 
-            clientService.addRoleToClient("linsyhen99@gmail.com", "ADMIN");
+            clientService.addRoleToClient("rahmat329@gmail.com", "ADMIN");
             clientService.addRoleToClient("webtestercs102@gmail.com", "ADMIN");
-            clientService.addRoleToClient("ruwansadris.2020@smu.edu.sg", "USER");
+            clientService.addRoleToClient("mohamadry.2020@smu.edu.sg", "USER");
 
             var industry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Food & Beverage", "Hawker", "SFA coffee shop / eating house / canteen license"));
             var anotherIndustry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Entertainment", "Fitness First", "Bro come workout and you wont regret."));

@@ -59,6 +59,7 @@ public class GuidelineInputModel {
                                String opGuidelines,
                                String referenceLink, 
                                String industryId) {
+        this.guidelineId = guidelineId;
         this.canOpOnSite = canOpOnSite;
         this.canOpOnSiteDetails = canOpOnSiteDetails;
         this.groupSize = groupSize;
@@ -75,7 +76,7 @@ public class GuidelineInputModel {
         this.industryId = UUID.fromString(industryId);
     }
 
-    private UUID guidelineId;
+    private String guidelineId;
 
     @NotNull(message = "Operation Status Required.")
     private boolean canOpOnSite;
@@ -238,11 +239,11 @@ public class GuidelineInputModel {
         this.referenceLink = referenceLink;
     }
 
-    public UUID getGuidelineId() {
+    public String getGuidelineId() {
         return guidelineId;
     }
 
-    public void setGuidelineId(UUID guidelineId) {
+    public void setGuidelineId(String guidelineId) {
         this.guidelineId = guidelineId;
     }
 

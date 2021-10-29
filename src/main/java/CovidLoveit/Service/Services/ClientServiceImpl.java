@@ -2,7 +2,6 @@ package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.InputModel.ClientInputModel;
 import CovidLoveit.Domain.Models.Client;
-import CovidLoveit.Domain.Models.Email;
 import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
 import CovidLoveit.Exception.RoleException;
@@ -16,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
 import java.util.*;
 
 @Service
@@ -28,16 +26,15 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private EmailServiceImpl emailService;
+    private final EmailServiceImpl emailService;
 
     // Injecting the required dependencies here
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
+    public ClientServiceImpl(ClientRepository clientRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder,EmailServiceImpl emailService ){
         this.clientRepository = clientRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.emailService = emailService;
     }
 
     @Override
@@ -177,15 +174,6 @@ public class ClientServiceImpl implements ClientService {
             logger.warn(String.format("Client with email address {%s} does not exist in database.", email));
             throw new ClientException(String.format("Client with email address {%s} does not exist in database.", email));
         });
-
-        Email emailToSend = new Email();
-
-        emailToSend.setEmailSubject("Email Testing");
-        emailToSend.setEmailFrom("TRAIL");
-
-        emailToSend.setEmailContent("Dear " + email);
-        emailToSend.setEmailTo("webtestercs102@gmail.com");
-        emailService.sendEmail(emailToSend);
 
         return client.get();
     }
