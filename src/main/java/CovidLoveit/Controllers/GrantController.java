@@ -10,16 +10,14 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.ConstraintViolation;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,6 +34,7 @@ public class GrantController {
         this.modelMapper = modelMapper;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/grant/{adminId}")
     public ResponseEntity<GrantDTO> addGrant(@PathVariable String adminId, @RequestBody GrantInputModel inputModel) {
         Set<ConstraintViolation<GrantInputModel>> violations = inputModel.validate();
@@ -54,13 +53,15 @@ public class GrantController {
         return ResponseEntity.created(uri).body(convertToDTO(grantService.addGrant(adminId, inputModel)));
     }
 
-    @PostMapping("/grant/{grantId}/{adminId}/industry/{industrySubtypeName}")
-    public ResponseEntity<GrantDTO> addIndustryToGrant(@PathVariable String adminId,
-                                                       @PathVariable String industrySubtypeName,
-                                                       @PathVariable String grantId) {
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/grant-industry")
+    public ResponseEntity<GrantDTO> addIndustryToGrant(@RequestBody Map<String, String> requestBody)
+    {
+        if(requestBody.get("adminId") == null || requestBody.get("industrySubtypeName") == null || requestBody.get("grantId") == null)
+            throw new GrantException("Invalid data provided in the request body.");
 
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/grant/industry").toUriString());
-        return ResponseEntity.created(uri).body(convertToDTO(grantService.addIndustryToGrant(adminId, industrySubtypeName, UUID.fromString(grantId))));
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/grant-industry").toUriString());
+        return ResponseEntity.created(uri).body(convertToDTO(grantService.addIndustryToGrant(requestBody.get("adminId"), requestBody.get("industrySubtypeName"), UUID.fromString(requestBody.get("grantId")))));
     }
 
     @PutMapping("/grant/{adminId}")
