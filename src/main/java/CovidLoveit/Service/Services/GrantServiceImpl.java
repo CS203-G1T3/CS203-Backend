@@ -92,23 +92,28 @@ public class GrantServiceImpl implements GrantService {
             }
         }
 
-        var industryRecord = industryRepository.findIndustryByIndustrySubtype(industrySubtypeName);
-        if(industryRecord == null){
-            logger.warn(String.format("Industry Subtype with name {%s} not found", industrySubtypeName));
-            throw new IndustryException(String.format("Industry Subtype with name {%s} not found", industrySubtypeName));
+        if(isAdmin) {
+            var industryRecord = industryRepository.findIndustryByIndustrySubtype(industrySubtypeName);
+            if(industryRecord == null){
+                logger.warn(String.format("Industry Subtype with name {%s} not found", industrySubtypeName));
+                throw new IndustryException(String.format("Industry Subtype with name {%s} not found", industrySubtypeName));
+            }
+
+            var grantOptional = grantRepository.findById(grantId);
+            grantOptional.orElseThrow(() -> {
+                logger.warn(String.format("Grant with ID {%s} not found", grantId));
+                throw new GrantException(String.format("Grant with ID {%s} not found", grantId));
+            });
+
+            var grant = grantOptional.get();
+            grant.getIndustries().add(industryRecord);
+
+            var savedGrant = grantRepository.save(grant);
+            return savedGrant;
+
+        } else {
+            throw new ClientException("Unauthorized access.");
         }
-
-        var grantOptional = grantRepository.findById(grantId);
-        grantOptional.orElseThrow(() -> {
-            logger.warn(String.format("Grant with ID {%s} not found", grantId));
-            throw new IndustryException(String.format("Grant with ID {%s} not found", grantId));
-        });
-
-        var grant = grantOptional.get();
-        grant.getIndustries().add(industryRecord);
-
-        var savedGrant = grantRepository.save(grant);
-        return savedGrant;
     }
 
     @Override
