@@ -33,7 +33,6 @@ import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GrantRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 @DataJpaTest
