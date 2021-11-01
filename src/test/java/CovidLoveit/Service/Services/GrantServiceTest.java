@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import CovidLoveit.Repositories.Interfaces.RoleRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GrantRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 @DataJpaTest
@@ -44,6 +46,9 @@ public class GrantServiceTest {
 
     @Autowired
     private IndustryRepository industryRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Mock
     private AutoCloseable autoCloseable;
@@ -77,8 +82,9 @@ public class GrantServiceTest {
 
     @Test
     void addGrant_GrantAlreadyExists_ThrowGrantException(){
+        Role savedRole = roleRepository.save(new Role("ADMIN"));
         List<Role> roles = new ArrayList<>();
-        roles.add(new Role("ADMIN"));
+        roles.add(savedRole);
         Client client = new Client("123456", roles, "tester@gmail.com");
         Client savedClient = clientRepository.save(client);
 
@@ -113,8 +119,9 @@ public class GrantServiceTest {
 
     @Test
     void addIndustryToGrant_SuccessfullyAddedIndustryToGrant_ReturnGrant(){
+        Role savedRole = roleRepository.save(new Role("ADMIN"));
         List<Role> roles = new ArrayList<>();
-        roles.add(new Role("ADMIN"));
+        roles.add(savedRole);
         Client client = new Client("123456", roles, "tester@gmail.com");
         Client savedClient = clientRepository.save(client);
         Industry industry = new Industry("industryName", "industrySubtype", "industryDesc");
@@ -154,8 +161,9 @@ public class GrantServiceTest {
 
     @Test
     void addIndustryToGrant_GrantNotFound_ThrowGrantException(){
+        Role savedRole = roleRepository.save(new Role("ADMIN"));
         List<Role> roles = new ArrayList<>();
-        roles.add(new Role("ADMIN"));
+        roles.add(savedRole);
         Client client = new Client("123456", roles, "tester@gmail.com");
         Client savedClient = clientRepository.save(client);
         Industry industry = new Industry("industryName", "industrySubtype", "industryDesc");
