@@ -1,5 +1,7 @@
 package CovidLoveit.Domain.InputModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -78,6 +80,7 @@ public class GuidelineInputModel {
     private UUID guidelineId;
 
     @NotNull(message = "Operation Status Required.")
+    @JsonProperty(value = "canOpOnSite")
     private boolean canOpOnSite;
 
     @NotBlank(message = "Operation Site Details Required. ")
