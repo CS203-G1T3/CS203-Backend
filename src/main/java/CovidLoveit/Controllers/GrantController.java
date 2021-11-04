@@ -57,11 +57,11 @@ public class GrantController {
     @PostMapping("/grant-industry")
     public ResponseEntity<GrantDTO> addIndustryToGrant(@RequestBody Map<String, String> requestBody)
     {
-        if(requestBody.get("adminId") == null || requestBody.get("industrySubtypeName") == null || requestBody.get("grantId") == null)
+        if(requestBody.get("adminId").isEmpty() || requestBody.get("industryName").isEmpty() || requestBody.get("grantId").isEmpty())
             throw new GrantException("Invalid data provided in the request body.");
 
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/grant-industry").toUriString());
-        return ResponseEntity.created(uri).body(convertToDTO(grantService.addIndustryToGrant(requestBody.get("adminId"), requestBody.get("industrySubtypeName"), UUID.fromString(requestBody.get("grantId")))));
+        return ResponseEntity.created(uri).body(convertToDTO(grantService.addIndustryToGrant(requestBody.get("adminId"), requestBody.get("industryName"), UUID.fromString(requestBody.get("grantId")))));
     }
 
     @PutMapping("/grant/{adminId}")
