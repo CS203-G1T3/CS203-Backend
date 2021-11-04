@@ -76,7 +76,7 @@ public class GrantServiceImpl implements GrantService {
     }
 
     @Override
-    public Grant addIndustryToGrant(String adminId, String industrySubtypeName, UUID grantId) {
+    public Grant addIndustryToGrant(String adminId, String industryName, UUID grantId) {
         var sessionUser = clientRepository.findById(UUID.fromString(adminId));
         sessionUser.orElseThrow(() -> {
             logger.warn(String.format("Client with ID {%s} not found", adminId));
@@ -92,10 +92,10 @@ public class GrantServiceImpl implements GrantService {
             }
         }
 
-        var industryRecord = industryRepository.findIndustryByIndustrySubtype(industrySubtypeName);
-        if(industryRecord == null){
-            logger.warn(String.format("Industry Subtype with name {%s} not found", industrySubtypeName));
-            throw new IndustryException(String.format("Industry Subtype with name {%s} not found", industrySubtypeName));
+        var industryRecords = industryRepository.findIndustryByIndustryName(industryName);
+        if(industryRecords.isEmpty()){
+            logger.warn(String.format("Industry Subtype with name {%s} not found", industryName));
+            throw new IndustryException(String.format("Industry Subtype with name {%s} not found", industryName));
         }
 
         var grantOptional = grantRepository.findById(grantId);
@@ -105,7 +105,7 @@ public class GrantServiceImpl implements GrantService {
         });
 
         var grant = grantOptional.get();
-        grant.getIndustries().add(industryRecord);
+        grant.getIndustries().addAll(industryRecords);
 
         var savedGrant = grantRepository.save(grant);
         return savedGrant;
@@ -134,13 +134,13 @@ public class GrantServiceImpl implements GrantService {
             }
         }
 
-        var industries = inputModel.getIndustrySubtypeNames();
+        var industries = inputModel.getIndustryNames();
         List<Industry> grantIndustries = new ArrayList<>();
         if(industries != null && !industries.isEmpty()) {
-            for(String industrySubtypeName : industries) {
-                var industryVerification = industryRepository.findIndustryByIndustrySubtype(industrySubtypeName);
-                if(industryVerification != null)
-                    grantIndustries.add(industryVerification);
+            for(String industryName : industries) {
+                var industryVerification = industryRepository.findIndustryByIndustryName(industryName);
+                if(!industryVerification.isEmpty())
+                    grantIndustries.addAll(industryVerification);
             }
         }
 
