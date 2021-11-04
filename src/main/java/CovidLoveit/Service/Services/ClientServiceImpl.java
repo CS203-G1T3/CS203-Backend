@@ -55,6 +55,9 @@ public class ClientServiceImpl implements ClientService {
                 });
                 clientRoles.add(roleVerification.get());
             }
+        } else {
+            var userRole = roleRepository.findByRoleName("USER");
+            clientRoles.add(userRole.get());
         }
 
         // Encode the user's password before storing their credentials
