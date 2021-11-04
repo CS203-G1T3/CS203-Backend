@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -83,5 +84,11 @@ public class AuthController {
         } else {
             throw new RuntimeException("Refresh token is missing");
         }
+    }
+
+    // for load balancer
+    @GetMapping("/healthcheck")
+    public Map<String, String> healthCheck() {
+        return Collections.singletonMap("response", "all good!");
     }
 }
