@@ -36,7 +36,7 @@ public class GrantInputModel {
     @NotBlank(message = "Grant Link required")
     private String grantLink;
 
-    private List<String> industrySubtypeNames;
+    private List<String> industryNames;
 
     public GrantInputModel() {
     }
@@ -131,11 +131,11 @@ public class GrantInputModel {
         this.grantLink = grantLink;
     }
 
-    public List<String> getIndustrySubtypeNames() {
-        return industrySubtypeNames;
+    public List<String> getIndustryNames() {
+        return industryNames;
     }
 
-    public void setIndustrySubtypeNames(List<String> industrySubtypeNames) {
-        this.industrySubtypeNames = industrySubtypeNames;
+    public void setIndustryNames(List<String> industryNames) {
+        this.industryNames = industryNames;
     }
 }

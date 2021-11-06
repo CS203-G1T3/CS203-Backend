@@ -53,6 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/**/client").permitAll()
             .antMatchers("/**/role").hasRole("ADMIN")
             .antMatchers("/**/guideline/*").permitAll()
+            .antMatchers("/api/health-check/**").permitAll()
             .anyRequest().authenticated().and()
             .sessionManagement().sessionCreationPolicy(STATELESS).and()
             .addFilter(customAuthenticationFilter)
@@ -70,6 +71,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.applyPermitDefaultValues();
         configuration.addAllowedMethod("DELETE");
+        configuration.addAllowedMethod("PUT");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

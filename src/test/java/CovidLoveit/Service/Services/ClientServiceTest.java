@@ -32,7 +32,7 @@ public class ClientServiceTest {
 
     @Autowired
     private ClientRepository clientRepository;
-    private ClientServiceImpl clientService;
+
 
     @Autowired
     private RoleRepository roleRepository;
@@ -42,6 +42,7 @@ public class ClientServiceTest {
 
     @InjectMocks
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private ClientServiceImpl clientService;
 
     @InjectMocks
     private EmailServiceImpl emailService;
@@ -61,8 +62,12 @@ public class ClientServiceTest {
     @Disabled
     void addClient_Successful_ReturnlClient() {
         //given
-        Client client = new Client("123456", "email@gmail.com");
-        ClientInputModel clientInputModel = new ClientInputModel("email@gmail.com", "123456");
+        var role = new Role("USER");
+        roleRepository.save(role);
+
+        var roles = new ArrayList<String>();
+        roles.add("USER");
+        ClientInputModel clientInputModel = new ClientInputModel("email@gmail.com", "123456", roles);
 
         //when
         Client savedClient = clientService.addClient(clientInputModel);

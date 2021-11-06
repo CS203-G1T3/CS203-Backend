@@ -21,6 +21,12 @@ public class ClientInputModel {
         this.password = password;
     }
 
+    public ClientInputModel(String password, String email, List<String> roleNames) {
+        this.password = password;
+        this.roleNames = roleNames;
+        this.email = email;
+    }
+
     private UUID clientId;
 
     private String password;
