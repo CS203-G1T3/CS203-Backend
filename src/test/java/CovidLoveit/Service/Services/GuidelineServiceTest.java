@@ -243,42 +243,6 @@ public class GuidelineServiceTest {
     }
 
     @Test
-    @Disabled
-    void updateGuideline_UnsuccessfullyGuidelineNotFound_ReturnGuidelineException() {
-        List<Role> roles = new ArrayList<>();
-        roles.add(new Role("ADMIN"));
-
-        Client client = new Client("123456",
-                null, "tester123@gmail.com");
-        client.setRoles(roles);
-        Client savedClient = clientRepository.save(client);
-
-        GuidelineInputModel guidelineInputModel = new GuidelineInputModel(
-                true,
-                "Can operate",
-                5,
-                "Maximum capacity 5 pax",
-                500000,
-                500001,
-                "Tested all negatives",
-                "Call me maybe",
-                "Trace together as one",
-                10,
-                "Only maximum 10 staff allowed",
-                "Please maintain a safe distance of 100m apart",
-                "www.tiktok.com",
-                UUID.randomUUID().toString()
-        );
-        guidelineInputModel.setGuidelineId(any(String.class));
-
-
-        assertThrows(GuidelineException.class, () -> {
-           guidelineService.updateGuideline(savedClient.getClientId().toString(), guidelineInputModel);
-        });
-
-    }
-
-    @Test
     void updateGuideline_UnsuccessfullyIndustryNotFound_ReturnIndustryException() {
         List<Role> roles = new ArrayList<>();
         roles.add(new Role("ADMIN"));
