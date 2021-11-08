@@ -125,7 +125,7 @@ public class NotificationServiceImpl implements NotificationService {
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
         });
 
-        var notifications = notificationRepository.findAllByClientId(clientId);
+        var notifications = notificationRepository.findAllByClient(clientOptional.get());
 
         return notifications;
     }
@@ -138,7 +138,7 @@ public class NotificationServiceImpl implements NotificationService {
             throw new ClientException(String.format("Client with ID {%s} not found", clientId));
         });
 
-        var notifications = notificationRepository.findAllUnacknowledgedNotificationByClientId(clientId);
+        var notifications = notificationRepository.findAllUnacknowledgedNotificationByClient(clientId);
         return notifications;
     }
 }
