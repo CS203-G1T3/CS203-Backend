@@ -15,6 +15,11 @@ public class NotificationInputModel {
     public NotificationInputModel() {
     }
 
+    public NotificationInputModel(String messageBody, UUID clientId) {
+        this.messageBody = messageBody;
+        this.clientId = clientId;
+    }
+
     public NotificationInputModel(String messageBody, boolean isAcknowledged, UUID clientId) {
         this.messageBody = messageBody;
         this.isAcknowledged = isAcknowledged;
