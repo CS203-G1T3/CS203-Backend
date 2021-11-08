@@ -3,10 +3,7 @@ package CovidLoveit.Domain.Models;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "CLIENT")
@@ -58,6 +55,9 @@ public class Client {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "client")
     private RegisteredBusiness registeredBusiness;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
+    private List<Notification> notification;
+
     public UUID getClientId() {
         return clientId;
     }
@@ -100,5 +100,13 @@ public class Client {
 
     public void setRegisteredBusiness(RegisteredBusiness registeredBusiness) {
         this.registeredBusiness = registeredBusiness;
+    }
+
+    public List<Notification> getNotification() {
+        return notification;
+    }
+
+    public void setNotification(List<Notification> notification) {
+        this.notification = notification;
     }
 }
