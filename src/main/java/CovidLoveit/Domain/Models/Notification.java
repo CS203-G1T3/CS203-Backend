@@ -23,7 +23,7 @@ public class Notification {
     @Column(name = "createdAt", nullable = false, updatable = false)
     private Date createdAt;
 
-    @Column(name = "isAcknowledged")
+    @Column(name = "isAcknowledged", columnDefinition = "BOOLEAN DEFAULT false")
     private boolean isAcknowledged;
 
     @ManyToOne(fetch = FetchType.LAZY)
