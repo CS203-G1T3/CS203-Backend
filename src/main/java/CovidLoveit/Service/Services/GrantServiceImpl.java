@@ -160,6 +160,14 @@ public class GrantServiceImpl implements GrantService {
             }
         }
 
+        for(Industry industry : grantIndustries) {
+            var business = businessRepository.findRegisteredBusinessByIndustry(industry.getIndustryId());
+
+            var message = "There is an update with regards to the grants available. Click here for more.";
+            var notification = new NotificationInputModel(message, business.getClient().getClientId());
+            notificationService.addNotification(sessionUser.get().getClientId(), notification);
+        }
+
         if(isAdmin) {
             var grantRecord = grantOptional.get();
             grantRecord.setGrantName(inputModel.getGrantName());
