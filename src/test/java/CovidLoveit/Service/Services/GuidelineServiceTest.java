@@ -13,6 +13,7 @@ import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Repositories.Interfaces.RoleRepository;
+import CovidLoveit.Service.Services.Interfaces.NotificationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -57,11 +58,12 @@ public class GuidelineServiceTest {
     private ClientServiceImpl clientService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private EmailServiceImpl emailService;
+    private NotificationService notificationService;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        guidelineService = new GuidelineServiceImpl(guidelineRepository, clientRepository, industryRepository, emailService);
+        guidelineService = new GuidelineServiceImpl(guidelineRepository, clientRepository, industryRepository, emailService, notificationService);
         clientService = new ClientServiceImpl(clientRepository, roleRepository, bCryptPasswordEncoder,emailService);
     }
 
