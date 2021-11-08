@@ -1,5 +1,7 @@
 package CovidLoveit.Domain.InputModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -20,6 +22,7 @@ public class NotificationInputModel {
     @NotEmpty(message = "Please include a notification message body")
     private String messageBody;
 
+    @JsonProperty(value = "isAcknowledged")
     private boolean isAcknowledged;
 
     public Set<ConstraintViolation<NotificationInputModel>> validate() {
