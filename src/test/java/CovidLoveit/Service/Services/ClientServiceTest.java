@@ -40,12 +40,12 @@ public class ClientServiceTest {
     @Mock
     private AutoCloseable autoCloseable;
 
+    @Mock
+    private EmailServiceImpl emailService;
+
     @InjectMocks
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private ClientServiceImpl clientService;
-
-    @InjectMocks
-    private EmailServiceImpl emailService;
 
     @BeforeEach
     void setUp() {
@@ -59,15 +59,14 @@ public class ClientServiceTest {
     }
 
     @Test
-    @Disabled
-    void addClient_Successful_ReturnlClient() {
+    void addClient_Successful_ReturnClient() {
         //given
         var role = new Role("USER");
         roleRepository.save(role);
 
         var roles = new ArrayList<String>();
         roles.add("USER");
-        ClientInputModel clientInputModel = new ClientInputModel("email@gmail.com", "123456", roles);
+        ClientInputModel clientInputModel = new ClientInputModel("123456", "email@gmail.com", roles);
 
         //when
         Client savedClient = clientService.addClient(clientInputModel);
