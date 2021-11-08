@@ -10,6 +10,20 @@ import java.util.UUID;
 @Table(name = "NOTIFICATION")
 public class Notification {
 
+    public Notification() {
+    }
+
+    public Notification(String messageBody, boolean isAcknowledged) {
+        this.messageBody = messageBody;
+        this.isAcknowledged = isAcknowledged;
+    }
+
+    public Notification(String messageBody, boolean isAcknowledged, Client client) {
+        this.messageBody = messageBody;
+        this.isAcknowledged = isAcknowledged;
+        this.client = client;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "notifId", unique = true, nullable = false)
