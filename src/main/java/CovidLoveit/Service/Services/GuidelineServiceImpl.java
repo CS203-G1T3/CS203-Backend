@@ -1,7 +1,9 @@
 package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.InputModel.GuidelineInputModel;
+import CovidLoveit.Domain.InputModel.NotificationInputModel;
 import CovidLoveit.Domain.Models.Guideline;
+import CovidLoveit.Domain.Models.Notification;
 import CovidLoveit.Domain.Models.RegisteredBusiness;
 import CovidLoveit.Domain.Models.Role;
 import CovidLoveit.Exception.ClientException;
@@ -11,6 +13,7 @@ import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Service.Services.Interfaces.GuidelineService;
+import CovidLoveit.Service.Services.Interfaces.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,19 +29,22 @@ import java.util.UUID;
 public class GuidelineServiceImpl implements GuidelineService {
 
     private Logger logger = LoggerFactory.getLogger(GuidelineServiceImpl.class);
-    private GuidelineRepository guidelineRepository;
-    private IndustryRepository industryRepository;
-    private ClientRepository clientRepository;
-    private EmailServiceImpl emailService;
+    private final GuidelineRepository guidelineRepository;
+    private final IndustryRepository industryRepository;
+    private final ClientRepository clientRepository;
+    private final EmailServiceImpl emailService;
+    private final NotificationService notificationService;
+
 
     @Autowired
     public GuidelineServiceImpl(GuidelineRepository guidelineRepository, ClientRepository clientRepository,
-                                IndustryRepository industryRepository, EmailServiceImpl emailService)
+                                IndustryRepository industryRepository, EmailServiceImpl emailService, NotificationService notificationService)
     {
         this.guidelineRepository = guidelineRepository;
         this.clientRepository = clientRepository;
         this.industryRepository = industryRepository;
         this.emailService = emailService;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -54,7 +60,6 @@ public class GuidelineServiceImpl implements GuidelineService {
         UUID industryId = inputModel.getIndustryId();
         var industry = industryRepository.findById(industryId);
         industry.orElseThrow(() -> {
-            // throw new IndustryException(String.format("Industry with ID {%s} not found", industryId.toString()));
             throw new IndustryException(String.format("Industry with ID {%s} not found", industryId));
         });
 
@@ -79,8 +84,8 @@ public class GuidelineServiceImpl implements GuidelineService {
             List<RegisteredBusiness> registeredBusinessList = industry.get().getRegisteredBusinesses();
             for (RegisteredBusiness business : registeredBusinessList) {
                 emailService.guidelineEmail(business.getClient().getEmail(), inputModel);
-            }
 
+            }
 
             logger.info(String.format("Successfully added guideline {%s}", savedGuideline.getGuidelineId().toString()));
             return savedGuideline;
@@ -143,6 +148,10 @@ public class GuidelineServiceImpl implements GuidelineService {
             List<RegisteredBusiness> registeredBusinessList = industry.get().getRegisteredBusinesses();
             for (RegisteredBusiness business : registeredBusinessList) {
                 emailService.guidelineEmail(business.getClient().getEmail(), inputModel);
+
+                var message = "There has been an update to your business's restrictions. Tap here to view more.";
+                var notification = new NotificationInputModel(message, business.getClient().getClientId());
+                notificationService.addNotification(sessionUser.get().getClientId(), notification);
             }
 
             logger.info(String.format("Successfully updated Guideline {%s}", inputModel.getGuidelineId()));
