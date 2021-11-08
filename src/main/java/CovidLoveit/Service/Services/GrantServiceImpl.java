@@ -1,6 +1,7 @@
 package CovidLoveit.Service.Services;
 
 import CovidLoveit.Domain.InputModel.GrantInputModel;
+import CovidLoveit.Domain.InputModel.NotificationInputModel;
 import CovidLoveit.Domain.Models.Grant;
 import CovidLoveit.Domain.Models.Industry;
 import CovidLoveit.Domain.Models.Role;
@@ -10,7 +11,9 @@ import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GrantRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
+import CovidLoveit.Repositories.Interfaces.RegisteredBusinessRepository;
 import CovidLoveit.Service.Services.Interfaces.GrantService;
+import CovidLoveit.Service.Services.Interfaces.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +32,18 @@ public class GrantServiceImpl implements GrantService {
     private final GrantRepository grantRepository;
     private final ClientRepository clientRepository;
     private final IndustryRepository industryRepository;
+    private final RegisteredBusinessRepository businessRepository;
+    private final NotificationService notificationService;
 
     @Autowired
     public GrantServiceImpl(GrantRepository grantRepository, ClientRepository clientRepository,
-                            IndustryRepository industryRepository) {
+                            IndustryRepository industryRepository, RegisteredBusinessRepository businessRepository,
+                            NotificationService notificationService) {
         this.grantRepository = grantRepository;
         this.clientRepository = clientRepository;
         this.industryRepository = industryRepository;
+        this.businessRepository = businessRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -106,6 +114,14 @@ public class GrantServiceImpl implements GrantService {
 
         var grant = grantOptional.get();
         grant.getIndustries().addAll(industryRecords);
+
+        for(Industry industry : industryRecords) {
+            var business = businessRepository.findRegisteredBusinessByIndustry(industry.getIndustryId());
+
+            var message = "New grants available! Check it out.";
+            var notification = new NotificationInputModel(message, business.getClient().getClientId());
+            notificationService.addNotification(sessionUser.get().getClientId(), notification);
+        }
 
         var savedGrant = grantRepository.save(grant);
         return savedGrant;
