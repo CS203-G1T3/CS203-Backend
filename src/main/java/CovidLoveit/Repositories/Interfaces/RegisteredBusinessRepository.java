@@ -11,6 +11,6 @@ import java.util.UUID;
 
 public interface RegisteredBusinessRepository extends JpaRepository<RegisteredBusiness, UUID>{
 
-    @Query(value = "SELECT * FROM RegisteredBusiness WHERE industry_id = :industryId", nativeQuery = true)
-    RegisteredBusiness findRegisteredBusinessByIndustry(@Param("industryId") UUID industryId);
+    @Query(value = "SELECT * FROM Registered_Business WHERE industry_id = :industryId", nativeQuery = true)
+    List<RegisteredBusiness> findRegisteredBusinessByIndustry(@Param("industryId") UUID industryId);
 }
