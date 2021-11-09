@@ -100,31 +100,36 @@ public class GrantServiceImpl implements GrantService {
             }
         }
 
-        var industryRecords = industryRepository.findIndustryByIndustryName(industryName);
-        if(industryRecords.isEmpty()){
-            logger.warn(String.format("Industry Subtype with name {%s} not found", industryName));
-            throw new IndustryException(String.format("Industry Subtype with name {%s} not found", industryName));
+        if (isAdmin) {
+            var industryRecords = industryRepository.findIndustryByIndustryName(industryName);
+            if(industryRecords.isEmpty()){
+                logger.warn(String.format("Industry Subtype with name {%s} not found", industryName));
+                throw new IndustryException(String.format("Industry Subtype with name {%s} not found", industryName));
+            }
+
+            var grantOptional = grantRepository.findById(grantId);
+            grantOptional.orElseThrow(() -> {
+                logger.warn(String.format("Grant with ID {%s} not found", grantId));
+                throw new IndustryException(String.format("Grant with ID {%s} not found", grantId));
+            });
+
+            var grant = grantOptional.get();
+            grant.getIndustries().addAll(industryRecords);
+
+            for(Industry industry : industryRecords) {
+                var business = businessRepository.findRegisteredBusinessByIndustry(industry.getIndustryId());
+
+                var message = "New grants available! Check it out.";
+                var notification = new NotificationInputModel(message, business.getClient().getClientId());
+                notificationService.addNotification(sessionUser.get().getClientId(), notification);
+            }
+
+            var savedGrant = grantRepository.save(grant);
+            return savedGrant;
+
+        } else {
+            throw new ClientException("Unauthorized access to modify grant.");
         }
-
-        var grantOptional = grantRepository.findById(grantId);
-        grantOptional.orElseThrow(() -> {
-            logger.warn(String.format("Grant with ID {%s} not found", grantId));
-            throw new IndustryException(String.format("Grant with ID {%s} not found", grantId));
-        });
-
-        var grant = grantOptional.get();
-        grant.getIndustries().addAll(industryRecords);
-
-        for(Industry industry : industryRecords) {
-            var business = businessRepository.findRegisteredBusinessByIndustry(industry.getIndustryId());
-
-            var message = "New grants available! Check it out.";
-            var notification = new NotificationInputModel(message, business.getClient().getClientId());
-            notificationService.addNotification(sessionUser.get().getClientId(), notification);
-        }
-
-        var savedGrant = grantRepository.save(grant);
-        return savedGrant;
     }
 
     @Override
