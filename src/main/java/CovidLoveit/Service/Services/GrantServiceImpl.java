@@ -103,25 +103,26 @@ public class GrantServiceImpl implements GrantService {
         if (isAdmin) {
             var industryRecords = industryRepository.findIndustryByIndustryName(industryName);
             if(industryRecords.isEmpty()){
-                logger.warn(String.format("Industry Subtype with name {%s} not found", industryName));
-                throw new IndustryException(String.format("Industry Subtype with name {%s} not found", industryName));
+                logger.warn(String.format("Industry with name {%s} not found", industryName));
+                throw new IndustryException(String.format("Industry with name {%s} not found", industryName));
             }
 
             var grantOptional = grantRepository.findById(grantId);
             grantOptional.orElseThrow(() -> {
                 logger.warn(String.format("Grant with ID {%s} not found", grantId));
-                throw new IndustryException(String.format("Grant with ID {%s} not found", grantId));
+                throw new GrantException(String.format("Grant with ID {%s} not found", grantId));
             });
 
             var grant = grantOptional.get();
             grant.getIndustries().addAll(industryRecords);
 
             for(Industry industry : industryRecords) {
-                var business = businessRepository.findRegisteredBusinessByIndustry(industry.getIndustryId());
+                for(var business : businessRepository.findRegisteredBusinessByIndustry(industry.getIndustryId())){
 
-                var message = "New grants available! Check it out.";
-                var notification = new NotificationInputModel(message, business.getClient().getClientId());
-                notificationService.addNotification(sessionUser.get().getClientId(), notification);
+                    var message = "New grants available! Check it out.";
+                    var notification = new NotificationInputModel(message, business.getClient().getClientId());
+                    notificationService.addNotification(sessionUser.get().getClientId(), notification);
+                }
             }
 
             var savedGrant = grantRepository.save(grant);
@@ -166,11 +167,12 @@ public class GrantServiceImpl implements GrantService {
         }
 
         for(Industry industry : grantIndustries) {
-            var business = businessRepository.findRegisteredBusinessByIndustry(industry.getIndustryId());
+            for(var business : businessRepository.findRegisteredBusinessByIndustry(industry.getIndustryId())){
 
-            var message = "There is an update with regards to the grants available. Click here for more.";
-            var notification = new NotificationInputModel(message, business.getClient().getClientId());
-            notificationService.addNotification(sessionUser.get().getClientId(), notification);
+                var message = "There is an update with regards to the grants available. Click here for more.";
+                var notification = new NotificationInputModel(message, business.getClient().getClientId());
+                notificationService.addNotification(sessionUser.get().getClientId(), notification);
+            }
         }
 
         if(isAdmin) {
