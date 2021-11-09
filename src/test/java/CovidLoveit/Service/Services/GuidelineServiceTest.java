@@ -13,6 +13,7 @@ import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GuidelineRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
 import CovidLoveit.Repositories.Interfaces.RoleRepository;
+import CovidLoveit.Service.Services.Interfaces.NotificationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -57,11 +58,12 @@ public class GuidelineServiceTest {
     private ClientServiceImpl clientService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private EmailServiceImpl emailService;
+    private NotificationService notificationService;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        guidelineService = new GuidelineServiceImpl(guidelineRepository, clientRepository, industryRepository, emailService);
+        guidelineService = new GuidelineServiceImpl(guidelineRepository, clientRepository, industryRepository, emailService, notificationService);
         clientService = new ClientServiceImpl(clientRepository, roleRepository, bCryptPasswordEncoder,emailService);
     }
 
@@ -237,42 +239,6 @@ public class GuidelineServiceTest {
         //then
         assertEquals(updatedGuideline.getGuidelineId(), savedGuideline.getGuidelineId());
 
-
-    }
-
-    @Test
-    @Disabled
-    void updateGuideline_UnsuccessfullyGuidelineNotFound_ReturnGuidelineException() {
-        List<Role> roles = new ArrayList<>();
-        roles.add(new Role("ADMIN"));
-
-        Client client = new Client("123456",
-                null, "tester123@gmail.com");
-        client.setRoles(roles);
-        Client savedClient = clientRepository.save(client);
-
-        GuidelineInputModel guidelineInputModel = new GuidelineInputModel(
-                true,
-                "Can operate",
-                5,
-                "Maximum capacity 5 pax",
-                500000,
-                500001,
-                "Tested all negatives",
-                "Call me maybe",
-                "Trace together as one",
-                10,
-                "Only maximum 10 staff allowed",
-                "Please maintain a safe distance of 100m apart",
-                "www.tiktok.com",
-                UUID.randomUUID().toString()
-        );
-        guidelineInputModel.setGuidelineId(any(String.class));
-
-
-        assertThrows(GuidelineException.class, () -> {
-           guidelineService.updateGuideline(savedClient.getClientId().toString(), guidelineInputModel);
-        });
 
     }
 
