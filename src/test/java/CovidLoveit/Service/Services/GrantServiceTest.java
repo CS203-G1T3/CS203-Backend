@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import CovidLoveit.Repositories.Interfaces.RoleRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +32,9 @@ import CovidLoveit.Exception.IndustryException;
 import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.GrantRepository;
 import CovidLoveit.Repositories.Interfaces.IndustryRepository;
+import CovidLoveit.Repositories.Interfaces.RegisteredBusinessRepository;
+import CovidLoveit.Repositories.Interfaces.RoleRepository;
+import CovidLoveit.Service.Services.Interfaces.NotificationService;
 
 @ExtendWith(MockitoExtension.class)
 @DataJpaTest
@@ -47,6 +49,12 @@ public class GrantServiceTest {
     private IndustryRepository industryRepository;
 
     @Autowired
+    private RegisteredBusinessRepository businessRepository;
+
+    @Mock
+    private NotificationService notificationService;
+
+    @Autowired
     private RoleRepository roleRepository;
 
     @Mock
@@ -58,7 +66,7 @@ public class GrantServiceTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        grantService = new GrantServiceImpl(grantRepository, clientRepository, industryRepository);
+        grantService = new GrantServiceImpl(grantRepository, clientRepository, industryRepository, businessRepository, notificationService);
     }
 
     @AfterEach
@@ -124,11 +132,13 @@ public class GrantServiceTest {
         Client client = new Client("123456", roles, "tester@gmail.com");
         Client savedClient = clientRepository.save(client);
         Industry industry = new Industry("industryName", "industrySubtype", "industryDesc");
+        Industry industry2 = new Industry("industryName", "industrySubtype2", "industryDesc2");
         Industry savedIndustry = industryRepository.save(industry);
+        Industry savedIndustry2 = industryRepository.save(industry2);
         Grant grant = new Grant("grantName", "provider", "grantDesc", 0, "eligibilityCriteria", "applicationProcess", "benefits", "grantLink");
         Grant savedGrant = grantRepository.save(grant);
 
-        Grant updatedGrant = grantService.addIndustryToGrant(savedClient.getClientId().toString(), savedIndustry.getIndustrySubtype(), savedGrant.getGrantId());
+        Grant updatedGrant = grantService.addIndustryToGrant(savedClient.getClientId().toString(), savedIndustry.getIndustryName(), savedGrant.getGrantId());
         assertNotNull(updatedGrant);
     }
 
@@ -140,7 +150,7 @@ public class GrantServiceTest {
         Grant savedGrant = grantRepository.save(grant);
 
         assertThrows(ClientException.class, () -> {
-            grantService.addIndustryToGrant(UUID.randomUUID().toString(), savedIndustry.getIndustrySubtype(), savedGrant.getGrantId());
+            grantService.addIndustryToGrant(UUID.randomUUID().toString(), savedIndustry.getIndustryName(), savedGrant.getGrantId());
         });
     }
 
@@ -169,7 +179,7 @@ public class GrantServiceTest {
         Industry savedIndustry = industryRepository.save(industry);
 
         assertThrows(GrantException.class, () -> {
-            grantService.addIndustryToGrant(savedClient.getClientId().toString(), savedIndustry.getIndustrySubtype(), UUID.randomUUID());
+            grantService.addIndustryToGrant(savedClient.getClientId().toString(), savedIndustry.getIndustryName(), UUID.randomUUID());
         });
     }
 
