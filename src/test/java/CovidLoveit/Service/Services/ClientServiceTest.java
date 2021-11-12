@@ -9,6 +9,7 @@ import CovidLoveit.Repositories.Interfaces.ClientRepository;
 import CovidLoveit.Repositories.Interfaces.RoleRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,6 +40,9 @@ public class ClientServiceTest {
     @Mock
     private AutoCloseable autoCloseable;
 
+    @Mock
+    private EmailServiceImpl emailService;
+
     @InjectMocks
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private ClientServiceImpl clientService;
@@ -46,7 +50,7 @@ public class ClientServiceTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        clientService = new ClientServiceImpl(clientRepository, roleRepository, bCryptPasswordEncoder);
+        clientService = new ClientServiceImpl(clientRepository, roleRepository, bCryptPasswordEncoder, emailService);
     }
 
     @AfterEach
@@ -62,7 +66,7 @@ public class ClientServiceTest {
 
         var roles = new ArrayList<String>();
         roles.add("USER");
-        ClientInputModel clientInputModel = new ClientInputModel("email@gmail.com", "123456", roles);
+        ClientInputModel clientInputModel = new ClientInputModel("123456", "email@gmail.com", roles);
 
         //when
         Client savedClient = clientService.addClient(clientInputModel);

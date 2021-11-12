@@ -29,7 +29,7 @@ public class GuidelineInputModel {
                                String opCapacityDetails, 
                                String opGuidelines,
                                String referenceLink, 
-                               UUID industryId) {
+                               String industryId) {
         this.canOpOnSite = canOpOnSite;
         this.canOpOnSiteDetails = canOpOnSiteDetails;
         this.groupSize = groupSize;
@@ -43,10 +43,10 @@ public class GuidelineInputModel {
         this.opCapacityDetails = opCapacityDetails;
         this.opGuidelines = opGuidelines;
         this.referenceLink = referenceLink;
-        this.industryId = industryId;
+        this.industryId = UUID.fromString(industryId);
     }
 
-    public GuidelineInputModel(UUID guidelineId,
+    public GuidelineInputModel(String guidelineId,
                                boolean canOpOnSite, 
                                String canOpOnSiteDetails,
                                int groupSize, 
@@ -60,7 +60,8 @@ public class GuidelineInputModel {
                                String opCapacityDetails, 
                                String opGuidelines,
                                String referenceLink, 
-                               UUID industryId) {
+                               String industryId) {
+        this.guidelineId = guidelineId;
         this.canOpOnSite = canOpOnSite;
         this.canOpOnSiteDetails = canOpOnSiteDetails;
         this.groupSize = groupSize;
@@ -74,10 +75,10 @@ public class GuidelineInputModel {
         this.opCapacityDetails = opCapacityDetails;
         this.opGuidelines = opGuidelines;
         this.referenceLink = referenceLink;
-        this.industryId = industryId;
+        this.industryId = UUID.fromString(industryId);
     }
 
-    private UUID guidelineId;
+    private String guidelineId;
 
     @NotNull(message = "Operation Status Required.")
     @JsonProperty(value = "canOpOnSite")
@@ -241,17 +242,15 @@ public class GuidelineInputModel {
         this.referenceLink = referenceLink;
     }
 
-    public UUID getGuidelineId() {
+    public String getGuidelineId() {
         return guidelineId;
     }
 
-    public void setGuidelineId(UUID guidelineId) {
+    public void setGuidelineId(String guidelineId) {
         this.guidelineId = guidelineId;
     }
 
-    public UUID getIndustryId() {
-        return industryId;
-    }
+    public UUID getIndustryId() { return industryId; }
 
     public void setIndustryId(UUID industryId) {
         this.industryId = industryId;
