@@ -7,6 +7,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 public class SeedData {
 
@@ -44,7 +47,7 @@ public class SeedData {
 //                    "Only allowed 75% capacity at each time slot",
 //                    "Clearly demarcate queue lines, put up signage to guide customers on where to queue to order and collect food, and ensure at least one-metre spacing between individual customers at areas such as entrances and cashier counters.",
 //                    "https://www.stb.gov.sg/content/stb/en/home-pages/advisory-for-food-and-beverage-establishments.html#_ftn2",
-//                    industry.getIndustryId()
+//                    industry.getIndustryId().toString()
 //            ));
 //
 //            EmployeeRecordInputModel employee = new EmployeeRecordInputModel("John Smith", "08/08/1998", "PFIZER", "10/10/2021", "NEGATIVE", business.getBusinessId());
@@ -60,19 +63,19 @@ public class SeedData {
 //            clientService.addRole(new Role("ADMIN"));
 //            clientService.addRole(new Role("USER"));
 //
-//            var adminUser = clientService.addClient(new ClientInputModel("linsyhen99@gmail.com", "123456"));
-//            var adminUserTest = clientService.addClient(new ClientInputModel("webtestercs102@gmail.com", "123456"));
-//            var user = clientService.addClient(new ClientInputModel("ruwansadris.2020@smu.edu.sg", "123456"));
+//            var adminUser = clientService.addClient(new ClientInputModel("rahmat329@gmail.com", "123456"));
+////            var adminUserTest = clientService.addClient(new ClientInputModel("webtestercs102@gmail.com", "123456"));
+//            var user = clientService.addClient(new ClientInputModel("mohamadry.2020@smu.edu.sg", "123456"));
 //
-//            clientService.addRoleToClient("linsyhen99@gmail.com", "ADMIN");
-//            clientService.addRoleToClient("webtestercs102@gmail.com", "ADMIN");
-//            clientService.addRoleToClient("ruwansadris.2020@smu.edu.sg", "USER");
+//            clientService.addRoleToClient("rahmat329@gmail.com", "ADMIN");
+////            clientService.addRoleToClient("webtestercs102@gmail.com", "ADMIN");
+//            clientService.addRoleToClient("mohamadry.2020@smu.edu.sg", "USER");
 //
 //            var industry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Food & Beverage", "Hawker", "SFA coffee shop / eating house / canteen license"));
 //            var anotherIndustry = industryService.addIndustry(adminUser.getClientId().toString(), new IndustryInputModel("Entertainment", "Fitness First", "Bro come workout and you wont regret."));
 //
-//            var business = businessService.addBusiness(new RegisteredBusinessInputModel("Yeow Leong Chicken Rice", "welcome! let's Chicken rice!", industry.getIndustryId(), user.getClientId()));
-//            var businessTest = businessService.addBusiness(new RegisteredBusinessInputModel("Yeow Leong Chicken Rice", "welcome! let's Chicken rice!", industry.getIndustryId(), adminUserTest.getClientId()));
+//            var business = businessService.addBusiness(new RegisteredBusinessInputModel("Yeow Leong Chicken Rice", "welcome! let's Chicken rice!", industry.getIndustryId(), adminUser.getClientId()));
+////            var businessTest = businessService.addBusiness(new RegisteredBusinessInputModel("Yeow Leong Chicken Rice", "welcome! let's Chicken rice!", industry.getIndustryId(), adminUserTest.getClientId()));
 //
 //            guidelineService.addGuideline(adminUser.getClientId().toString(), new GuidelineInputModel(
 //                    true,

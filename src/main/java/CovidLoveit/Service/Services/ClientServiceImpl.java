@@ -64,7 +64,7 @@ public class ClientServiceImpl implements ClientService {
         // Encode the user's password before storing their credentials
         inputModel.setPassword(bCryptPasswordEncoder.encode(inputModel.getPassword()));
 
-        var client = new Client(inputModel.getPassword(), clientRoles, inputModel.getEmail());
+        var client = new Client(inputModel.getPassword(), inputModel.getEmail());
         var savedClient = clientRepository.save(client);
         emailService.newClientCreationEmail(savedClient.getEmail());
 
