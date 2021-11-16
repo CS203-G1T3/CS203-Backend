@@ -7,6 +7,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 public class SeedData {
 
@@ -51,7 +54,13 @@ public class SeedData {
             ));
 
             EmployeeRecordInputModel employee = new EmployeeRecordInputModel("John Smith", "08/08/1998", "PFIZER", "10/10/2021", "NEGATIVE", business.getBusinessId());
+            EmployeeRecordInputModel employee1 = new EmployeeRecordInputModel("John Smith", "08/08/2000", "PFIZER", "01/01/2021", "NEGATIVE", business.getBusinessId());
+            EmployeeRecordInputModel employee2 = new EmployeeRecordInputModel("John Smith", "08/08/1978", null, "16/02/2021", "NEGATIVE", business.getBusinessId());
+            EmployeeRecordInputModel employee3 = new EmployeeRecordInputModel("John Smith", "08/08/1988", null, "20/06/2021", "NEGATIVE", business.getBusinessId());
             employeeRecordService.addEmployee(employee);
+            employeeRecordService.addEmployee(employee1);
+            employeeRecordService.addEmployee(employee2);
+            employeeRecordService.addEmployee(employee3);
         };
     }
 }
