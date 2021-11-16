@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class RegisteredBusinessIntegerationTest {
+public class RegisteredBusinessIntegrationTest {
     @LocalServerPort
     private int port;
 
